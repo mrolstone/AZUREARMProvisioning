@@ -1,0 +1,57 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VirtualMachineName": {
+            "value": "ops31"
+        },
+        "VMadminUsername": {
+            "value": "allan"
+        },
+        "VMadminPassword": {
+            "value": "GEN-Password"
+        },
+        "windowsOSVersion": {
+            "value": "2012-R2-Datacenter"
+        },
+        "SizeOfDataDisksInGB": {
+            "value": "512"
+        },
+        "DiskCaching": {
+            "value": "ReadWrite"
+        },
+        "StorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "ExistingSubnetName": {
+            "value": "LAN-Subnet-02"
+        },
+        "ExistingvirtualNetworkName": {
+            "value": "OnPremConnectedNetwork"
+        },
+        "VirtualMachineSize": {
+            "value": "Standard_D1"
+        },
+        "VirtualMachineIP": {
+            "value": "10.4.2.86"
+        },
+        "StorageAccountName": {
+            "value": "satest"
+        },
+        "ExistingVirtualNetworkResourceGroup": {
+            "value": "Operations"
+        },
+        "Location": {
+            "value": "West Europe"
+        },
+        "numDataDisks": {
+            "value": 0
+        },
+        "DSCFilesLocation": {
+            "value": "https://dscresources.file.core.windows.net/basedsc"
+        },
+        "DesiredStateBaseUpdateTagVersion": {
+            "value": "2.0"
+        }
+    }
+}
