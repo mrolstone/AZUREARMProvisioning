@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualNetworkName": {
-            "value": "OnPremConnectedNetwork"
+            "value": ""
         },
         "SubnetName": {
-            "value": "LAN-Subnet-04"
+            "value": ""
         },
         "SubnetAddressPrefix": {
-            "value": "10.4.4.0/28"
+            "value": ""
         }
     }
 }
