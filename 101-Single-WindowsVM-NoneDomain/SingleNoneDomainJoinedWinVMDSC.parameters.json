@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualMachineName": {
-            "value": "ops31"
+            "value": ""
         },
         "VMadminUsername": {
-            "value": "allan"
+            "value": ""
         },
         "VMadminPassword": {
-            "value": "GEN-Password"
+            "value": ""
         },
         "windowsOSVersion": {
             "value": "2012-R2-Datacenter"
@@ -23,23 +23,23 @@
         "StorageAccountType": {
             "value": "Standard_LRS"
         },
-        "ExistingSubnetName": {
+        "SubnetName": {
             "value": "LAN-Subnet-02"
         },
-        "ExistingvirtualNetworkName": {
-            "value": "OnPremConnectedNetwork"
+        "VirtualNetworkName": {
+            "value": ""
         },
         "VirtualMachineSize": {
             "value": "Standard_D1"
         },
         "VirtualMachineIP": {
-            "value": "10.4.2.86"
+            "value": ""
         },
         "StorageAccountName": {
-            "value": "satest"
+            "value": ""
         },
-        "ExistingVirtualNetworkResourceGroup": {
-            "value": "Operations"
+        "VirtualNetworkResourceGroup": {
+            "value": ""
         },
         "Location": {
             "value": "West Europe"
