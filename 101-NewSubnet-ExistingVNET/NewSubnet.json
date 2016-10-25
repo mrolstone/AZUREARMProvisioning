@@ -2,19 +2,19 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ExistingvirtualNetworkName": {
+        "VirtualNetworkName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the VNET to add a subnet to"
             }
         },
-        "NewSubnetName": {
+        "SubnetName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the subnet to add"
             }
         },
-        "NewSubnetAddressPrefix": {
+        "SubnetAddressPrefix": {
             "type": "string",
             "metadata": {
                 "description": "Address space of the subnet to add"
@@ -28,21 +28,21 @@
     {
         "apiVersion": "[variables('apiVersion')]",
         "type": "Microsoft.Network/virtualNetworks/subnets",
-        "name": "[concat(parameters('ExistingvirtualNetworkName'), '/', parameters('NewSubnetName'))]",
+        "name": "[concat(parameters('VirtualNetworkName'), '/', parameters('SubnetName'))]",
         "location": "[resourceGroup().location]",
         "properties": {
-            "addressPrefix": "[parameters('NewSubnetAddressPrefix')]"
+            "addressPrefix": "[parameters('SubnetAddressPrefix')]"
         }
     }
   ],
     "outputs": {
         "resultsaddressPrefix": {
             "type": "string",
-            "value": "[parameters('newSubnetAddressPrefix')]"
+            "value": "[parameters('SubnetAddressPrefix')]"
         },
         "resultsSubnetName": {
             "type": "string",
-            "value": "[parameters('newSubnetName')]"
+            "value": "[parameters('SubnetName')]"
         }
 
     }
