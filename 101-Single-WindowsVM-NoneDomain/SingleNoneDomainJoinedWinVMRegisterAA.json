@@ -14,18 +14,6 @@
                 "description": "Virtual Machine Name"
             }
         },
-        "_domainUsername": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Username of the account on the domain"
-            }
-        },
-        "_domainPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password of the account on the domain"
-            }
-        },
         "VirtualMachineNICName": {
             "type": "string",
             "Metadata": {
