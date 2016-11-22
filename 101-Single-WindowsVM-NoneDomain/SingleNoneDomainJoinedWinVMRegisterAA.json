@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -12,6 +12,18 @@
             "type": "string",
             "Metadata": {
                 "description": "Virtual Machine Name"
+            }
+        },
+        "_domainUsername": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Username of the account on the domain"
+            }
+        },
+        "_domainPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password of the account on the domain"
             }
         },
         "VirtualMachineNICName": {
@@ -49,7 +61,7 @@
                 "description": "Auto-generated from runbook"
             }
         },
-        "windowsOSVersion": {
+        "OSVersion": {
             "type": "string",
             "metadata": {
                 "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
@@ -324,7 +336,7 @@
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "[parameters('windowsOSVersion')]",
+                        "sku": "[parameters('OSVersion')]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -441,4 +453,3 @@
     }
 
 }
-
