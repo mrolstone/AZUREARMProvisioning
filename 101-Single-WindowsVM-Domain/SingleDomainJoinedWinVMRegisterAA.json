@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -65,13 +65,13 @@
         "StorageAccountName": {
             "type": "string",
             "metadata": {
-                "description": "Name  for storageaccount."
+                "description": "Name  for storageaccount"
             }
         },
         "VMadminUsername": {
             "type": "string",
             "metadata": {
-                "description": "Username for the Virtual Machine."
+                "description": "Username for the Virtual Machine"
             }
         },
         "_vmAdminPassword": {
@@ -80,7 +80,7 @@
                 "description": "Auto-generated from runbook"
             }
         },
-        "windowsOSVersion": {
+        "OSVersion": {
             "type": "string",
             "metadata": {
                 "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
@@ -355,7 +355,7 @@
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "[parameters('windowsOSVersion')]",
+                        "sku": "[parameters('OSVersion')]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -497,4 +497,3 @@
     }
 
 }
-
