@@ -1,21 +1,21 @@
-﻿{
+{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualMachineName": {
-            "value": "ops74"
+            "value": "win3"
         },
         "VMadminUsername": {
             "value": "allan"
         },
-        "windowsOSVersion": {
+        "OSVersion": {
             "value": "2012-R2-Datacenter"
         },
         "SizeOfDataDisksInGB": {
             "value": "512"
         },
         "VirtualMachineNICName": {
-            "value": "ops74-NIC"
+            "value": "win3-NIC"
         },
         "DiskCaching": {
             "value": "ReadWrite"
@@ -33,10 +33,10 @@
             "value": "Standard_D1"
         },
         "VirtualMachineIP": {
-            "value": "10.4.2.199"
+            "value": "10.4.2.125"
         },
         "StorageAccountName": {
-            "value": "satest"
+            "value": "satest54643675121"
         },
         "VirtualNetworkResourceGroup": {
             "value": "Operations"
@@ -57,7 +57,7 @@
             "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
         },
         "NodeConfigurationName": {
-            "value": "telnet.localhost"
+            "value": "WinAgentsDSCConf.winvm"
         },
         "ConfigurationMode": {
             "value": "ApplyAndMonitor"
