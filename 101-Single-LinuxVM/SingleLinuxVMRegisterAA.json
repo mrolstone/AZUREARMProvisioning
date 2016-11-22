@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -49,7 +49,7 @@
                 "description": "Auto-generated from runbook"
             }
         },
-        "RHATOSVersion": {
+        "OSVersion": {
             "type": "string",
             "defaultValue": "6.7",
             "allowedValues": [
@@ -131,94 +131,16 @@
                 "description": "Location of base DSC file"
             }
         },
-        "_artifactsLocationSasToken": {
+        "StorageAccountNameOfMOFfile": {
+            "type": "string",
+            "metadata": {
+                "description": "Storageaccount name where the MOF file is stored"
+            }
+        },
+        "StorageAccountKeyOfMOFfile": {
             "type": "securestring",
             "metadata": {
-                "description": "Auto-generated token to access DSC configurations"
-            }
-        },
-        "DesiredStateBaseUpdateTagVersion": {
-            "type": "string",
-            "defaultValue": "1.0",
-            "metadata": {
-                "description": "This value must be changed from a previous deployment to ensure the extension will run"
-            }
-        },
-        "_azureDSCregistrationKey": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated from runbook"
-            }
-        },
-        "RegistrationUrl": {
-            "type": "string",
-            "metadata": {
-                "description": "Registration url of the Azure Automation DSC pull/reporting server"
-            }
-        },
-        "NodeConfigurationName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the node configuration, on the Azure Automation DSC pull server, that this node will be configured as"
-            }
-        },
-        "ConfigurationMode": {
-            "type": "string",
-            "defaultValue": "ApplyAndMonitor",
-            "allowedValues": [
-                "ApplyOnly",
-                "ApplyAndMonitor",
-                "ApplyAndAutoCorrect"
-            ],
-            "metadata": {
-                "description": "DSC agent (LCM) configuration mode setting. ApplyOnly, ApplyAndMonitor, or ApplyAndAutoCorrect"
-            }
-        },
-        "ConfigurationFunction": {
-            "type": "string",
-            "defaultValue": "DesiredStateOnboardAA.ps1\\ConfigureLCMforAAPull",
-            "metadata": {
-                "description": "DSC configuration function to call. Should contain filename and function in format fileName.ps1\\configurationfunction"
-            }
-        },
-
-        "ConfigurationModeFrequencyMins": {
-            "type": "int",
-            "defaultValue": 15,
-            "metadata": {
-                "description": "DSC agent (LCM) configuration mode frequency setting, in minutes"
-            }
-        },
-        "RefreshFrequencyMins": {
-            "type": "int",
-            "defaultValue": 30,
-            "metadata": {
-                "description": "DSC agent (LCM) refresh frequency setting, in minutes"
-            }
-        },
-        "RebootNodeIfNeeded": {
-            "type": "bool",
-            "defaultValue": true,
-            "metadata": {
-                "description": "DSC agent (LCM) rebootNodeIfNeeded setting"
-            }
-        },
-        "ActionAfterReboot": {
-            "type": "string",
-            "defaultValue": "ContinueConfiguration",
-            "allowedValues": [
-                "ContinueConfiguration",
-                "StopConfiguration"
-            ],
-            "metadata": {
-                "description": "DSC agent (LCM) actionAfterReboot setting. ContinueConfiguration or StopConfiguration"
-            }
-        },
-        "AllowModuleOverwrite": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "DSC agent (LCM) allowModuleOverwrite setting"
+                "description": "Key of storage account where MOF file is stored"
             }
         }
     },
@@ -331,7 +253,7 @@
                     "imageReference": {
                         "publisher": "Redhat",
                         "offer": "RHEL",
-                        "sku": "[parameters('RHATOSVersion')]",
+                        "sku": "[parameters('OSVersion')]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -354,7 +276,7 @@
             },
             "resources": [
                 {
-                    "name": "Microsoft.Powershell.DSC",
+                    "name": "DSCForLinux",
                     "type": "extensions",
                     "location": "[parameters('Location')]",
                     "apiVersion": "2015-06-15",
@@ -366,11 +288,12 @@
                         "type": "DSCForLinux",
                         "typeHandlerVersion": "2.0",
                         "settings": {
-                            "Mode": "Register"
+                            "Mode": "Push",
+                            "FileUri": "[parameters('DSCFile')]"
                         },
                         "protectedSettings": {
-                            "RegistrationUrl": "[parameters('RegistrationUrl')]",
-                            "RegistrationKey": "[parameters('_azureDSCregistrationKey')]"
+                            "StorageAccountName": "[parameters('StorageAccountNameOfMOFfile')]",
+                            "StorageAccountKey": "[parameters('StorageAccountKeyOfMOFfile')]"
 
                         }
                     }
@@ -384,4 +307,3 @@
     }
 
 }
-
