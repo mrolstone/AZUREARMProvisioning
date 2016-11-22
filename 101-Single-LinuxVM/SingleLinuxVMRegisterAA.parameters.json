@@ -1,21 +1,21 @@
-﻿{
+{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualMachineName": {
-            "value": "rhat8"
+            "value": "rhat40"
         },
         "VMadminUsername": {
             "value": "allan"
         },
-        "RHATOSVersion": {
+        "OSVersion": {
             "value": "6.7"
         },
         "SizeOfDataDisksInGB": {
             "value": "512"
         },
         "VirtualMachineNICName": {
-            "value": "rhat8-NIC"
+            "value": "rhat40-NIC"
         },
         "DiskCaching": {
             "value": "ReadWrite"
@@ -33,10 +33,10 @@
             "value": "Standard_D1"
         },
         "VirtualMachineIP": {
-            "value": "10.4.2.129"
+            "value": "10.4.2.123"
         },
         "StorageAccountName": {
-            "value": "satest546436751211"
+            "value": "satest54643675wwq"
         },
         "VirtualNetworkResourceGroup": {
             "value": "Operations"
@@ -48,34 +48,13 @@
             "value": 0
         },
         "DSCFile": {
-            "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
+            "value": "https://dscresources.blob.core.windows.net/test/rhat40.mof"
         },
-        "DesiredStateBaseUpdateTagVersion": {
-            "value": "5.0"
+        "StorageAccountNameOfMOFfile": {
+            "value": "dscresources"
         },
-        "RegistrationUrl": {
-            "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
-        },
-        "NodeConfigurationName": {
-            "value": "Conditional2.ops74"
-        },
-        "ConfigurationMode": {
-            "value": "ApplyAndMonitor"
-        },
-        "ConfigurationModeFrequencyMins": {
-            "value": 15
-        },
-        "RefreshFrequencyMins": {
-            "value": 30
-        },
-        "RebootNodeIfNeeded": {
-            "value": true
-        },
-        "ActionAfterReboot": {
-            "value": "ContinueConfiguration"
-        },
-        "AllowModuleOverwrite": {
-            "value": false
+        "StorageAccountKeyOfMOFfile": {
+            "value": "azk86ZexHHbhmMkCco2HpILuhSkSP5xpaVNgxsbuJ1KfH/jUM9Ls7hBFnVhdsunhTCVHqrAq9UDhJV1YUmXMLw=="
         }
     }
 }
