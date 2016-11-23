@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualMachineName": {
-            "value": "win3"
+            "value": "win4"
         },
         "VMadminUsername": {
             "value": "allan"
@@ -15,7 +15,7 @@
             "value": "512"
         },
         "VirtualMachineNICName": {
-            "value": "win3-NIC"
+            "value": "win4-NIC"
         },
         "DiskCaching": {
             "value": "ReadWrite"
@@ -33,7 +33,10 @@
             "value": "Standard_D1"
         },
         "VirtualMachineIP": {
-            "value": "10.4.2.125"
+            "value": "10.4.2.126"
+        },
+        "PrivateIPAllocationMethod": {
+            "value": "Dynamic"
         },
         "StorageAccountName": {
             "value": "satest54643675121"
