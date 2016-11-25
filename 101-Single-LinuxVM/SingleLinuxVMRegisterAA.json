@@ -131,13 +131,13 @@
                 "description": "Location of base DSC file"
             }
         },
-        "StorageAccountNameOfMOFfile": {
+        "_storageAccountNameOfMOFfile": {
             "type": "string",
             "metadata": {
                 "description": "Storageaccount name where the MOF file is stored"
             }
         },
-        "StorageAccountKeyOfMOFfile": {
+        "_storageAccountKeyOfMOFfile": {
             "type": "securestring",
             "metadata": {
                 "description": "Key of storage account where MOF file is stored"
@@ -190,9 +190,7 @@
                 "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
             }
 
-        ],
-        "DesiredStateBaseArchiveFolder": "DSC",
-        "DesiredStateBaseArchiveFileName": "DesiredStateBase.zip"
+        ]
     },
 
     "resources": [
@@ -292,8 +290,8 @@
                             "FileUri": "[parameters('DSCFile')]"
                         },
                         "protectedSettings": {
-                            "StorageAccountName": "[parameters('StorageAccountNameOfMOFfile')]",
-                            "StorageAccountKey": "[parameters('StorageAccountKeyOfMOFfile')]"
+                            "StorageAccountName": "[parameters('_storageAccountNameOfMOFfile')]",
+                            "StorageAccountKey": "[parameters('_storageAccountKeyOfMOFfile')]"
 
                         }
                     }
