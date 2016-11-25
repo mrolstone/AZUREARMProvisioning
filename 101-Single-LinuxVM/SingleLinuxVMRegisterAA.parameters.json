@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualMachineName": {
-            "value": "rhat40"
+            "value": "rhat1"
         },
         "VMadminUsername": {
             "value": "allan"
@@ -15,7 +15,7 @@
             "value": "512"
         },
         "VirtualMachineNICName": {
-            "value": "rhat40-NIC"
+            "value": "rhat1NIC"
         },
         "DiskCaching": {
             "value": "ReadWrite"
@@ -33,7 +33,7 @@
             "value": "Standard_D1"
         },
         "VirtualMachineIP": {
-            "value": "10.4.2.123"
+            "value": "10.4.2.131"
         },
         "StorageAccountName": {
             "value": "satest54643675wwq"
@@ -48,13 +48,7 @@
             "value": 0
         },
         "DSCFile": {
-            "value": "https://dscresources.blob.core.windows.net/test/rhat40.mof"
-        },
-        "StorageAccountNameOfMOFfile": {
-            "value": "dscresources"
-        },
-        "StorageAccountKeyOfMOFfile": {
-            "value": "azk86ZexHHbhmMkCco2HpILuhSkSP5xpaVNgxsbuJ1KfH/jUM9Ls7hBFnVhdsunhTCVHqrAq9UDhJV1YUmXMLw=="
+            "value": "https://dscresources.blob.core.windows.net/test/rhat19.mof"
         }
     }
 }
