@@ -48,7 +48,7 @@
             "value": 0
         },
         "DSCFile": {
-            "value": "https://dscresources.blob.core.windows.net/test/rhat19.mof"
+            "value": "https://stgazewpmgislsd075d38001.blob.core.windows.net/linuxdsc/rhat.mof"
         }
     }
 }
