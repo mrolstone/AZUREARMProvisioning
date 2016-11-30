@@ -120,12 +120,6 @@
         "VirtualMachineSize": {
             "type": "string",
             "defaultValue": "Standard_D1",
-            "allowedValues": [
-                "Standard_D1",
-                "Standard_D2",
-                "Standard_D3"
-            ],
-
             "metadata": {
                 "description": "VMsize"
             }
