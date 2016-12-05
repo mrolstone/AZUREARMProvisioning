@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -8,7 +8,7 @@
         "VMadminUsername": {
             "value": "allan"
         },
-        "windowsOSVersion": {
+        "OSVersion": {
             "value": "2012-R2-Datacenter"
         },
         "SizeOfDataDisksInGB": {
@@ -35,8 +35,11 @@
         "VirtualMachineIP": {
             "value": "10.4.2.173"
         },
+        "PrivateIPAllocationMethod": {
+            "value": "Dynamic"
+        },
         "StorageAccountName": {
-            "value": "satestwe"
+            "value": "satestwe23456"
         },
         "VirtualNetworkResourceGroup": {
             "value": "Operations"

@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -49,7 +49,7 @@
                 "description": "Auto-generated from runbook"
             }
         },
-        "windowsOSVersion": {
+        "OSVersion": {
             "type": "string",
             "metadata": {
                 "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
@@ -89,18 +89,20 @@
         "VirtualMachineSize": {
             "type": "string",
             "defaultValue": "Standard_D1",
-            "allowedValues": [
-                "Standard_D1",
-                "Standard_D2",
-                "Standard_D3"
-            ],
-
             "metadata": {
                 "description": "VMsize"
             }
         },
         "VirtualMachineIP": {
             "type": "string"
+        },
+        "PrivateIPAllocationMethod": {
+            "type": "string",
+            "defaultValue": "Static",
+            "allowedValues": [
+                "Static",
+                "Dynamic"
+            ]
         },
         "numDataDisks": {
             "type": "int",
@@ -263,7 +265,25 @@
                 "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
             }
 
-        ]
+        ],
+        "nicIpConfiguration": {
+            "Static": {
+                "privateIPAllocationMethod": "Static",
+                "privateIPAddress": "[parameters('VirtualMachineIP')]",
+                "subnet": {
+                    "id": "[variables('alwaysonvnetSubnetRef')]"
+                }
+            },
+            "Dynamic": {
+                "privateIPAllocationMethod": "Dynamic",
+                "subnet": {
+                    "id": "[variables('alwaysonvnetSubnetRef')]"
+                }
+            }
+        },
+        "nicIpProperties": "[variables('nicIpConfiguration')[parameters('privateIPAllocationMethod')]]"
+
+
     },
 
     "resources": [
@@ -289,13 +309,7 @@
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[parameters('VirtualMachineIP')]",
-                            "subnet": {
-                                "id": "[variables('alwaysonvnetSubnetRef')]"
-                            }
-                        }
+                        "properties": "[variables('nicIpProperties')]"
                     }
                 ]
             },
@@ -324,7 +338,7 @@
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "[parameters('windowsOSVersion')]",
+                        "sku": "[parameters('OSVersion')]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -441,4 +455,3 @@
     }
 
 }
-
