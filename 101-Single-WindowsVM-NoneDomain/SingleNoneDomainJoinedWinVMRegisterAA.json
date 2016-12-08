@@ -93,17 +93,6 @@
                 "description": "VMsize"
             }
         },
-        "VirtualMachineIP": {
-            "type": "string"
-        },
-        "PrivateIPAllocationMethod": {
-            "type": "string",
-            "defaultValue": "Static",
-            "allowedValues": [
-                "Static",
-                "Dynamic"
-            ]
-        },
         "numDataDisks": {
             "type": "int",
             "maxValue": 4,
@@ -265,23 +254,7 @@
                 "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
             }
 
-        ],
-        "nicIpConfiguration": {
-            "Static": {
-                "privateIPAllocationMethod": "Static",
-                "privateIPAddress": "[parameters('VirtualMachineIP')]",
-                "subnet": {
-                    "id": "[variables('alwaysonvnetSubnetRef')]"
-                }
-            },
-            "Dynamic": {
-                "privateIPAllocationMethod": "Dynamic",
-                "subnet": {
-                    "id": "[variables('alwaysonvnetSubnetRef')]"
-                }
-            }
-        },
-        "nicIpProperties": "[variables('nicIpConfiguration')[parameters('privateIPAllocationMethod')]]"
+        ]
 
 
     },
@@ -309,7 +282,13 @@
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "properties": "[variables('nicIpProperties')]"
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('alwaysonvnetSubnetRef')]"
+                            }
+
+                        }
                     }
                 ]
             },
