@@ -32,12 +32,6 @@
         "VirtualMachineSize": {
             "value": "Standard_D1"
         },
-        "VirtualMachineIP": {
-            "value": "10.4.2.126"
-        },
-        "PrivateIPAllocationMethod": {
-            "value": "Dynamic"
-        },
         "StorageAccountName": {
             "value": "satest54643675121"
         },
