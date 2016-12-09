@@ -1,0 +1,60 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VirtualMachineName": {
+            "value": "rhattest4"
+        },
+        "VMadminUsername": {
+            "value": "allan"
+        },
+        "OSVersion": {
+            "value": "6.7"
+        },
+        "SizeOfDataDisksInGB": {
+            "value": "512"
+        },
+        "VirtualMachineNICName": {
+            "value": "rhattest4NIC"
+        },
+        "DiskCaching": {
+            "value": "ReadWrite"
+        },
+        "StorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "SubnetName": {
+            "value": "LAN-Subnet-02"
+        },
+        "VirtualNetworkName": {
+            "value": "OnPremConnectedNetwork"
+        },
+        "VirtualMachineSize": {
+            "value": "Standard_D1"
+        },
+        "VirtualMachineIP": {
+            "value": "10.4.2.124"
+        },
+        "StorageAccountName": {
+            "value": "satest5464e3675wwq"
+        },
+        "VirtualNetworkResourceGroup": {
+            "value": "Operations"
+        },
+        "Location": {
+            "value": "West Europe"
+        },
+        "NumDataDisks": {
+            "value": 0
+        },
+        "DSCFile": {
+            "value": "https://dscresources.blob.core.windows.net/test/LinuxDSCConf.mof"
+        },
+        "CustomScriptExtensionScriptFileNameToRun": {
+            "value": "https://dscresources.file.core.windows.net/basedsc/untar.sh"
+        },
+        "CustomScriptExtensionScriptAgentFileName": {
+            "value": "https://dscresources.file.core.windows.net/basedsc/agents.tar"
+        }
+    }
+}
