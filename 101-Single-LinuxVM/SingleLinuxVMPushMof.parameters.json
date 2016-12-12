@@ -51,7 +51,7 @@
             "value": "https://stgazewpmgislsd075d38001.blob.core.windows.net/linuxdsc/LinuxDSCConf.mof"
         },
         "CustomScriptExtensionScriptFileNameToRun": {
-            "value": "https://dscresources.file.core.windows.net/basedsc/untar.sh"
+            "value": "https://stgazewpmgislsd075d38001.file.core.windows.net/linuxbaseagents/untar.sh"
         },
         "CustomScriptExtensionScriptAgentFileName": {
             "value": "https://stgazewpmgislsd075d38001.file.core.windows.net/linuxbaseagents/agents.tar"
