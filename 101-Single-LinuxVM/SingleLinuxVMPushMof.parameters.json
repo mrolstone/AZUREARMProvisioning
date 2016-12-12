@@ -48,7 +48,7 @@
             "value": 0
         },
         "DSCFile": {
-            "value": "https://dscresources.blob.core.windows.net/test/LinuxDSCConf.mof"
+            "value": "https://stgazewpmgislsd075d38001.blob.core.windows.net/linuxdsc/LinuxDSCConf.mof"
         },
         "CustomScriptExtensionScriptFileNameToRun": {
             "value": "https://dscresources.file.core.windows.net/basedsc/untar.sh"
