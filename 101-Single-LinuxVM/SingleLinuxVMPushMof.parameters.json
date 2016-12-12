@@ -54,7 +54,7 @@
             "value": "https://dscresources.file.core.windows.net/basedsc/untar.sh"
         },
         "CustomScriptExtensionScriptAgentFileName": {
-            "value": "https://dscresources.file.core.windows.net/basedsc/agents.tar"
+            "value": "https://stgazewpmgislsd075d38001.file.core.windows.net/linuxbaseagents/agents.tar"
         }
     }
 }
