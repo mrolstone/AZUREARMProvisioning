@@ -26,7 +26,7 @@
                 "description": "Name of NSG"
             }
         },
-        "_nsgGrules": {
+        "_nsgRules": {
             "type": "array",
             "defaultValue": [ ]
 
@@ -44,7 +44,7 @@
                 "displayName": "NSG"
             },
             "properties": {
-                "securityRules": "[parameters('_nsgGrules')]"
+                "securityRules": "[parameters('_nsgRules')]"
             }
 
         },
