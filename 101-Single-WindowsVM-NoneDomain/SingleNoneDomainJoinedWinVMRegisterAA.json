@@ -211,13 +211,12 @@
     "variables": {
         "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
         "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
-        "uniquestorageAccountName": "[concat(parameters('StorageAccountName'))]",
         "DiskArray": [
             {
                 "name": "Datadisk1",
                 "lun": 0,
                 "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
+                    "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
@@ -227,7 +226,7 @@
                 "name": "Datadisk2",
                 "lun": 1,
                 "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
+                    "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
@@ -237,7 +236,7 @@
                 "name": "Datadisk3",
                 "lun": 2,
                 "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
+                    "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
@@ -247,7 +246,7 @@
                 "name": "Datadisk4",
                 "lun": 3,
                 "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
+                    "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
@@ -261,13 +260,13 @@
 
     "resources": [
         {
-            "name": "[variables('uniquestorageAccountName')]",
+            "name": "[parameters('StorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "location": "[parameters('Location')]",
             "apiVersion": "2015-06-15",
             "dependsOn": [ ],
             "tags": {
-                "displayName": "[variables('uniquestorageAccountName')]"
+                "displayName": "[parameters('StorageAccountName')]"
             },
             "properties": {
                 "accountType": "[parameters('StorageAccountType')]"
@@ -302,7 +301,7 @@
             "location": "[parameters('Location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts/',variables('uniquestorageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -323,7 +322,7 @@
                     "osDisk": {
                         "name": "osdisk",
                         "vhd": {
-                            "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
+                            "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
