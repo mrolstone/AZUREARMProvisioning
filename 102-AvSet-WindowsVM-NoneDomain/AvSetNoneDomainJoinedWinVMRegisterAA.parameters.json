@@ -1,0 +1,93 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VMadminUsername": {
+      "value": "allan"
+    },
+    "OSVersion": {
+      "value": "2012-R2-Datacenter"
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "512"
+    },
+    "DiskCaching": {
+      "value": "ReadWrite"
+    },
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "SubnetName": {
+      "value": "LAN-Subnet-02"
+    },
+    "VirtualNetworkName": {
+      "value": "OnPremConnectedNetwork"
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D1"
+    },
+    "StorageAccountName": {
+      "value": "satest546436751214"
+    },
+    "VirtualNetworkResourceGroup": {
+      "value": "Operations"
+    },
+    "Location": {
+      "value": "West Europe"
+    },
+    "DSCFile": {
+      "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
+    },
+    "DesiredStateBaseUpdateTagVersion": {
+      "value": "5.0"
+    },
+    "RegistrationUrl": {
+      "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
+    },
+    "NodeConfigurationName": {
+      "value": "WinAgentsDSCConf.winvm"
+    },
+    "ConfigurationMode": {
+      "value": "ApplyAndMonitor"
+    },
+    "ConfigurationModeFrequencyMins": {
+      "value": 15
+    },
+    "RefreshFrequencyMins": {
+      "value": 30
+    },
+    "RebootNodeIfNeeded": {
+      "value": true
+    },
+    "ActionAfterReboot": {
+      "value": "ContinueConfiguration"
+    },
+    "AllowModuleOverwrite": {
+      "value": false
+    },
+    "VirtualMachineNameFirst": {
+      "value": "vma12"
+    },
+    "VirtualMachineNameSecond": {
+      "value": "vma13"
+    },
+    "VirtualMachineNICNameFirst": {
+      "value": "vma12NIC"
+    },
+    "VirtualMachineNICNameSecond": {
+      "value": "vma13NIC"
+    },
+    "numDataDisksFirst": {
+      "value": 0
+    },
+    "numDataDisksSecond": {
+      "value": 0
+    },
+    "AvailabilitysetName": {
+      "value": "avsetallan2"
+    },
+    "LoadBalancerName": {
+      "value": "ilballan2"
+    }
+  }
+}
