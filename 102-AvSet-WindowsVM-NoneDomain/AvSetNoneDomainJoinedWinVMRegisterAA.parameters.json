@@ -1,6 +1,6 @@
-﻿{
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
   "parameters": {
     "VMadminUsername": {
       "value": "allan"
@@ -27,7 +27,7 @@
       "value": "Standard_D1"
     },
     "StorageAccountName": {
-      "value": "satest546436751214"
+      "value": "satest509876543"
     },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
@@ -66,16 +66,16 @@
       "value": false
     },
     "VirtualMachineNameFirst": {
-      "value": "vma12"
+      "value": "vma16"
     },
     "VirtualMachineNameSecond": {
-      "value": "vma13"
+      "value": "vma17"
     },
     "VirtualMachineNICNameFirst": {
-      "value": "vma12NIC"
+      "value": "vma16NIC"
     },
     "VirtualMachineNICNameSecond": {
-      "value": "vma13NIC"
+      "value": "vma17NIC"
     },
     "numDataDisksFirst": {
       "value": 0
@@ -87,7 +87,37 @@
       "value": "avsetallan2"
     },
     "LoadBalancerName": {
-      "value": "ilballan2"
+      "value": "ilballan3"
+    },
+    "LoadBalancerProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerFrontPort": {
+      "value": 80
+    },
+    "LoadBalancerBackendPort": {
+      "value": 80
+    },
+    "LoadBalancerIdleTimeoutInMinutes": {
+      "value": 15
+    },
+    "LoadBalancerNameRuleName": {
+      "value": "testrules"
+    },
+    "LoadBalancerProbeProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerProbePort": {
+      "value": 80
+    },
+    "LoadBalancerProbeIntervalInSeconds": {
+      "value": 15
+    },
+    "LoadBalancerNumberofProbes": {
+      "value": 2
+    },
+    "LoadBalancerProbeName": {
+      "value": "lbprobe"
     }
   }
 }
