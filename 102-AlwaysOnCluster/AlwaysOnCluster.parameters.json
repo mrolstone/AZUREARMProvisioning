@@ -1,105 +1,111 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "VirtualMachineNamePrimary": {
-            "value": "ops71"
-        },
-        "VirtualMachineNameSecondary": {
-            "value": "ops72"
-        },
-        "VirtualMachineNameWitness": {
-            "value": "ops73"
-        },
-        "VMadminUsername": {
-            "value": "allan"
-        },
-        "OSVersion": {
-            "value": "2012-R2-Datacenter"
-        },
-        "SizeOfDataDisksInGB": {
-            "value": "512"
-        },
-        "VirtualMachineNICNamePrimary": {
-            "value": "ops71-NIC"
-        },
-        "VirtualMachineNICNameSecondary": {
-            "value": "ops72-NIC"
-        },
-        "VirtualMachineNICNameWitness": {
-            "value": "ops73-NIC"
-        },
-        "DiskCaching": {
-            "value": "ReadWrite"
-        },
-        "StorageAccountType": {
-            "value": "Standard_LRS"
-        },
-        "SubnetName": {
-            "value": "LAN-Subnet-02"
-        },
-        "VirtualNetworkName": {
-            "value": "OnPremConnectedNetwork"
-        },
-        "VirtualMachineSize": {
-            "value": "Standard_D1"
-        },
-        "VirtualMachineIPPrimary": {
-            "value": "10.4.2.181"
-        },
-        "VirtualMachineIPSecondary": {
-            "value": "10.4.2.182"
-        },
-        "VirtualMachineIPWitness": {
-            "value": "10.4.2.183"
-        },
-        "StorageAccountName": {
-            "value": "satestwe345678"
-        },
-        "VirtualNetworkResourceGroup": {
-            "value": "Operations"
-        },
-        "Location": {
-            "value": "West Europe"
-        },
-        "DSCFile": {
-            "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
-        },
-        "DesiredStateBaseUpdateTagVersion": {
-            "value": "5.0"
-        },
-        "RegistrationUrl": {
-            "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
-        },
-        "NodeConfigurationName": {
-            "value": "WindowsAgents.WindowsVMs"
-        },
-        "ConfigurationMode": {
-            "value": "ApplyAndMonitor"
-        },
-        "ConfigurationModeFrequencyMins": {
-            "value": 15
-        },
-        "RefreshFrequencyMins": {
-            "value": 30
-        },
-        "RebootNodeIfNeeded": {
-            "value": true
-        },
-        "ActionAfterReboot": {
-            "value": "ContinueConfiguration"
-        },
-        "AllowModuleOverwrite": {
-            "value": false
-        },
-        "DomainToJoin": {
-            "value": "corp.allan.com"
-        },
-        "OuPath": {
-            "value": "OU=testOU;DC=corp;DC=allan;DC=com"
-        },
-        "DomainJoinOptions": {
-            "value": 3
-        }
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualMachineNamePrimary": {
+      "value": "ops71"
+    },
+    "VirtualMachineNameSecondary": {
+      "value": "ops72"
+    },
+    "VirtualMachineNameWitness": {
+      "value": "ops73"
+    },
+    "VMadminUsername": {
+      "value": "allan"
+    },
+    "OSVersion": {
+      "value": "2012-R2-Datacenter"
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "512"
+    },
+    "VirtualMachineNICNamePrimary": {
+      "value": "ops71-NIC"
+    },
+    "VirtualMachineNICNameSecondary": {
+      "value": "ops72-NIC"
+    },
+    "VirtualMachineNICNameWitness": {
+      "value": "ops73-NIC"
+    },
+    "DiskCaching": {
+      "value": "ReadWrite"
+    },
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "StorageAccountTypeSecond": {
+      "value": "Standard_LRS"
+    },
+    "SubnetName": {
+      "value": "LAN-Subnet-02"
+    },
+    "VirtualNetworkName": {
+      "value": "OnPremConnectedNetwork"
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D1"
+    },
+    "VirtualMachineIPPrimary": {
+      "value": "10.4.2.181"
+    },
+    "VirtualMachineIPSecondary": {
+      "value": "10.4.2.182"
+    },
+    "VirtualMachineIPWitness": {
+      "value": "10.4.2.183"
+    },
+    "StorageAccountName": {
+      "value": "satestwe345678"
+    },
+    "StorageAccountNameSecond": {
+      "value": "satestwe3456782"
+    },
+    "VirtualNetworkResourceGroup": {
+      "value": "Operations"
+    },
+    "Location": {
+      "value": "West Europe"
+    },
+    "DSCFile": {
+      "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
+    },
+    "DesiredStateBaseUpdateTagVersion": {
+      "value": "5.0"
+    },
+    "RegistrationUrl": {
+      "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
+    },
+    "NodeConfigurationName": {
+      "value": "WindowsAgents.WindowsVMs"
+    },
+    "ConfigurationMode": {
+      "value": "ApplyAndMonitor"
+    },
+    "ConfigurationModeFrequencyMins": {
+      "value": 15
+    },
+    "RefreshFrequencyMins": {
+      "value": 30
+    },
+    "RebootNodeIfNeeded": {
+      "value": true
+    },
+    "ActionAfterReboot": {
+      "value": "ContinueConfiguration"
+    },
+    "AllowModuleOverwrite": {
+      "value": false
+    },
+    "DomainToJoin": {
+      "value": "corp.allan.com"
+    },
+    "OuPath": {
+      "value": "OU=testOU;DC=corp;DC=allan;DC=com"
+    },
+    "DomainJoinOptions": {
+      "value": 3
     }
+  }
 }
