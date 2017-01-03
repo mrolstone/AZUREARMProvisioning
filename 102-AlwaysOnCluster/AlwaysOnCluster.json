@@ -1,5 +1,4 @@
-{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "DomainToJoin": {
@@ -382,7 +381,6 @@
             "createOption": "FromImage"
           },
           "dataDisks": [
-            //Premium disks
             {
               "name": "DatadiskPrem1",
               "lun": 0,
@@ -423,7 +421,6 @@
               "caching": "[variables('DiskCachingPrem')]",
               "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
             },
-            //Standard disks
             {
               "name": "DatadiskStd1",
               "lun": 4,
@@ -628,7 +625,6 @@
             "createOption": "FromImage"
           },
           "dataDisks": [
-            //Premium disks
             {
               "name": "DatadiskPrem1",
               "lun": 0,
@@ -669,7 +665,6 @@
               "caching": "[variables('DiskCachingPrem')]",
               "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
             },
-            //Standard disks
             {
               "name": "DatadiskStd1",
               "lun": 4,
