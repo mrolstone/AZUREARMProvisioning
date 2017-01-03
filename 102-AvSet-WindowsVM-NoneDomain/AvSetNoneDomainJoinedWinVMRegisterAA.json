@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -232,6 +232,36 @@
     },
     "LoadBalancerName": {
       "type": "string"
+    },
+    "LoadBalancerProtocol": {
+      "type": "string"
+    },
+    "LoadBalancerFrontPort": {
+      "type": "int"
+    },
+    "LoadBalancerBackendPort": {
+      "type": "int"
+    },
+    "LoadBalancerIdleTimeoutInMinutes": {
+      "type": "int"
+    },
+    "LoadBalancerNameRuleName": {
+      "type": "string"
+    },
+    "LoadBalancerProbeProtocol": {
+      "type": "string"
+    },
+    "LoadBalancerProbePort": {
+      "type": "int"
+    },
+    "LoadBalancerProbeIntervalInSeconds": {
+      "type": "int"
+    },
+    "LoadBalancerNumberofProbes": {
+      "type": "int"
+    },
+    "LoadBalancerProbeName": {
+      "type": "string"
     }
   },
   "variables": {
@@ -324,11 +354,10 @@
 
     ]
 
-
   },
 
   "resources": [
-    
+
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/loadBalancers",
@@ -352,6 +381,7 @@
             "name": "BackendPool1"
           }
         ],
+
         "loadBalancingRules": [
           {
             "properties": {
@@ -364,23 +394,23 @@
               "probe": {
                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/probes/lbprobe')]"
               },
-              "protocol": "Tcp",
-              "frontendPort": 80,
-              "backendPort": 80,
-              "idleTimeoutInMinutes": 15
+              "protocol": "[parameters('LoadBalancerProtocol')]",
+              "frontendPort": "[parameters('LoadBalancerFrontPort')]",
+              "backendPort": "[parameters('LoadBalancerBackendPort')]",
+              "idleTimeoutInMinutes": "[parameters('LoadBalancerIdleTimeoutInMinutes')]"
             },
-            "Name": "lbrule"
+            "Name": "[parameters('LoadBalancerNameRuleName')]"
           }
         ],
         "probes": [
           {
             "properties": {
-              "protocol": "Tcp",
-              "port": 80,
-              "intervalInSeconds": 15,
-              "numberOfProbes": 2
+              "protocol": "[parameters('LoadBalancerProbeProtocol')]",
+              "port": "[parameters('LoadBalancerProbePort')]",
+              "intervalInSeconds": "[parameters('LoadBalancerProbeIntervalInSeconds')]",
+              "numberOfProbes": "[parameters('LoadBalancerNumberofProbes')]"
             },
-            "name": "lbprobe"
+            "name": "[parameters('LoadBalancerProbeName')]"
           }
         ]
       }
@@ -427,7 +457,7 @@
       "location": "[parameters('Location')]",
       "name": "[parameters('VirtualMachineNICNameSecond')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" 
+        "[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
       ],
       "properties": {
         "ipConfigurations": [
