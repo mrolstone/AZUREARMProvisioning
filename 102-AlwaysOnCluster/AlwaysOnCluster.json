@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -86,13 +86,13 @@
         "description": "Location of Virtual machine"
       }
     },
-    "StorageAccountName": {
+    "StorageAccountNamePrem": {
       "type": "string",
       "metadata": {
         "description": "Name  for storageaccount"
       }
     },
-    "StorageAccountNameSecond": {
+    "StorageAccountNameStd": {
       "type": "string",
       "metadata": {
         "description": "Name of second storageaccount"
@@ -128,25 +128,6 @@
         "description": "Existing virtualNetworkName"
       }
     },
-    "SizeOfDataDisksInGB": {
-      "type": "string",
-      "defaultValue": "1023",
-      "allowedValues": [
-        "512",
-        "1023"
-      ],
-      "metadata": {
-        "description": "Size of datadisks"
-      }
-    },
-    "DiskCaching": {
-      "type": "string",
-      "allowedValues": [
-        "None",
-        "ReadOnly",
-        "ReadWrite"
-      ]
-    },
     "VirtualMachineSize": {
       "type": "string",
       "defaultValue": "Standard_D1",
@@ -162,29 +143,7 @@
     },
     "VirtualMachineIPWitness": {
       "type": "string"
-    },
-    "StorageAccountType": {
-      "type": "string",
-      "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_ZRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
-      ]
-    },
-    "StorageAccountTypeSecond": {
-      "type": "string",
-      "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_ZRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
-      ]
-    },
+    },    
     "DSCFile": {
       "type": "string",
       "metadata": {
@@ -284,34 +243,41 @@
   },
   "variables": {
     "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
-    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]"
+    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
+    "StorageAccountTypeStd": "Standard_LRS",
+    "StorageAccountTypePrem": "Premium_LRS",
+    "SizeOfDataDisksInGB": "1023",
+    "DiskCachingPrem": "none",
+    "DiskCachingStd": "none" 
+
+
   },
 
   "resources": [
     {
-      "name": "[parameters('StorageAccountName')]",
+      "name": "[parameters('StorageAccountNamePrem')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [],
       "tags": {
-        "displayName": "[parameters('StorageAccountName')]"
+        "displayName": "[parameters('StorageAccountNamePrem')]"
       },
       "properties": {
-        "accountType": "[parameters('StorageAccountType')]"
+        "accountType": "[variables('StorageAccountTypePrem')]"
       }
     },
     {
-      "name": "[parameters('StorageAccountNameSecond')]",
+      "name": "[parameters('StorageAccountNameStd')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[parameters('Location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [],
       "tags": {
-        "displayName": "[parameters('StorageAccountNameSecond')]"
+        "displayName": "[parameters('StorageAccountNameStd')]"
       },
       "properties": {
-        "accountType": "[parameters('StorageAccountTypeSecond')]"
+        "accountType": "[variables('StorageAccountTypeStd')]"
       }
     },
 
@@ -388,7 +354,8 @@
       "location": "[parameters('Location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNamePrimary'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -409,11 +376,95 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'osdisk', '.vhd')]"
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'osdisk', '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            //Premium disks
+            {
+              "name": "DatadiskPrem1",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem2",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem3",
+              "lun": 2,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem4",
+              "lun": 3,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            //Standard disks
+            {
+              "name": "DatadiskStd1",
+              "lun": 4,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd2",
+              "lun": 5,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd3",
+              "lun": 6,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd4",
+              "lun": 7,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
 
         },
         "networkProfile": {
@@ -548,8 +599,9 @@
       "name": "[string(parameters('VirtualMachineNameSecondary'))]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameSecondary'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNamePrimary'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -570,11 +622,95 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'osdisk', '.vhd')]"
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'osdisk', '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            //Premium disks
+            {
+              "name": "DatadiskPrem1",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskprem1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem2",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskprem2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem3",
+              "lun": 2,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskprem3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem4",
+              "lun": 3,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskprem4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            //Standard disks
+            {
+              "name": "DatadiskStd1",
+              "lun": 4,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskstd1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd2",
+              "lun": 5,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskstd2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd3",
+              "lun": 6,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskstd3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd4",
+              "lun": 7,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecondary'), 'datadiskstd4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -709,7 +845,7 @@
       "location": "[parameters('Location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameWitness'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -730,7 +866,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameWitness'), 'osdisk', '.vhd')]"
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameWitness'), 'osdisk', '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"

@@ -1,15 +1,15 @@
-{
+﻿{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VirtualMachineNamePrimary": {
-      "value": "ops71"
+      "value": "ops91"
     },
     "VirtualMachineNameSecondary": {
-      "value": "ops72"
+      "value": "ops92"
     },
     "VirtualMachineNameWitness": {
-      "value": "ops73"
+      "value": "ops93"
     },
     "VMadminUsername": {
       "value": "allan"
@@ -17,26 +17,14 @@
     "OSVersion": {
       "value": "2012-R2-Datacenter"
     },
-    "SizeOfDataDisksInGB": {
-      "value": "512"
-    },
     "VirtualMachineNICNamePrimary": {
-      "value": "ops71-NIC"
+      "value": "ops91-NIC"
     },
     "VirtualMachineNICNameSecondary": {
-      "value": "ops72-NIC"
+      "value": "ops92-NIC"
     },
     "VirtualMachineNICNameWitness": {
-      "value": "ops73-NIC"
-    },
-    "DiskCaching": {
-      "value": "ReadWrite"
-    },
-    "StorageAccountType": {
-      "value": "Standard_LRS"
-    },
-    "StorageAccountTypeSecond": {
-      "value": "Standard_LRS"
+      "value": "ops93-NIC"
     },
     "SubnetName": {
       "value": "LAN-Subnet-02"
@@ -45,22 +33,16 @@
       "value": "OnPremConnectedNetwork"
     },
     "VirtualMachineSize": {
-      "value": "Standard_D1"
+      "value": "Standard_DS3_v2"
     },
     "VirtualMachineIPPrimary": {
-      "value": "10.4.2.181"
+      "value": "10.4.2.171"
     },
     "VirtualMachineIPSecondary": {
-      "value": "10.4.2.182"
+      "value": "10.4.2.172"
     },
     "VirtualMachineIPWitness": {
-      "value": "10.4.2.183"
-    },
-    "StorageAccountName": {
-      "value": "satestwe345678"
-    },
-    "StorageAccountNameSecond": {
-      "value": "satestwe3456782"
+      "value": "10.4.2.173"
     },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
@@ -106,6 +88,12 @@
     },
     "DomainJoinOptions": {
       "value": 3
-    }
+    },
+      "StorageAccountNamePrem": {
+          "value": "saprem176598"
+      },
+      "StorageAccountNameStd": {
+          "value": "sastd79896233"
+      }
   }
 }
