@@ -1,5 +1,4 @@
-{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "DomainToJoin": {
@@ -244,8 +243,6 @@
   "variables": {
     "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
     "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
-    "StorageAccountTypeStd": "Standard_LRS",
-    "StorageAccountTypePrem": "Premium_LRS",
     "SizeOfDataDisksInGB": "1023",
     "DiskCachingPrem": "none",
     "DiskCachingStd": "none" 
@@ -264,7 +261,7 @@
         "displayName": "[parameters('StorageAccountNamePrem')]"
       },
       "properties": {
-        "accountType": "[variables('StorageAccountTypePrem')]"
+        "accountType": "Standard_LRS"
       }
     },
     {
@@ -277,7 +274,7 @@
         "displayName": "[parameters('StorageAccountNameStd')]"
       },
       "properties": {
-        "accountType": "[variables('StorageAccountTypeStd')]"
+        "accountType": "Premium_LRS"
       }
     },
 
