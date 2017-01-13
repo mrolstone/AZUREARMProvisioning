@@ -45,10 +45,10 @@
       "value": 0
     },
     "DSCFile": {
-      "value": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip"
+      "value": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip"
     },
     "StorageAccountSourcePath": {
-      "value": "\\\\dscresources.file.core.windows.net\\agents" 
+      "value": "\\\\stgazewdmgislscfgsvc001.file.core.windows.net\\agents" 
     }
   }
 }
