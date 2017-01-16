@@ -1,489 +1,370 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "DomainToJoin": {
-            "type": "string",
-            "metadata": {
-                "description": "The FQDN of the AD domain"
-            }
-        },
-        "_domainUsername": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Username of the account on the domain"
-            }
-        },
-        "_domainPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password of the account on the domain"
-            }
-        },
-        "OuPath": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
-            }
-        },
-        "DomainJoinOptions": {
-            "type": "int",
-            "defaultValue": 3,
-            "metadata": {
-                "description": "Set of bit flags that define the join options. Default value of 3 is a combination of NETSETUP_JOIN_DOMAIN (0x00000001) & NETSETUP_ACCT_CREATE (0x00000002) i.e. will join the domain and create the account on the domain. For more information see https://msdn.microsoft.com/en-us/library/aa392154(v=vs.85).aspx"
-            }
-        },
-        "VirtualNetworkResourceGroup": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the existing VNET resource group"
-            }
-        },
-        "VirtualMachineName": {
-            "type": "string",
-            "Metadata": {
-                "description": "Virtual Machine Name"
-            }
-        },
-        "VirtualMachineNICName": {
-            "type": "string",
-            "Metadata": {
-                "description": "Name of VM NIC"
-            }
-        },
-        "Location": {
-            "type": "string",
-            "allowedValues": [
-                "East Asia",
-                "East US 2",
-                "West Europe"
-            ],
-            "metadata": {
-                "description": "Location of Virtual machine"
-            }
-        },
-        "StorageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name  for storageaccount"
-            }
-        },
-        "VMadminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "Username for the Virtual Machine"
-            }
-        },
-        "_vmAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated from runbook"
-            }
-        },
-        "OSVersion": {
-            "type": "string",
-            "metadata": {
-                "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
-            }
-        },
-        "SubnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Subnet Name"
-            }
-        },
-        "VirtualNetworkName": {
-            "type": "string",
-            "metadata": {
-                "description": "Existing virtualNetworkName"
-            }
-        },
-        "SizeOfDataDisksInGB": {
-            "type": "string",
-            "defaultValue": "1023",
-            "allowedValues": [
-                "512",
-                "1023"
-            ],
-            "metadata": {
-                "description": "Size of datadisks"
-            }
-        },
-        "DiskCaching": {
-            "type": "string",
-            "allowedValues": [
-                "None",
-                "ReadOnly",
-                "ReadWrite"
-            ]
-        },
-        "VirtualMachineSize": {
-            "type": "string",
-            "defaultValue": "Standard_D1",
-            "metadata": {
-                "description": "VMsize"
-            }
-        },
-        "numDataDisks": {
-            "type": "int",
-            "maxValue": 4,
-            "metadata": {
-                "description": "This parameter allows the user to select the number of disks they want"
-            }
-        },
-        "StorageAccountType": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "allowedValues": [
-                "Standard_LRS",
-                "Standard_ZRS",
-                "Standard_GRS",
-                "Standard_RAGRS",
-                "Premium_LRS"
-            ]
-        },
-        "DSCFile": {
-            "type": "string",
-            "metadata": {
-                "description": "Location of base DSC file"
-            }
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated token to access DSC configurations"
-            }
-        },
-        "DesiredStateBaseUpdateTagVersion": {
-            "type": "string",
-            "defaultValue": "1.0",
-            "metadata": {
-                "description": "This value must be changed from a previous deployment to ensure the extension will run"
-            }
-        },
-        "_azureDSCregistrationKey": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated from runbook"
-            }
-        },
-        "RegistrationUrl": {
-            "type": "string",
-            "metadata": {
-                "description": "Registration url of the Azure Automation DSC pull/reporting server"
-            }
-        },
-        "NodeConfigurationName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the node configuration, on the Azure Automation DSC pull server, that this node will be configured as"
-            }
-        },
-        "ConfigurationMode": {
-            "type": "string",
-            "defaultValue": "ApplyAndMonitor",
-            "allowedValues": [
-                "ApplyOnly",
-                "ApplyAndMonitor",
-                "ApplyAndAutoCorrect"
-            ],
-            "metadata": {
-                "description": "DSC agent (LCM) configuration mode setting. ApplyOnly, ApplyAndMonitor, or ApplyAndAutoCorrect"
-            }
-        },
-        "ConfigurationFunction": {
-            "type": "string",
-            "defaultValue": "DesiredStateOnboardAA.ps1\\ConfigureLCMforAAPull",
-            "metadata": {
-                "description": "DSC configuration function to call. Should contain filename and function in format fileName.ps1\\configurationfunction"
-            }
-        },
-
-        "ConfigurationModeFrequencyMins": {
-            "type": "int",
-            "defaultValue": 15,
-            "metadata": {
-                "description": "DSC agent (LCM) configuration mode frequency setting, in minutes"
-            }
-        },
-        "RefreshFrequencyMins": {
-            "type": "int",
-            "defaultValue": 30,
-            "metadata": {
-                "description": "DSC agent (LCM) refresh frequency setting, in minutes"
-            }
-        },
-        "RebootNodeIfNeeded": {
-            "type": "bool",
-            "defaultValue": true,
-            "metadata": {
-                "description": "DSC agent (LCM) rebootNodeIfNeeded setting"
-            }
-        },
-        "ActionAfterReboot": {
-            "type": "string",
-            "defaultValue": "ContinueConfiguration",
-            "allowedValues": [
-                "ContinueConfiguration",
-                "StopConfiguration"
-            ],
-            "metadata": {
-                "description": "DSC agent (LCM) actionAfterReboot setting. ContinueConfiguration or StopConfiguration"
-            }
-        },
-        "AllowModuleOverwrite": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "DSC agent (LCM) allowModuleOverwrite setting"
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DomainToJoin": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD domain"
+      }
     },
-    "variables": {
-        "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
-        "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
-        "uniquestorageAccountName": "[concat(parameters('StorageAccountName'))]",
-        "DiskArray": [
-            {
-                "name": "Datadisk1",
-                "lun": 0,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk2",
-                "lun": 1,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk3",
-                "lun": 2,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk4",
-                "lun": 3,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            }
-
-        ]
+    "_domainUsername": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Username of the account on the domain"
+      }
     },
-
-    "resources": [
-        {
-            "name": "[variables('uniquestorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "location": "[parameters('Location')]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [ ],
-            "tags": {
-                "displayName": "[variables('uniquestorageAccountName')]"
-            },
-            "properties": {
-                "accountType": "[parameters('StorageAccountType')]"
-            }
-        },
-
-        {
-            "apiVersion": "2016-03-30",
-            "location": "[parameters('Location')]",
-            "name": "[parameters('VirtualMachineNICName')]",
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "Subnet": {
-                                "id": "[variables('alwaysonvnetSubnetRef')]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "type": "Microsoft.Network/networkInterfaces"
-        },
-
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[string(parameters('VirtualMachineName'))]",
-            "location": "[parameters('Location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts/',variables('uniquestorageAccountName'))]"
-            ],
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('VirtualMachineSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[parameters('VirtualMachineName')]",
-                    "adminUsername": "[parameters('VMadminUsername')]",
-                    "adminPassword": "[parameters('_vmAdminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "[parameters('OSVersion')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "osdisk",
-                        "vhd": {
-                            "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
-                        },
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    },
-                    "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICName'))]"
-                        }
-                    ]
-                }
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-06-15",
-                    "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'))]"
-                    ],
-                    "type": "Microsoft.Compute/virtualMachines/extensions",
-                    "name": "[concat(parameters('VirtualMachineName'),'/joindomain')]",
-                    "location": "[resourceGroup().location]",
-                    "properties": {
-                        "autoUpgradeMinorVersion": true,
-                        "protectedsettings": {
-                            "Password": "[parameters('_domainPassword')]"
-                        },
-                        "publisher": "Microsoft.Compute",
-                        "settings": {
-                            "Name": "[parameters('domainToJoin')]",
-                            "OUPath": "[parameters('ouPath')]",
-                            "User": "[parameters('_domainUsername')]",
-                            "Restart": "true",
-                            "Options": "[parameters('domainJoinOptions')]"
-                        },
-                        "type": "JsonADDomainExtension",
-                        "typeHandlerVersion": "1.3"
-                    }
-                },
-                {
-                    "name": "Microsoft.Powershell.DSC",
-                    "type": "extensions",
-                    "location": "[parameters('Location')]",
-                    "apiVersion": "2015-06-15",
-                    "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]"
-                    ],
-                    "tags": {
-                        "displayName": "DesiredStateBase"
-                    },
-                    "properties": {
-                        "publisher": "Microsoft.Powershell",
-                        "type": "DSC",
-                        "typeHandlerVersion": "2.9",
-                        "autoUpgradeMinorVersion": true,
-                        "forceUpdateTag": "[parameters('DesiredStateBaseUpdateTagVersion')]",
-                        "settings": {
-                            "ModulesUrl": "[parameters('DSCFile')]",
-                            "ConfigurationFunction": "[parameters('ConfigurationFunction')]",
-                            "SASToken": "[parameters('_artifactsLocationSasToken')]",
-                            "Properties": [
-                                {
-                                    "Name": "RegistrationKey",
-                                    "Value": {
-                                        "UserName": "PLACEHOLDER_DONOTUSE",
-                                        "Password": "PrivateSettingsRef:registrationKeyPrivate"
-                                    },
-                                    "TypeName": "System.Management.Automation.PSCredential"
-                                },
-                                {
-                                    "Name": "RegistrationUrl",
-                                    "Value": "[parameters('RegistrationUrl')]",
-                                    "TypeName": "System.String"
-                                },
-                                {
-                                    "Name": "ComputerName",
-                                    "Value": "[parameters('VirtualMachineName')]",
-                                    "TypeName": "System.String"
-                                },
-                                {
-                                    "Name": "NodeConfigurationName",
-                                    "Value": "[parameters('NodeConfigurationName')]",
-                                    "TypeName": "System.String"
-                                },
-                                {
-                                    "Name": "ConfigurationMode",
-                                    "Value": "[parameters('ConfigurationMode')]",
-                                    "TypeName": "System.String"
-                                },
-                                {
-                                    "Name": "ConfigurationModeFrequencyMins",
-                                    "Value": "[parameters('ConfigurationModeFrequencyMins')]",
-                                    "TypeName": "System.Int32"
-                                },
-                                {
-                                    "Name": "RefreshFrequencyMins",
-                                    "Value": "[parameters('RefreshFrequencyMins')]",
-                                    "TypeName": "System.Int32"
-                                },
-                                {
-                                    "Name": "RebootNodeIfNeeded",
-                                    "Value": "[parameters('RebootNodeIfNeeded')]",
-                                    "TypeName": "System.Boolean"
-                                },
-                                {
-                                    "Name": "ActionAfterReboot",
-                                    "Value": "[parameters('ActionAfterReboot')]",
-                                    "TypeName": "System.String"
-                                },
-                                {
-                                    "Name": "AllowModuleOverwrite",
-                                    "Value": "[parameters('AllowModuleOverwrite')]",
-                                    "TypeName": "System.Boolean"
-                                }
-                            ]
-
-                        },
-                        "protectedSettings": {
-                            "Items": {
-                                "registrationKeyPrivate": "[parameters('_azureDSCregistrationKey')]"
-                            }
-
-                        }
-                    }
-                }
-
-            ]
-        }
-    ],
-    "outputs": {
-
+    "_domainPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password of the account on the domain"
+      }
+    },
+    "OuPath": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
+      }
+    },
+    "DomainJoinOptions": {
+      "type": "int",
+      "defaultValue": 3,
+      "metadata": {
+        "description": "Set of bit flags that define the join options. Default value of 3 is a combination of NETSETUP_JOIN_DOMAIN (0x00000001) & NETSETUP_ACCT_CREATE (0x00000002) i.e. will join the domain and create the account on the domain. For more information see https://msdn.microsoft.com/en-us/library/aa392154(v=vs.85).aspx"
+      }
+    },
+    "VirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "VirtualMachineName": {
+      "type": "string",
+      "Metadata": {
+        "description": "Virtual Machine Name"
+      }
+    },
+    "VirtualMachineNICName": {
+      "type": "string",
+      "Metadata": {
+        "description": "Name of VM NIC"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "allowedValues": [
+        "East Asia",
+        "East US 2",
+        "West Europe"
+      ],
+      "metadata": {
+        "description": "Location of Virtual machine"
+      }
+    },
+    "StorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name  for storageaccount."
+      }
+    },
+    "VMadminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "_vmAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated from runbook"
+      }
+    },
+    "OSVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+      }
+    },
+    "SubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet Name"
+      }
+    },
+    "VirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing virtualNetworkName"
+      }
+    },
+    "SizeOfDataDisksInGB": {
+      "type": "string",
+      "defaultValue": "1023",
+      "allowedValues": [
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Size of datadisks"
+      }
+    },
+    "DiskCaching": {
+      "type": "string",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ]
+    },
+    "VirtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1",
+      "metadata": {
+        "description": "VMsize"
+      }
+    },
+    "numDataDisks": {
+      "type": "int",
+      "maxValue": 4,
+      "metadata": {
+        "description": "This parameter allows the user to select the number of disks they want"
+      }
+    },
+    "StorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "DSCFile": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of base DSC file"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated token to access DSC configurations"
+      }
+    },
+    "_automationAccountStorageUser": {
+      "type": "securestring",
+      "metadata": {
+        "description": "AutomationAccountStorageuser"
+      }
+    },
+    "_automationAccountStoragePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "AutomationAccountStoragePassword"
+      }
+    },
+    "StorageAccountSourcePath": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage path of agents"
+      }
     }
+  },
+  "variables": {
+    "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
+    "DiskArray": [
+      {
+        "name": "Datadisk1",
+        "lun": 0,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk2",
+        "lun": 1,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk3",
+        "lun": 2,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk4",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      }
+    ]
+  },
+
+  "resources": [
+    {
+      "name": "[parameters('StorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('StorageAccountName')]"
+      },
+      "properties": {
+        "accountType": "[parameters('StorageAccountType')]"
+      }
+    },
+
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICName')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              }
+
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[string(parameters('VirtualMachineName'))]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VirtualMachineSize')]"
+
+        },
+          "osProfile": {
+            "computerName": "[parameters('VirtualMachineName')]",
+            "adminUsername": "[parameters('VMadminUsername')]",
+            "adminPassword": "[parameters('_vmAdminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "MicrosoftWindowsServer",
+              "offer": "WindowsServer",
+              "sku": "[parameters('OSVersion')]",
+              "version": "latest"
+            },
+            "osDisk": {
+              "name": "osdisk",
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
+              },
+              "caching": "ReadWrite",
+              "createOption": "FromImage"
+            },
+            "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICName'))]"
+              }
+            ]
+          }
+        },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('VirtualMachineName'),'/BaseWindowsConfiguration')]",
+          "location": "[parameters('Location')]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.17",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "wmfVersion": "5.0",
+              "modulesUrl": "[parameters('DSCFile')]",
+              "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
+              "SASToken": "[parameters('_artifactsLocationSasToken')]",
+              "properties": {
+                "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+                "AutomationAccountStorageCredential": {
+                  "userName": "[parameters('_automationAccountStorageUser')]",
+                  "password": "PrivateSettingsRef:AutomationAccountPass"
+                }
+              }
+            },
+            "protectedSettings": {
+              "items": {
+                "AutomationAccountPass": "[parameters('_automationAccountStoragePassword')]"
+              }
+            }
+          }
+        },
+        {
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'))]"
+          ],
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('VirtualMachineName'),'/joindomain')]",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "autoUpgradeMinorVersion": true,
+            "protectedsettings": {
+              "Password": "[parameters('_domainPassword')]"
+            },
+            "publisher": "Microsoft.Compute",
+            "settings": {
+              "Name": "[parameters('domainToJoin')]",
+              "OUPath": "[parameters('ouPath')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
+              "Restart": "true",
+              "Options": "[parameters('domainJoinOptions')]"
+            },
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3"
+          }
+        }
+
+      ]
+    }
+  ],
+  "outputs": {
+
+  }
 
 }
