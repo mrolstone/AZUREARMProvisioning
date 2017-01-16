@@ -154,16 +154,16 @@
         "description": "Auto-generated token to access DSC configurations"
       }
     },
-    "_automationAccountStorageUser": {
+    "_DSCagentSourceStorageAccountName": {
       "type": "securestring",
       "metadata": {
-        "description": "AutomationAccountStorageuser"
+        "description": "Storage account name of storage account with agents"
       }
     },
-    "_automationAccountStoragePassword": {
+    "_DSCagentSourceStorageAccountKey": {
       "type": "securestring",
       "metadata": {
-        "description": "AutomationAccountStoragePassword"
+        "description": "Storage account key of storage account with agents"
       }
     },
     "StorageAccountSourcePath": {
@@ -322,14 +322,14 @@
               "properties": {
                 "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
                 "AutomationAccountStorageCredential": {
-                  "userName": "[parameters('_automationAccountStorageUser')]",
+                  "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
                   "password": "PrivateSettingsRef:AutomationAccountPass"
                 }
               }
             },
             "protectedSettings": {
               "items": {
-                "AutomationAccountPass": "[parameters('_automationAccountStoragePassword')]"
+                "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
               }
             }
           }
