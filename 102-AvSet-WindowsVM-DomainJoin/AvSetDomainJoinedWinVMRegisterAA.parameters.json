@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -27,7 +27,7 @@
       "value": "Standard_D1"
     },
     "StorageAccountName": {
-      "value": "sa5856723578"
+      "value": "sa5856323448"
     },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
@@ -36,58 +36,34 @@
       "value": "West Europe"
     },
     "DSCFile": {
-      "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
+      "value": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip"
     },
-    "DesiredStateBaseUpdateTagVersion": {
-      "value": "5.0"
-    },
-    "RegistrationUrl": {
-      "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
-    },
-    "NodeConfigurationName": {
-      "value": "WinAgentsDSCConf.winvm"
-    },
-    "ConfigurationMode": {
-      "value": "ApplyAndMonitor"
-    },
-    "ConfigurationModeFrequencyMins": {
-      "value": 15
-    },
-    "RefreshFrequencyMins": {
-      "value": 30
-    },
-    "RebootNodeIfNeeded": {
-      "value": true
-    },
-    "ActionAfterReboot": {
-      "value": "ContinueConfiguration"
-    },
-    "AllowModuleOverwrite": {
-      "value": false
+    "StorageAccountSourcePath": {
+      "value": "\\\\dscresources.file.core.windows.net\\agents"
     },
     "VirtualMachineNameFirst": {
-      "value": "vma26"
+      "value": "vma76"
     },
     "VirtualMachineNameSecond": {
-      "value": "vma27"
+      "value": "vma77"
     },
     "VirtualMachineNICNameFirst": {
-      "value": "vma26NIC"
+      "value": "vma76NIC"
     },
     "VirtualMachineNICNameSecond": {
-      "value": "vma27NIC"
+      "value": "vma77NIC"
     },
     "numDataDisksFirst": {
-      "value": 2
+      "value": 1
     },
     "numDataDisksSecond": {
-      "value": 2
+      "value": 1
     },
     "AvailabilitysetName": {
-      "value": "avsetalla21"
+      "value": "avsetalla51"
     },
     "LoadBalancerName": {
-      "value": "ilballan33"
+      "value": "ilballan"
     },
     "LoadBalancerProtocol": {
       "value": "Tcp"
