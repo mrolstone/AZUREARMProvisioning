@@ -5,10 +5,10 @@
      "ClusterName": {
       "value": "clutest"
     },
-    "VirtualMachineNameFirst": {
+    "VirtualMachineNamePrimary": {
       "value": "ops91"
     },
-    "VirtualMachineNameSecond": {
+    "VirtualMachineNameSecondary": {
       "value": "ops92"
     },
     "VirtualMachineNameWitness": {
