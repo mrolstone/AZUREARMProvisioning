@@ -2,10 +2,13 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "VirtualMachineNamePrimary": {
+     "ClusterName": {
+      "value": "clutest"
+    },
+    "VirtualMachineNameFirst": {
       "value": "ops91"
     },
-    "VirtualMachineNameSecondary": {
+    "VirtualMachineNameSecond": {
       "value": "ops92"
     },
     "VirtualMachineNameWitness": {
@@ -34,15 +37,6 @@
     },
     "VirtualMachineSize": {
       "value": "Standard_DS3_v2"
-    },
-    "VirtualMachineIPPrimary": {
-      "value": "10.4.2.171"
-    },
-    "VirtualMachineIPSecondary": {
-      "value": "10.4.2.172"
-    },
-    "VirtualMachineIPWitness": {
-      "value": "10.4.2.173"
     },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
