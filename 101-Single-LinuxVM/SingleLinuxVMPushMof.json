@@ -1,352 +1,369 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "VirtualNetworkResourceGroup": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the existing VNET resource group"
-            }
-        },
-        "VirtualMachineName": {
-            "type": "string",
-            "Metadata": {
-                "description": "Virtual Machine Name"
-            }
-        },
-        "VirtualMachineNICName": {
-            "type": "string",
-            "Metadata": {
-                "description": "Name of VM NIC"
-            }
-        },
-        "Location": {
-            "type": "string",
-            "allowedValues": [
-                "East Asia",
-                "East US 2",
-                "West Europe"
-            ],
-            "metadata": {
-                "description": "Location of Virtual machine"
-            }
-        },
-        "StorageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name  for storageaccount."
-            }
-        },
-        "VMadminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "Username for the Virtual Machine."
-            }
-        },
-        "_vmAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated from runbook"
-            }
-        },
-        "OSVersion": {
-            "type": "string",
-            "defaultValue": "6.7",
-            "allowedValues": [
-                "6.7",
-                "6.8"
-            ],
-            "metadata": {
-                "description": "The Linux version for the VM. This will pick a fully patched image of this given Windows version."
-            }
-        },
-        "SubnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Subnet Name"
-            }
-        },
-        "VirtualNetworkName": {
-            "type": "string",
-            "metadata": {
-                "description": "Existing virtualNetworkName"
-            }
-        },
-        "SizeOfDataDisksInGB": {
-            "type": "string",
-            "defaultValue": "1023",
-            "allowedValues": [
-                "512",
-                "1023"
-            ],
-            "metadata": {
-                "description": "Size of datadisks"
-            }
-        },
-        "DiskCaching": {
-            "type": "string",
-            "allowedValues": [
-                "None",
-                "ReadOnly",
-                "ReadWrite"
-            ]
-        },
-        "VirtualMachineSize": {
-            "type": "string",
-            "defaultValue": "Standard_D1",
-            "metadata": {
-                "description": "VMsize"
-            }
-        },
-        "VirtualMachineIP": {
-            "type": "string"
-        },
-        "numDataDisks": {
-            "type": "int",
-            "maxValue": 4,
-            "metadata": {
-                "description": "This parameter allows the user to select the number of disks they want"
-            }
-        },
-        "StorageAccountType": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "allowedValues": [
-                "Standard_LRS",
-                "Standard_ZRS",
-                "Standard_GRS",
-                "Standard_RAGRS",
-                "Premium_LRS"
-            ]
-        },
-        "DSCFile": {
-            "type": "string",
-            "metadata": {
-                "description": "Location of base DSC file"
-            }
-        },
-        "_storageAccountNameOfMOFfile": {
-            "type": "string",
-            "metadata": {
-                "description": "Storageaccount name where the MOF file is stored"
-            }
-        },
-        "_storageAccountKeyOfMOFfile": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Key of storage account where MOF file is stored"
-            }
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated token to access _artifactsLocation"
-            }
-        },
-        "CustomScriptExtensionScriptFileNameToRun": {
-            "type": "string",
-            "metadata": {
-                "description": "Script file to run as custome script extension, format should be full URL path"
-            }
-        },
-        "CustomScriptExtensionScriptAgentFileName": {
-            "type": "string",
-            "metadata": {
-                "description": "Script file to download, format should be full URL path"
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
     },
-    "variables": {
-        "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
-        "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
-        "uniquestorageAccountName": "[concat(parameters('StorageAccountName'))]",
-        "DiskArray": [
-            {
-                "name": "Datadisk1",
-                "lun": 0,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk2",
-                "lun": 1,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk3",
-                "lun": 2,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            },
-            {
-                "name": "Datadisk4",
-                "lun": 3,
-                "vhd": {
-                    "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
-                },
-                "createOption": "Empty",
-                "caching": "[parameters('diskCaching')]",
-                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-            }
-
-        ],
-        "CustomScriptExtensionScriptFolder": "basedsc",
-        "CustomScriptExtensionScriptFileNameToRun": "untar.sh"
-
+    "VirtualMachineName": {
+      "type": "string",
+      "Metadata": {
+        "description": "Virtual Machine Name"
+      }
     },
-
-    "resources": [
-        {
-            "name": "[variables('uniquestorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "location": "[parameters('Location')]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [ ],
-            "tags": {
-                "displayName": "[variables('uniquestorageAccountName')]"
-            },
-            "properties": {
-                "accountType": "[parameters('StorageAccountType')]"
-            }
-        },
-
-        {
-            "apiVersion": "2016-03-30",
-            "location": "[parameters('Location')]",
-            "name": "[parameters('VirtualMachineNICName')]",
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[parameters('VirtualMachineIP')]",
-                            "subnet": {
-                                "id": "[variables('alwaysonvnetSubnetRef')]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "type": "Microsoft.Network/networkInterfaces"
-        },
-
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[string(parameters('VirtualMachineName'))]",
-            "location": "[parameters('Location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts/',variables('uniquestorageAccountName'))]"
-            ],
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('VirtualMachineSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[parameters('VirtualMachineName')]",
-                    "adminUsername": "[parameters('VMadminUsername')]",
-                    "adminPassword": "[parameters('_vmAdminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "Redhat",
-                        "offer": "RHEL",
-                        "sku": "[parameters('OSVersion')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "osdisk",
-                        "vhd": {
-                            "uri": "[concat('http://', variables('uniquestorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
-                        },
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    },
-                    "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICName'))]"
-                        }
-                    ]
-                }
-            },
-            "resources": [
-
-            ]
-
-        },
-        {
-            "name": "[concat(parameters('VirtualMachineName'), '/DSCForLinux')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "location": "[parameters('Location')]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]",
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'),'/extensions/CustomScriptExtension')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "DSCForLinux",
-                "typeHandlerVersion": "2.0",
-                "settings": {
-                    "Mode": "Push",
-                    "FileUri": "[parameters('DSCFile')]"
-                },
-                "protectedSettings": {
-                    "StorageAccountName": "[parameters('_storageAccountNameOfMOFfile')]",
-                    "StorageAccountKey": "[parameters('_storageAccountKeyOfMOFfile')]"
-
-                }
-            }
-        },
-        {
-            "name": "[concat(parameters('VirtualMachineName'), '/CustomScriptExtension')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "location": "[parameters('Location')]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]"
-            ],
-            "tags": {
-                "displayName": "CustomScriptExtension"
-            },
-            "properties": {
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "CustomScriptForLinux",
-                "typeHandlerVersion": "1.4",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[concat(parameters('CustomScriptExtensionScriptAgentFileName'), parameters('_artifactsLocationSasToken'))]",
-                        "[concat(parameters('CustomScriptExtensionScriptFileNameToRun'), parameters('_artifactsLocationSasToken'))]"
-
-                    ],
-                    "commandToExecute": "[concat('sh ', 'untar.sh')]"
-                }
-            }
-        }
-
-
-    ],
-    "outputs": {
+    "VirtualMachineNICName": {
+      "type": "string",
+      "Metadata": {
+        "description": "Name of VM NIC"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "allowedValues": [
+        "East Asia",
+        "East US 2",
+        "West Europe"
+      ],
+      "metadata": {
+        "description": "Location of Virtual machine"
+      }
+    },
+    "StorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name  for storageaccount."
+      }
+    },
+    "VMadminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "_vmAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated from runbook"
+      }
+    },
+    "OSVersion": {
+      "type": "string",
+      "defaultValue": "6.7",
+      "allowedValues": [
+        "6.7",
+        "6.8"
+      ],
+      "metadata": {
+        "description": "The Linux version for the VM. This will pick a fully patched image of this given Windows version."
+      }
+    },
+    "SubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet Name"
+      }
+    },
+    "VirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing virtualNetworkName"
+      }
+    },
+    "SizeOfDataDisksInGB": {
+      "type": "string",
+      "defaultValue": "1023",
+      "allowedValues": [
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Size of datadisks"
+      }
+    },
+    "DiskCaching": {
+      "type": "string",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ]
+    },
+    "VirtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_D1",
+      "metadata": {
+        "description": "VMsize"
+      }
+    },
+    "numDataDisks": {
+      "type": "int",
+      "maxValue": 4,
+      "metadata": {
+        "description": "This parameter allows the user to select the number of disks they want"
+      }
+    },
+    "StorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "_DSCagentSourceStorageAccountName": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Storageaccount name where the MOF file is stored"
+      }
+    },
+    "_DSCagentSourceStorageAccountKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Key of storage account where MOF file is stored"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated token to access _artifactsLocation"
+      }
+    },
+    "CustomScriptExtensionScriptFileNameToRun": {
+      "type": "string",
+      "metadata": {
+        "description": "Script file to run as custome script extension"
+      }
+    },
+    "CustomScriptExtensionScriptAgentFileName": {
+      "type": "string",
+      "metadata": {
+        "description": "Script file to download"
+      }
+    },
+    "CustomScriptExtensionContainer": {
+      "type": "string",
+      "metadata": {
+        "description": "Container name of CSE files"
+      }
+    },
+    "DSCFile": {
+      "type": "string",
+      "metadata": {
+        "description": "DSC file name"
+      }
+    },
+    "ArtifactsStorageAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account of artifacts, should be the same as the storage account of which SAS tokens was created"
+      }
+    },
+    "MofContainerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Container name of MOF"
+      }
 
     }
+  },
+  "variables": {
+    "DSCFileURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.blob.core.windows.net/',parameters('MofContainerName'),'/',parameters('DSCFile'))]",
+    "CustomScriptExtensionScriptAgentFileNameURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptAgentFileName'))]",
+    "CustomScriptExtensionScriptFileNameToRunURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptFileNameToRun'))]",
+    "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
+    "DiskArray": [
+      {
+        "name": "Datadisk1",
+        "lun": 0,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk1', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk2",
+        "lun": 1,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk2', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk3",
+        "lun": 2,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk3', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk4",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk4', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      }
+
+    ]
+
+  },
+
+  "resources": [
+    {
+      "name": "[parameters('StorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('StorageAccountName')]"
+      },
+      "properties": {
+        "accountType": "[parameters('StorageAccountType')]"
+      }
+    },
+
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICName')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              }
+
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[string(parameters('VirtualMachineName'))]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('VirtualMachineSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('VirtualMachineName')]",
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Redhat",
+            "offer": "RHEL",
+            "sku": "[parameters('OSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'osdisk', '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "[concat(parameters('VirtualMachineName'), '/DSCForLinux')]",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "location": "[parameters('Location')]",
+          "tags": {
+            "displayname": "DSCForLinux"
+          },
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]",
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'),'/extensions/CustomScriptExtension')]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.OSTCExtensions",
+            "type": "DSCForLinux",
+            "typeHandlerVersion": "2.0",
+            "settings": {
+              "Mode": "Push",
+              "FileUri": "[variables('DSCFileURL')]"
+            },
+            "protectedSettings": {
+              "StorageAccountName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "StorageAccountKey": "[parameters('_DSCagentSourceStorageAccountKey')]"
+
+            }
+          }
+        },
+        {
+          "name": "[concat(parameters('VirtualMachineName'), '/CustomScriptExtension')]",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "location": "[parameters('Location')]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]"
+          ],
+          "tags": {
+            "displayName": "CustomScriptExtension"
+          },
+          "properties": {
+            "publisher": "Microsoft.OSTCExtensions",
+            "type": "CustomScriptForLinux",
+            "typeHandlerVersion": "1.4",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[concat(variables('CustomScriptExtensionScriptAgentFileNameURL'), parameters('_artifactsLocationSasToken'))]",
+                "[concat(variables('CustomScriptExtensionScriptFileNameToRunURL'), parameters('_artifactsLocationSasToken'))]"
+
+              ],
+              "commandToExecute": "[concat('sh ', parameters('CustomScriptExtensionScriptFileNameToRun'))]"
+            }
+          }
+        }
+
+      ]
+
+    }
+  ],
+  "outputs": {
+
+  }
 
 }
