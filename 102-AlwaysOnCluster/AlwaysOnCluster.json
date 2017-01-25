@@ -1,4 +1,4 @@
-﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "ClusterName": {
@@ -204,7 +204,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "wmfVersion": "5.0",
-          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
           "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
           "SASToken": "[parameters('_artifactsLocationSasToken')]",
           "properties": {
@@ -237,7 +237,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "wmfVersion": "5.0",
-          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
           "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
           "SASToken": "[parameters('_artifactsLocationSasToken')]",
           "properties": {
@@ -270,7 +270,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "wmfVersion": "5.0",
-          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
           "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
           "SASToken": "[parameters('_artifactsLocationSasToken')]",
           "properties": {
