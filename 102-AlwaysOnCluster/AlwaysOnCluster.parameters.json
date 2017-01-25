@@ -1,33 +1,24 @@
-{
+﻿{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-     "ClusterName": {
-      "value": "clutest"
-    },
-    "VirtualMachineNamePrimary": {
-      "value": "ops91"
+    "VirtualMachineNameFirst": {
+      "value": "cls17first"
     },
     "VirtualMachineNameSecondary": {
-      "value": "ops92"
+      "value": "cls17sec"
     },
     "VirtualMachineNameWitness": {
-      "value": "ops93"
+      "value": "cls17witt"
     },
-    "VMadminUsername": {
-      "value": "allan"
-    },
-    "OSVersion": {
-      "value": "2012-R2-Datacenter"
-    },
-    "VirtualMachineNICNamePrimary": {
-      "value": "ops91-NIC"
+    "VirtualMachineNICNameFirst": {
+      "value": "cls17first-NIC"
     },
     "VirtualMachineNICNameSecondary": {
-      "value": "ops92-NIC"
+      "value": "cls17sec-NIC"
     },
     "VirtualMachineNICNameWitness": {
-      "value": "ops93-NIC"
+      "value": "cls17witt-NIC"
     },
     "SubnetName": {
       "value": "LAN-Subnet-02"
@@ -35,59 +26,53 @@
     "VirtualNetworkName": {
       "value": "OnPremConnectedNetwork"
     },
-    "VirtualMachineSize": {
-      "value": "Standard_DS3_v2"
-    },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
     },
     "Location": {
       "value": "West Europe"
     },
-    "DSCFile": {
-      "value": "https://dscresources.file.core.windows.net/basedsc/DesiredStateOnboardAA.zip"
-    },
-    "DesiredStateBaseUpdateTagVersion": {
-      "value": "5.0"
-    },
-    "RegistrationUrl": {
-      "value": "https://we-agentservice-prod-1.azure-automation.net/accounts/25b71cae-5b0e-42b5-a3b8-ce775e3266a4"
-    },
-    "NodeConfigurationName": {
-      "value": "WindowsAgents.WindowsVMs"
-    },
-    "ConfigurationMode": {
-      "value": "ApplyAndMonitor"
-    },
-    "ConfigurationModeFrequencyMins": {
-      "value": 15
-    },
-    "RefreshFrequencyMins": {
-      "value": 30
-    },
-    "RebootNodeIfNeeded": {
-      "value": true
-    },
-    "ActionAfterReboot": {
-      "value": "ContinueConfiguration"
-    },
-    "AllowModuleOverwrite": {
-      "value": false
-    },
     "DomainToJoin": {
       "value": "corp.allan.com"
     },
     "OuPath": {
-      "value": "OU=testOU;DC=corp;DC=allan;DC=com"
+      "value": "OU=computersAzure;DC=corp;DC=allan;DC=com"
     },
     "DomainJoinOptions": {
       "value": 3
     },
-      "StorageAccountNamePrem": {
-          "value": "saprem176598"
-      },
-      "StorageAccountNameStd": {
-          "value": "sastd79896233"
-      }
+    "StorageAccountNamePrem": {
+      "value": "cls17n11672"
+    },
+    "StorageAccountNameStd": {
+      "value": "cls174882"
+    },
+    "LoadBalancerName": {
+      "value": "cls17"
+    },
+    "LoadBalancerNameRuleName": {
+      "value": "cls17lbr"
+    },
+    "LoadBalancerProbeName": {
+      "value": "cls17pr"
+    },
+    "AvailabilitysetName": {
+      "value": "cls17t1021"
+    },
+    "LoadBalancerIP": {
+      "value": "10.4.2.37"
+    },
+    "ClusterName": {
+      "value": "cls17"
+    },
+    "_domainUsername": {
+      "value": "allan"
+    },
+    "_SQLsvcaccountname": {
+      "value": "SA-CRB17"
+    },
+    "StorageAccountSourcePath": {
+      "value": "\\\\dscresources.file.core.windows.net\\agents"
+    }
   }
 }

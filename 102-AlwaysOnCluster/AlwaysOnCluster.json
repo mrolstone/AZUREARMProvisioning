@@ -1,4 +1,4 @@
-{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "ClusterName": {
@@ -6,7 +6,7 @@
       "metadata": {
         "description": "ClusterPrefix for naming cluster resources"
       }
-    },   
+    },
     "DomainToJoin": {
       "type": "string",
       "metadata": {
@@ -14,7 +14,7 @@
       }
     },
     "_domainUsername": {
-      "type": "securestring",
+      "type": "string",
       "metadata": {
         "description": "Username of the account on the domain"
       }
@@ -23,6 +23,18 @@
       "type": "securestring",
       "metadata": {
         "description": "Password of the account on the domain"
+      }
+    },
+    "_SQLsvcaccountname": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL service account"
+      }
+    },
+    "_SQLsvcaccountnamePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SQL service account password"
       }
     },
     "OuPath": {
@@ -44,7 +56,7 @@
         "description": "Name of the existing VNET resource group"
       }
     },
-    "VirtualMachineNamePrimary": {
+    "VirtualMachineNameFirst": {
       "type": "string",
       "Metadata": {
         "description": "Virtual Machine Name"
@@ -62,7 +74,7 @@
         "description": "Virtual Machine Name"
       }
     },
-    "VirtualMachineNICNamePrimary": {
+    "VirtualMachineNICNameFirst": {
       "type": "string",
       "Metadata": {
         "description": "Name of VM NIC"
@@ -97,28 +109,14 @@
         "description": "Name  for storageaccount"
       }
     },
+    "AvailabilitysetName": {
+      "type": "string",
+      "minLength": 1
+    },
     "StorageAccountNameStd": {
       "type": "string",
       "metadata": {
         "description": "Name of second storageaccount"
-      }
-    },
-    "VMadminUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Username for the Virtual Machine"
-      }
-    },
-    "_vmAdminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Auto-generated from runbook"
-      }
-    },
-    "OSVersion": {
-      "type": "string",
-      "metadata": {
-        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
       }
     },
     "SubnetName": {
@@ -133,116 +131,40 @@
         "description": "Existing virtualNetworkName"
       }
     },
-    "VirtualMachineSize": {
-      "type": "string",
-      "defaultValue": "Standard_D1",
-      "metadata": {
-        "description": "VMsize"
-      }
-    },
-    "VirtualMachineIPPrimary": {
-      "type": "string"
-    },
-    "VirtualMachineIPSecondary": {
-      "type": "string"
-    },
-    "VirtualMachineIPWitness": {
-      "type": "string"
-    },    
-    "DSCFile": {
-      "type": "string",
-      "metadata": {
-        "description": "Location of base DSC file"
-      }
-    },
     "_artifactsLocationSasToken": {
       "type": "securestring",
       "metadata": {
         "description": "Auto-generated token to access DSC configurations"
       }
     },
-    "DesiredStateBaseUpdateTagVersion": {
+    "LoadBalancerName": {
+      "type": "string"
+    },
+    "LoadBalancerIP": {
+      "type": "string"
+    },
+    "LoadBalancerNameRuleName": {
+      "type": "string"
+    },
+    "LoadBalancerProbeName": {
+      "type": "string"
+    },
+    "_DSCagentSourceStorageAccountName": {
       "type": "string",
-      "defaultValue": "1.0",
       "metadata": {
-        "description": "This value must be changed from a previous deployment to ensure the extension will run"
+        "description": "Storage account name of storage account with agents"
       }
     },
-    "_azureDSCregistrationKey": {
+    "_DSCagentSourceStorageAccountKey": {
       "type": "securestring",
       "metadata": {
-        "description": "Auto-generated from runbook"
+        "description": "Storage account key of storage account with agents"
       }
     },
-    "RegistrationUrl": {
+    "StorageAccountSourcePath": {
       "type": "string",
       "metadata": {
-        "description": "Registration url of the Azure Automation DSC pull/reporting server"
-      }
-    },
-    "NodeConfigurationName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the node configuration, on the Azure Automation DSC pull server, that this node will be configured as"
-      }
-    },
-    "ConfigurationMode": {
-      "type": "string",
-      "defaultValue": "ApplyAndMonitor",
-      "allowedValues": [
-        "ApplyOnly",
-        "ApplyAndMonitor",
-        "ApplyAndAutoCorrect"
-      ],
-      "metadata": {
-        "description": "DSC agent (LCM) configuration mode setting. ApplyOnly, ApplyAndMonitor, or ApplyAndAutoCorrect"
-      }
-    },
-    "ConfigurationFunction": {
-      "type": "string",
-      "defaultValue": "DesiredStateOnboardAA.ps1\\ConfigureLCMforAAPull",
-      "metadata": {
-        "description": "DSC configuration function to call. Should contain filename and function in format fileName.ps1\\configurationfunction"
-      }
-    },
-
-    "ConfigurationModeFrequencyMins": {
-      "type": "int",
-      "defaultValue": 15,
-      "metadata": {
-        "description": "DSC agent (LCM) configuration mode frequency setting, in minutes"
-      }
-    },
-    "RefreshFrequencyMins": {
-      "type": "int",
-      "defaultValue": 30,
-      "metadata": {
-        "description": "DSC agent (LCM) refresh frequency setting, in minutes"
-      }
-    },
-    "RebootNodeIfNeeded": {
-      "type": "bool",
-      "defaultValue": true,
-      "metadata": {
-        "description": "DSC agent (LCM) rebootNodeIfNeeded setting"
-      }
-    },
-    "ActionAfterReboot": {
-      "type": "string",
-      "defaultValue": "ContinueConfiguration",
-      "allowedValues": [
-        "ContinueConfiguration",
-        "StopConfiguration"
-      ],
-      "metadata": {
-        "description": "DSC agent (LCM) actionAfterReboot setting. ContinueConfiguration or StopConfiguration"
-      }
-    },
-    "AllowModuleOverwrite": {
-      "type": "bool",
-      "defaultValue": false,
-      "metadata": {
-        "description": "DSC agent (LCM) allowModuleOverwrite setting"
+        "description": "Storage path of agents"
       }
     }
   },
@@ -251,12 +173,192 @@
     "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
     "SizeOfDataDisksInGB": "1023",
     "DiskCachingPrem": "none",
-    "DiskCachingStd": "none" 
-
+    "DiskCachingStd": "none",
+    "ClusterVMSize": "Standard_DS3_v2",
+    "ClusterVMWitnessSize": "Standard_DS1_v2",
+    "AlwaysonWitnessDSCFile": "https://dscresources.file.core.windows.net/basedsc/DesiredStateAlwaysonWitness.zip",
+    "AlwaysonFirstDSCFile": "https://dscresources.file.core.windows.net/basedsc/PrepareAlwaysOnSqlServer.zip",
+    "AlwaysonSecondaryDSCFile": "https://dscresources.file.core.windows.net/basedsc/CreateCluster.zip",
+    "sqlAlwaysOnFileSharePath": "[concat(parameters('ClusterName'),'-fsw')]",
+    "numberOfDisks": "4",
+    "workloadType": "GENERAL",
+    "sqlAlwaysOnEPName": "[concat(parameters('ClusterName'),'-agep')]",
+    "sqlAlwaysOnAGName1": "[concat(parameters('ClusterName'),'-ag1')]",
+    "sqlAlwaysOnListener1": "[concat(parameters('ClusterName'),'-agl1')]"
 
   },
 
   "resources": [
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameFirst'),'/BaseWindowsConfiguration')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameSecondary'),'/BaseWindowsConfiguration')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecondary'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameWitness'),'/BaseWindowsConfiguration')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "https://dscresources.file.core.windows.net/basedsc/BaseWindowsInstallation.zip",
+          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
+          }
+        }
+      }
+    },
+
+
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[parameters('loadBalancerName')]",
+      "location": "[parameters('Location')]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('LoadBalancerIP')]",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              }
+            },
+            "name": "LoadBalancerFrontend"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "BackendPool1"
+          }
+        ],
+
+        "loadBalancingRules": [
+          {
+            "Name": "[variables('sqlAlwaysOnListener1')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/probes/',parameters('LoadBalancerProbeName'))]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 1433,
+              "backendPort": 1433,
+              "enableFloatingIP": true
+            }
+
+          }
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 59999,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            },
+            "name": "[parameters('LoadBalancerProbeName')]"
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('AvailabilitysetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('AvailabilitysetName')]"
+      },
+      "properties": {}
+    },
     {
       "name": "[parameters('StorageAccountNamePrem')]",
       "type": "Microsoft.Storage/storageAccounts",
@@ -267,7 +369,7 @@
         "displayName": "[parameters('StorageAccountNamePrem')]"
       },
       "properties": {
-        "accountType": "Standard_LRS"
+        "accountType": "Premium_LRS"
       }
     },
     {
@@ -280,26 +382,28 @@
         "displayName": "[parameters('StorageAccountNameStd')]"
       },
       "properties": {
-        "accountType": "Premium_LRS"
+        "accountType": "Standard_LRS"
       }
     },
-
-
-
     {
       "apiVersion": "2016-03-30",
       "location": "[parameters('Location')]",
-      "name": "[parameters('VirtualMachineNICNamePrimary')]",
+      "name": "[parameters('VirtualMachineNICNameFirst')]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
       "properties": {
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('VirtualMachineIPPrimary')]",
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('alwaysonvnetSubnetRef')]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
             }
           }
         ]
@@ -311,16 +415,21 @@
       "apiVersion": "2016-03-30",
       "location": "[parameters('Location')]",
       "name": "[parameters('VirtualMachineNICNameSecondary')]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
       "properties": {
         "ipConfigurations": [
           {
             "name": "ipconfig2",
             "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('VirtualMachineIPSecondary')]",
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('alwaysonvnetSubnetRef')]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
             }
           }
         ]
@@ -337,8 +446,7 @@
           {
             "name": "ipconfig3",
             "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('VirtualMachineIPWitness')]",
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('alwaysonvnetSubnetRef')]"
               }
@@ -353,33 +461,37 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[string(parameters('VirtualMachineNamePrimary'))]",
+      "name": "[parameters('VirtualMachineNameFirst')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNamePrimary'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameFirst'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
       ],
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
         "hardwareProfile": {
-          "vmSize": "[parameters('VirtualMachineSize')]"
+          "vmSize": "[variables('ClusterVMSize')]"
         },
         "osProfile": {
-          "computerName": "[parameters('VirtualMachineNamePrimary')]",
-          "adminUsername": "[parameters('VMadminUsername')]",
-          "adminPassword": "[parameters('_vmAdminPassword')]"
+          "computerName": "[parameters('VirtualMachineNameFirst')]",
+          "adminUsername": "[parameters('_domainUsername')]",
+          "adminPassword": "[parameters('_domainPassword')]"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "[parameters('OSVersion')]",
+            "publisher": "MicrosoftSQLServer",
+            "offer": "SQL2014SP1-WS2012R2",
+            "sku": "Enterprise",
             "version": "latest"
           },
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'osdisk', '.vhd')]"
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'osdisk', '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -389,7 +501,7 @@
               "name": "DatadiskPrem1",
               "lun": 0,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem1', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem1', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingPrem')]",
@@ -399,7 +511,7 @@
               "name": "DatadiskPrem2",
               "lun": 1,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem2', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem2', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingPrem')]",
@@ -409,7 +521,7 @@
               "name": "DatadiskPrem3",
               "lun": 2,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem3', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem3', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingPrem')]",
@@ -419,7 +531,7 @@
               "name": "DatadiskPrem4",
               "lun": 3,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskprem4', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem4', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingPrem')]",
@@ -429,7 +541,7 @@
               "name": "DatadiskStd1",
               "lun": 4,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd1', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd1', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingStd')]",
@@ -439,7 +551,7 @@
               "name": "DatadiskStd2",
               "lun": 5,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd2', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd2', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingStd')]",
@@ -449,7 +561,7 @@
               "name": "DatadiskStd3",
               "lun": 6,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd3', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd3', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingStd')]",
@@ -459,7 +571,7 @@
               "name": "DatadiskStd4",
               "lun": 7,
               "vhd": {
-                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNamePrimary'), 'datadiskstd4', '.vhd')]"
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd4', '.vhd')]"
               },
               "createOption": "Empty",
               "caching": "[variables('DiskCachingStd')]",
@@ -471,7 +583,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNamePrimary'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameFirst'))]"
             }
           ]
         }
@@ -480,10 +592,10 @@
         {
           "apiVersion": "2015-06-15",
           "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNamePrimary'))]"
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]"
           ],
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('VirtualMachineNamePrimary'),'/joindomain')]",
+          "name": "[concat(parameters('VirtualMachineNameFirst'),'/joindomain')]",
           "location": "[resourceGroup().location]",
           "properties": {
             "autoUpgradeMinorVersion": true,
@@ -494,102 +606,14 @@
             "settings": {
               "Name": "[parameters('domainToJoin')]",
               "OUPath": "[parameters('ouPath')]",
-              "User": "[parameters('_domainUsername')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
               "Restart": "true",
               "Options": "[parameters('domainJoinOptions')]"
             },
             "type": "JsonADDomainExtension",
             "typeHandlerVersion": "1.3"
           }
-        },
-        {
-          "name": "Microsoft.Powershell.DSC",
-          "type": "extensions",
-          "location": "[parameters('Location')]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineNamePrimary')))]"
-          ],
-          "tags": {
-            "displayName": "DesiredStateBase"
-          },
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.9",
-            "autoUpgradeMinorVersion": true,
-            "forceUpdateTag": "[parameters('DesiredStateBaseUpdateTagVersion')]",
-            "settings": {
-              "ModulesUrl": "[parameters('DSCFile')]",
-              "ConfigurationFunction": "[parameters('ConfigurationFunction')]",
-              "SASToken": "[parameters('_artifactsLocationSasToken')]",
-              "Properties": [
-                {
-                  "Name": "RegistrationKey",
-                  "Value": {
-                    "UserName": "PLACEHOLDER_DONOTUSE",
-                    "Password": "PrivateSettingsRef:registrationKeyPrivate"
-                  },
-                  "TypeName": "System.Management.Automation.PSCredential"
-                },
-                {
-                  "Name": "RegistrationUrl",
-                  "Value": "[parameters('RegistrationUrl')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ComputerName",
-                  "Value": "[parameters('VirtualMachineNamePrimary')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "NodeConfigurationName",
-                  "Value": "[parameters('NodeConfigurationName')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationMode",
-                  "Value": "[parameters('ConfigurationMode')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationModeFrequencyMins",
-                  "Value": "[parameters('ConfigurationModeFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RefreshFrequencyMins",
-                  "Value": "[parameters('RefreshFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RebootNodeIfNeeded",
-                  "Value": "[parameters('RebootNodeIfNeeded')]",
-                  "TypeName": "System.Boolean"
-                },
-                {
-                  "Name": "ActionAfterReboot",
-                  "Value": "[parameters('ActionAfterReboot')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "AllowModuleOverwrite",
-                  "Value": "[parameters('AllowModuleOverwrite')]",
-                  "TypeName": "System.Boolean"
-                }
-              ]
-
-            },
-            "protectedSettings": {
-              "Items": {
-                "registrationKeyPrivate": "[parameters('_azureDSCregistrationKey')]"
-              }
-
-            }
-          }
         }
-
-
 
       ]
     },
@@ -597,27 +621,31 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[string(parameters('VirtualMachineNameSecondary'))]",
+      "name": "[parameters('VirtualMachineNameSecondary')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNamePrimary'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameFirst'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
       ],
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
         "hardwareProfile": {
-          "vmSize": "[parameters('VirtualMachineSize')]"
+          "vmSize": "[variables('ClusterVMSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('VirtualMachineNameSecondary')]",
-          "adminUsername": "[parameters('VMadminUsername')]",
-          "adminPassword": "[parameters('_vmAdminPassword')]"
+          "adminUsername": "[parameters('_domainUsername')]",
+          "adminPassword": "[parameters('_domainPassword')]"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "[parameters('OSVersion')]",
+            "publisher": "MicrosoftSQLServer",
+            "offer": "SQL2014SP1-WS2012R2",
+            "sku": "Enterprise",
             "version": "latest"
           },
           "osDisk": {
@@ -737,129 +765,44 @@
             "settings": {
               "Name": "[parameters('domainToJoin')]",
               "OUPath": "[parameters('ouPath')]",
-              "User": "[parameters('_domainUsername')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
               "Restart": "true",
               "Options": "[parameters('domainJoinOptions')]"
             },
             "type": "JsonADDomainExtension",
             "typeHandlerVersion": "1.3"
           }
-        },
-        {
-          "name": "Microsoft.Powershell.DSC",
-          "type": "extensions",
-          "location": "[parameters('Location')]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineNameSecondary')))]"
-          ],
-          "tags": {
-            "displayName": "DesiredStateBase"
-          },
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.9",
-            "autoUpgradeMinorVersion": true,
-            "forceUpdateTag": "[parameters('DesiredStateBaseUpdateTagVersion')]",
-            "settings": {
-              "ModulesUrl": "[parameters('DSCFile')]",
-              "ConfigurationFunction": "[parameters('ConfigurationFunction')]",
-              "SASToken": "[parameters('_artifactsLocationSasToken')]",
-              "Properties": [
-                {
-                  "Name": "RegistrationKey",
-                  "Value": {
-                    "UserName": "PLACEHOLDER_DONOTUSE",
-                    "Password": "PrivateSettingsRef:registrationKeyPrivate"
-                  },
-                  "TypeName": "System.Management.Automation.PSCredential"
-                },
-                {
-                  "Name": "RegistrationUrl",
-                  "Value": "[parameters('RegistrationUrl')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ComputerName",
-                  "Value": "[parameters('VirtualMachineNameSecondary')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "NodeConfigurationName",
-                  "Value": "[parameters('NodeConfigurationName')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationMode",
-                  "Value": "[parameters('ConfigurationMode')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationModeFrequencyMins",
-                  "Value": "[parameters('ConfigurationModeFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RefreshFrequencyMins",
-                  "Value": "[parameters('RefreshFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RebootNodeIfNeeded",
-                  "Value": "[parameters('RebootNodeIfNeeded')]",
-                  "TypeName": "System.Boolean"
-                },
-                {
-                  "Name": "ActionAfterReboot",
-                  "Value": "[parameters('ActionAfterReboot')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "AllowModuleOverwrite",
-                  "Value": "[parameters('AllowModuleOverwrite')]",
-                  "TypeName": "System.Boolean"
-                }
-              ]
-
-            },
-            "protectedSettings": {
-              "Items": {
-                "registrationKeyPrivate": "[parameters('_azureDSCregistrationKey')]"
-              }
-
-            }
-          }
         }
-
-
-
       ]
     },
 
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[string(parameters('VirtualMachineNameWitness'))]",
+      "name": "[parameters('VirtualMachineNameWitness')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameWitness'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
       ],
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
         "hardwareProfile": {
-          "vmSize": "[parameters('VirtualMachineSize')]"
+          "vmSize": "[variables('ClusterVMWitnessSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('VirtualMachineNameWitness')]",
-          "adminUsername": "[parameters('VMadminUsername')]",
-          "adminPassword": "[parameters('_vmAdminPassword')]"
+          "adminUsername": "[parameters('_domainUsername')]",
+          "adminPassword": "[parameters('_domainPassword')]"
         },
         "storageProfile": {
           "imageReference": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
-            "sku": "[parameters('OSVersion')]",
+            "sku": "2012-R2-Datacenter",
             "version": "latest"
           },
           "osDisk": {
@@ -869,7 +812,19 @@
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            {
+              "name": "Datadiskstd",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameWitness'), 'datadiskstd', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -887,7 +842,7 @@
           ],
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('VirtualMachineNameWitness'),'/joindomain')]",
-          "location": "[resourceGroup().location]",
+          "location": "[parameters('Location')]",
           "properties": {
             "autoUpgradeMinorVersion": true,
             "protectedsettings": {
@@ -897,105 +852,19 @@
             "settings": {
               "Name": "[parameters('domainToJoin')]",
               "OUPath": "[parameters('ouPath')]",
-              "User": "[parameters('_domainUsername')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
               "Restart": "true",
               "Options": "[parameters('domainJoinOptions')]"
             },
             "type": "JsonADDomainExtension",
             "typeHandlerVersion": "1.3"
           }
-        },
-        {
-          "name": "Microsoft.Powershell.DSC",
-          "type": "extensions",
-          "location": "[parameters('Location')]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineNameWitness')))]"
-          ],
-          "tags": {
-            "displayName": "DesiredStateBase"
-          },
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.9",
-            "autoUpgradeMinorVersion": true,
-            "forceUpdateTag": "[parameters('DesiredStateBaseUpdateTagVersion')]",
-            "settings": {
-              "ModulesUrl": "[parameters('DSCFile')]",
-              "ConfigurationFunction": "[parameters('ConfigurationFunction')]",
-              "SASToken": "[parameters('_artifactsLocationSasToken')]",
-              "Properties": [
-                {
-                  "Name": "RegistrationKey",
-                  "Value": {
-                    "UserName": "PLACEHOLDER_DONOTUSE",
-                    "Password": "PrivateSettingsRef:registrationKeyPrivate"
-                  },
-                  "TypeName": "System.Management.Automation.PSCredential"
-                },
-                {
-                  "Name": "RegistrationUrl",
-                  "Value": "[parameters('RegistrationUrl')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ComputerName",
-                  "Value": "[parameters('VirtualMachineNameWitness')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "NodeConfigurationName",
-                  "Value": "[parameters('NodeConfigurationName')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationMode",
-                  "Value": "[parameters('ConfigurationMode')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "ConfigurationModeFrequencyMins",
-                  "Value": "[parameters('ConfigurationModeFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RefreshFrequencyMins",
-                  "Value": "[parameters('RefreshFrequencyMins')]",
-                  "TypeName": "System.Int32"
-                },
-                {
-                  "Name": "RebootNodeIfNeeded",
-                  "Value": "[parameters('RebootNodeIfNeeded')]",
-                  "TypeName": "System.Boolean"
-                },
-                {
-                  "Name": "ActionAfterReboot",
-                  "Value": "[parameters('ActionAfterReboot')]",
-                  "TypeName": "System.String"
-                },
-                {
-                  "Name": "AllowModuleOverwrite",
-                  "Value": "[parameters('AllowModuleOverwrite')]",
-                  "TypeName": "System.Boolean"
-                }
-              ]
-
-            },
-            "protectedSettings": {
-              "Items": {
-                "registrationKeyPrivate": "[parameters('_azureDSCregistrationKey')]"
-              }
-
-            }
-          }
         }
-
-
 
       ]
     }
+
+
 
 
 
