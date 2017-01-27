@@ -60,7 +60,7 @@
       "value": "cls18t1021"
     },
     "LoadBalancerIP": {
-      "value": "10.4.2.38"
+      "value": "192.168.2.60"
     },
     "ClusterName": {
       "value": "cls18"
