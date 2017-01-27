@@ -1,24 +1,24 @@
-{
+﻿{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VirtualMachineNameFirst": {
-      "value": "cls17first"
+      "value": "cls18first"
     },
     "VirtualMachineNameSecond": {
-      "value": "cls17sec"
+      "value": "cls18sec"
     },
     "VirtualMachineNameWitness": {
-      "value": "cls17witt"
+      "value": "cls18witt"
     },
     "VirtualMachineNICNameFirst": {
-      "value": "cls17first-NIC"
+      "value": "cls18first-NIC"
     },
     "VirtualMachineNICNameSecond": {
-      "value": "cls17sec-NIC"
+      "value": "cls18sec-NIC"
     },
     "VirtualMachineNICNameWitness": {
-      "value": "cls17witt-NIC"
+      "value": "cls18witt-NIC"
     },
     "SubnetName": {
       "value": "LAN-Subnet-02"
@@ -42,34 +42,34 @@
       "value": 3
     },
     "StorageAccountNamePrem": {
-      "value": "cls17n11672"
+      "value": "cls18n11672"
     },
     "StorageAccountNameStd": {
-      "value": "cls174882"
+      "value": "cls184882"
     },
     "LoadBalancerName": {
-      "value": "cls17"
+      "value": "cls18"
     },
     "LoadBalancerNameRuleName": {
-      "value": "cls17lbr"
+      "value": "cls18lbr"
     },
     "LoadBalancerProbeName": {
-      "value": "cls17pr"
+      "value": "cls18pr"
     },
     "AvailabilitysetName": {
-      "value": "cls17t1021"
+      "value": "cls18t1021"
     },
     "LoadBalancerIP": {
-      "value": "192.168.2.60"
+      "value": "10.4.2.38"
     },
     "ClusterName": {
-      "value": "cls17"
+      "value": "cls18"
     },
     "_domainUsername": {
       "value": "allan"
     },
     "_SQLsvcaccountname": {
-      "value": "SA-CRB17"
+      "value": "SA-CRB18"
     },
     "VMadminUsername": {
       "value": "allan"

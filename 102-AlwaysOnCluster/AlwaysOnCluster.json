@@ -1,4 +1,4 @@
-{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "ClusterName": {
@@ -14,7 +14,7 @@
       }
     },
     "VMadminUsername": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "Username for the Virtual Machine."
       }
@@ -490,8 +490,8 @@
         },
         "osProfile": {
           "computerName": "[parameters('VirtualMachineNameFirst')]",
-          "adminUsername": "[parameters('_domainUsername')]",
-          "adminPassword": "[parameters('_domainPassword')]"
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -650,8 +650,8 @@
         },
         "osProfile": {
           "computerName": "[parameters('VirtualMachineNameSecond')]",
-          "adminUsername": "[parameters('_domainUsername')]",
-          "adminPassword": "[parameters('_domainPassword')]"
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -807,8 +807,8 @@
         },
         "osProfile": {
           "computerName": "[parameters('VirtualMachineNameWitness')]",
-          "adminUsername": "[parameters('_domainUsername')]",
-          "adminPassword": "[parameters('_domainPassword')]"
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
