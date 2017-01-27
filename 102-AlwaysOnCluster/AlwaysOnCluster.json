@@ -14,7 +14,7 @@
       }
     },
     "VMadminUsername": {
-      "type": "securestring",
+      "type": "string",
       "metadata": {
         "description": "Username for the Virtual Machine."
       }
