@@ -1,4 +1,4 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -19,22 +19,51 @@
             "metadata": {
                 "description": "Address space of the subnet to add"
             }
+        },
+        "NSGName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of NSG"
+            }
+        },
+        "_nsgRules": {
+            "type": "array",
+            "defaultValue": [ ]
+
         }
     },
-  "variables": {
-    "apiVersion": "2015-06-15"
-  },
-  "resources": [
-    {
-        "apiVersion": "[variables('apiVersion')]",
-        "type": "Microsoft.Network/virtualNetworks/subnets",
-        "name": "[concat(parameters('VirtualNetworkName'), '/', parameters('SubnetName'))]",
-        "location": "[resourceGroup().location]",
-        "properties": {
-            "addressPrefix": "[parameters('SubnetAddressPrefix')]"
+    "variables": {
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('NSGName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "NSG"
+            },
+            "properties": {
+                "securityRules": "[parameters('_nsgRules')]"
+            }
+
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('VirtualNetworkName'), '/', parameters('SubnetName'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('NSGName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('SubnetAddressPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
+                }
+            }
         }
-    }
-  ],
+    ],
     "outputs": {
         "resultsaddressPrefix": {
             "type": "string",

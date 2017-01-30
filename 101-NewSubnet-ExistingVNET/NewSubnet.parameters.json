@@ -1,15 +1,18 @@
-﻿{
+{
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VirtualNetworkName": {
-            "value": ""
+            "value": "OnPremConnectedNetwork"
         },
         "SubnetName": {
-            "value": ""
+            "value": "LAN-Subnet-07"
         },
         "SubnetAddressPrefix": {
-            "value": ""
+            "value": "10.4.7.0/24"
+        },
+        "NSGName": {
+            "value": "test2"
         }
     }
 }
