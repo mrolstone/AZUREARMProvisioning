@@ -1,4 +1,4 @@
-﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VMadminUsername": {
@@ -188,9 +188,9 @@
     "DiskCachingStd": "none",
     "ClusterVMSize": "Standard_DS3_v2",
     "ClusterVMWitnessSize": "Standard_DS1_v2",
-    "AlwaysonWitnessDSCFile": "https://dscresources.file.core.windows.net/basedsc/DesiredStateAlwaysonWitness.zip",
-    "AlwaysonFirstDSCFile": "https://dscresources.file.core.windows.net/basedsc/PrepareAlwaysOnSqlServer.zip",
-    "AlwaysonSecondaryDSCFile": "https://dscresources.file.core.windows.net/basedsc/CreateAlwaysOnCluster.zip",
+    "AlwaysonWitnessDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysonWitness.zip",
+    "AlwaysonFirstDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/PrepareAlwaysOnSqlServer.zip",
+    "AlwaysonSecondaryDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysOnCluster.zip",
     "sqlAlwaysOnFileSharePath": "[concat(parameters('ClusterName'),'-fsw')]",
     "numberOfDisks": "4",
     "workloadType": "GENERAL",
