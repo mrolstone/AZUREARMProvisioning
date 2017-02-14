@@ -1,18 +1,6 @@
-{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+﻿{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "ClusterName": {
-      "type": "string",
-      "metadata": {
-        "description": "ClusterPrefix for naming cluster resources"
-      }
-    },
-    "DomainToJoin": {
-      "type": "string",
-      "metadata": {
-        "description": "The FQDN of the AD domain"
-      }
-    },
     "VMadminUsername": {
       "type": "string",
       "metadata": {
@@ -25,8 +13,20 @@
         "description": "Auto-generated from runbook"
       }
     },
-    "_domainUsername": {
+    "ClusterName": {
       "type": "string",
+      "metadata": {
+        "description": "ClusterPrefix for naming cluster resources"
+      }
+    },
+    "DomainToJoin": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD domain"
+      }
+    },
+    "_domainUsername": {
+      "type": "securestring",
       "metadata": {
         "description": "Username of the account on the domain"
       }
@@ -38,7 +38,7 @@
       }
     },
     "_SQLsvcaccountname": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "SQL service account"
       }
@@ -162,7 +162,7 @@
       "type": "string"
     },
     "_DSCagentSourceStorageAccountName": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "Storage account name of storage account with agents"
       }
@@ -190,7 +190,7 @@
     "ClusterVMWitnessSize": "Standard_DS1_v2",
     "AlwaysonWitnessDSCFile": "https://dscresources.file.core.windows.net/basedsc/DesiredStateAlwaysonWitness.zip",
     "AlwaysonFirstDSCFile": "https://dscresources.file.core.windows.net/basedsc/PrepareAlwaysOnSqlServer.zip",
-    "AlwaysonSecondaryDSCFile": "https://dscresources.file.core.windows.net/basedsc/CreateCluster.zip",
+    "AlwaysonSecondaryDSCFile": "https://dscresources.file.core.windows.net/basedsc/CreateAlwaysOnCluster.zip",
     "sqlAlwaysOnFileSharePath": "[concat(parameters('ClusterName'),'-fsw')]",
     "numberOfDisks": "4",
     "workloadType": "GENERAL",
@@ -201,13 +201,15 @@
   },
 
   "resources": [
+
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('VirtualMachineNameFirst'),'/BaseWindowsConfiguration')]",
+      "name": "[concat(parameters('VirtualMachineNameWitness'),'/CreateFileShareWitness')]",
       "location": "[parameters('Location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'),'/extensions/joindomain')]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -216,91 +218,153 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "wmfVersion": "5.0",
-          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
-          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
+          "modulesUrl": "[variables('AlwaysonWitnessDSCFile')]",
+          "configurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
           "SASToken": "[parameters('_artifactsLocationSasToken')]",
           "properties": {
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
             "AutomationAccountStorageCredential": {
               "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
               "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "domainName": "[parameters('DomainToJoin')]",
+            "sharePath": "[variables('sqlAlwaysOnFileSharePath')]",
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
             }
           }
         },
         "protectedSettings": {
           "items": {
-            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('VirtualMachineNameSecond'),'/BaseWindowsConfiguration')]",
-      "location": "[parameters('Location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Powershell",
-        "type": "DSC",
-        "typeHandlerVersion": "2.17",
-        "autoUpgradeMinorVersion": true,
-        "settings": {
-          "wmfVersion": "5.0",
-          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
-          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
-          "SASToken": "[parameters('_artifactsLocationSasToken')]",
-          "properties": {
-            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
-            "AutomationAccountStorageCredential": {
-              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
-              "password": "PrivateSettingsRef:AutomationAccountPass"
-            }
-          }
-        },
-        "protectedSettings": {
-          "items": {
-            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('VirtualMachineNameWitness'),'/BaseWindowsConfiguration')]",
-      "location": "[parameters('Location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Powershell",
-        "type": "DSC",
-        "typeHandlerVersion": "2.17",
-        "autoUpgradeMinorVersion": true,
-        "settings": {
-          "wmfVersion": "5.0",
-          "modulesUrl": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip",
-          "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
-          "SASToken": "[parameters('_artifactsLocationSasToken')]",
-          "properties": {
-            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
-            "AutomationAccountStorageCredential": {
-              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
-              "password": "PrivateSettingsRef:AutomationAccountPass"
-            }
-          }
-        },
-        "protectedSettings": {
-          "items": {
+            "adminPassword": "[parameters('_domainPassword')]",
             "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
           }
         }
       }
     },
 
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameFirst'),'/SetupFirstVM')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'),'/extensions/joindomain')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "[variables('AlwaysonFirstDSCFile')]",
+          "configurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "domainName": "[parameters('DomainToJoin')]",
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
+            },
+            "SQLServicecreds": {
+              "userName": "[parameters('_SQLsvcaccountname')]",
+              "password": "PrivateSettingsRef:sqlServerServiceAccountPassword"
+            },
+            "VMAdmincreds": {
+              "userName": "[parameters('VMadminUsername')]",
+              "password": "PrivateSettingsRef:VMadminUsernamePassword"
+            }
+          }
+
+        },
+        "protectedSettings": {
+          "items": {
+            "sqlServerServiceAccountPassword": "[parameters('_SQLsvcaccountnamePassword')]",
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]",
+            "adminPassword": "[parameters('_domainPassword')]",
+            "VMadminUsernamePassword": "[parameters('_vmAdminPassword')]"
+          }
+        }
+      }
+    },
+
+      {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameSecond'),'/SetupSecondVM')]",
+      "location": "[parameters('Location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'),'/extensions/CreateFileShareWitness')]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'),'/extensions/SetupFirstVM')]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'))]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'),'/extensions/joindomain')]"
+        ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "[variables('AlwaysonSecondaryDSCFile')]",
+          "configurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "domainName": "[parameters('DomainToJoin')]",
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "clusterName": "[parameters('ClusterName')]",
+            "sharePath": "[concat('\\\\',parameters('VirtualMachineNameWitness'),'\\',variables('sqlAlwaysOnFileSharePath'))]",
+            "nodes": [
+              "[parameters('VirtualMachineNameFirst')]",
+              "[parameters('VirtualMachineNameSecond')]"
+            ],
+            "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
+            "sqlAlwaysOnAvailabilityGroupName": "[variables('sqlAlwaysOnAGName1')]",
+            "sqlAlwaysOnAvailabilityGroupListenerName": "[variables('sqlAlwaysOnListener1')]",
+            "sqlAlwaysOnAvailabilityGroupListenerPort": 1433,
+            "lbName": "[parameters('LoadBalancerName')]",
+            "lbAddress": "[parameters('LoadBalancerIP')]",
+            "PrimaryReplica": "[parameters('VirtualMachineNameSecond')]",
+            "SecondaryReplica": "[parameters('VirtualMachineNameFirst')]",
+            "dnsServerName": "OperationsDC",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
+            },
+            "sqlServiceCreds": {
+              "userName": "[parameters('_SQLsvcaccountname')]",
+              "password": "PrivateSettingsRef:sqlServerServiceAccountPassword"
+
+            },
+            "VMAdmincreds": {
+              "userName": "[parameters('VMadminUsername')]",
+              "password": "PrivateSettingsRef:VMadminUsernamePassword"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "adminPassword": "[parameters('_domainPassword')]",
+            "sqlServerServiceAccountPassword": "[parameters('_SQLsvcaccountnamePassword')]",
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]",
+            "VMadminUsernamePassword": "[parameters('_vmAdminPassword')]"
+          }
+        }
+      }
+    },
 
     {
       "apiVersion": "2015-05-01-preview",

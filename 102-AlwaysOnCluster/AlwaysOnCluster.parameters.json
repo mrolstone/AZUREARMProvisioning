@@ -1,24 +1,24 @@
-{
+﻿{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "VirtualMachineNameFirst": {
-      "value": "cls18first"
+      "value": "cls210irst"
     },
     "VirtualMachineNameSecond": {
-      "value": "cls18sec"
+      "value": "cls210sec"
     },
     "VirtualMachineNameWitness": {
-      "value": "cls18witt"
+      "value": "cls210witt"
     },
     "VirtualMachineNICNameFirst": {
-      "value": "cls18first-NIC"
+      "value": "cls210first-NIC"
     },
     "VirtualMachineNICNameSecond": {
-      "value": "cls18sec-NIC"
+      "value": "cls210sec-NIC"
     },
     "VirtualMachineNICNameWitness": {
-      "value": "cls18witt-NIC"
+      "value": "cls2107witt-NIC"
     },
     "SubnetName": {
       "value": "LAN-Subnet-02"
@@ -42,37 +42,34 @@
       "value": 3
     },
     "StorageAccountNamePrem": {
-      "value": "cls18n11672"
+      "value": "cls2102n121672"
     },
     "StorageAccountNameStd": {
-      "value": "cls184882"
+      "value": "cls21014882"
     },
     "LoadBalancerName": {
-      "value": "cls18"
+      "value": "cls210"
     },
     "LoadBalancerNameRuleName": {
-      "value": "cls18lbr"
+      "value": "cls210br"
     },
     "LoadBalancerProbeName": {
-      "value": "cls18pr"
+      "value": "cls210rpr"
     },
     "AvailabilitysetName": {
-      "value": "cls18t1021"
+      "value": "cls210t10221"
     },
     "LoadBalancerIP": {
-      "value": "192.168.2.60"
+      "value": "10.4.2.210"
     },
     "ClusterName": {
-      "value": "cls18"
-    },
-    "_SQLsvcaccountname": {
-      "value": "SA-CRB18"
-    },
-    "VMadminUsername": {
-      "value": "allan"
+      "value": "cls210"
     },
     "StorageAccountSourcePath": {
-      "value": "\\\\dscresources.file.core.windows.net\\agents"
-    }
+      "value": "\\\\dscresources.file.core.windows.net\\agentssql"
+    },
+      "VMadminUsername": {
+          "value": "allan"
+      }
   }
 }
