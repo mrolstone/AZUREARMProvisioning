@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -66,7 +66,7 @@
       "value": "cls210"
     },
     "StorageAccountSourcePath": {
-      "value": "\\\\dscresources.file.core.windows.net\\agentssql"
+      "value": "\\\\stgazewpmgislsd075d38001.file.core.windows.net\\aonbaseagents"
     },
       "VMadminUsername": {
           "value": "allan"
