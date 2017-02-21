@@ -55,6 +55,12 @@
         "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
       }
     },
+    "ServiceAccountOUPath": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies an organizational unit (OU) for sql service account to be created. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
+      }
+    },
     "DomainJoinOptions": {
       "type": "int",
       "defaultValue": 3,
@@ -267,6 +273,7 @@
             "domainName": "[parameters('DomainToJoin')]",
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
             "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')],
             "AutomationAccountStorageCredential": {
               "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
               "password": "PrivateSettingsRef:AutomationAccountPass"
@@ -321,6 +328,7 @@
           "properties": {
             "domainName": "[parameters('DomainToJoin')]",
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')],
             "clusterName": "[parameters('ClusterName')]",
             "sharePath": "[concat('\\\\',parameters('VirtualMachineNameWitness'),'\\',variables('sqlAlwaysOnFileSharePath'))]",
             "nodes": [
