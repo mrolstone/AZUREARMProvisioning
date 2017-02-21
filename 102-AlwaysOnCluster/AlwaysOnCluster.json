@@ -273,7 +273,7 @@
             "domainName": "[parameters('DomainToJoin')]",
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
             "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
-            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')],
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')]",
             "AutomationAccountStorageCredential": {
               "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
               "password": "PrivateSettingsRef:AutomationAccountPass"
@@ -328,7 +328,7 @@
           "properties": {
             "domainName": "[parameters('DomainToJoin')]",
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
-            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')],
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')]",
             "clusterName": "[parameters('ClusterName')]",
             "sharePath": "[concat('\\\\',parameters('VirtualMachineNameWitness'),'\\',variables('sqlAlwaysOnFileSharePath'))]",
             "nodes": [
