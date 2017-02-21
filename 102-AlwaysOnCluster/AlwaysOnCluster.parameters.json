@@ -38,6 +38,9 @@
     "OuPath": {
       "value": "OU=computersAzure;DC=corp;DC=allan;DC=com"
     },
+    "ServiceAccountOUPath": {
+      "value": "OU=computersAzure;DC=corp;DC=allan;DC=com"
+    },
     "DomainJoinOptions": {
       "value": 3
     },
