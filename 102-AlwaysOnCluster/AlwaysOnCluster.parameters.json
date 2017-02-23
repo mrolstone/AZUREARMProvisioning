@@ -36,10 +36,10 @@
       "value": "corp.allan.com"
     },
     "OuPath": {
-      "value": "OU=computersAzure;DC=corp;DC=allan;DC=com"
+      "value": "OU=Testing,OU=Secure Servers,dc=CRB,DC=apmoller,DC=net"
     },
     "ServiceAccountOUPath": {
-      "value": "OU=computersAzure;DC=corp;DC=allan;DC=com"
+      "value": "OU=Testing,OU=Secure Servers,dc=CRB,DC=apmoller,DC=net"
     },
     "DomainJoinOptions": {
       "value": 3
