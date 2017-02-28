@@ -54,13 +54,13 @@
       "value": "agents.tar"
     },
     "CustomScriptExtensionContainer": {
-      "value": "basedsc"
+      "value": "linuxbaseagents"
     },
     "MofContainerName": {
-      "value": "test"
+      "value": "linuxdsc"
     },
     "ArtifactsStorageAccount": {
-      "value": "dscresources"
+      "value": "stgazewpmgislsd075d38001"
     },
     "VirtualMachineNameSecond": {
       "value": "SCRBTSTAZE076"
