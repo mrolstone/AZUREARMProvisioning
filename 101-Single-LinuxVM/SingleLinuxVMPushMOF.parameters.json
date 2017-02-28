@@ -57,10 +57,10 @@
       "value": "basedsc"
     },
     "MofContainerName": {
-      "value": "test"
+      "value": "linuxdsc"
     },
     "ArtifactsStorageAccount": {
-      "value": "dscresources"
+      "value": "stgazewpmgislsd075d38001"
     }
   }
 }
