@@ -54,7 +54,7 @@
       "value": "agents.tar"
     },
     "CustomScriptExtensionContainer": {
-      "value": "basedsc"
+      "value": "linuxbaseagents"
     },
     "MofContainerName": {
       "value": "linuxdsc"
