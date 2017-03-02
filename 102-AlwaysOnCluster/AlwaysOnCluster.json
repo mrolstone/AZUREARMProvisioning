@@ -19,6 +19,12 @@
         "description": "ClusterPrefix for naming cluster resources"
       }
     },
+    "ADComputerModificationGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "AD group for cluster"
+      }
+    },
     "DomainToJoin": {
       "type": "string",
       "metadata": {
