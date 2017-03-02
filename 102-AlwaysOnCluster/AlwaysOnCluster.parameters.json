@@ -68,6 +68,9 @@
     "ClusterName": {
       "value": "cls210"
     },
+    "ADComputerModificationGroup": {
+      "value": "sOUD-SecureServersTesting-ManageComp"
+    },
     "StorageAccountSourcePath": {
       "value": "\\\\stgazewpmgislsd075d38001.file.core.windows.net\\aonbaseagents"
     },
