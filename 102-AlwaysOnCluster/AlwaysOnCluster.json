@@ -330,6 +330,7 @@
             "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
             "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')]",
             "clusterName": "[parameters('ClusterName')]",
+            "ADComputerModificationGroup": "[parameters('ADComputerModificationGroup')]",
             "sharePath": "[concat('\\\\',parameters('VirtualMachineNameWitness'),'\\',variables('sqlAlwaysOnFileSharePath'))]",
             "nodes": [
               "[parameters('VirtualMachineNameFirst')]",
