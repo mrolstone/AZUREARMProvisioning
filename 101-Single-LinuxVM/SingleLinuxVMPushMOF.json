@@ -100,7 +100,7 @@
     },
     "numDataDisks": {
       "type": "int",
-      "maxValue": 4,
+      "maxValue": 8,
       "metadata": {
         "description": "This parameter allows the user to select the number of disks they want"
       }
