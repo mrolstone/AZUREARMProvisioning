@@ -227,7 +227,7 @@
       },
       {
         "name": "Datadisk5",
-        "lun": 3,
+        "lun": 4,
         "vhd": {
           "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk5', '.vhd')]"
         },
@@ -237,7 +237,7 @@
       },
       {
         "name": "Datadisk6",
-        "lun": 3,
+        "lun": 5,
         "vhd": {
           "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk6', '.vhd')]"
         },
@@ -247,7 +247,7 @@
       },
       {
         "name": "Datadisk7",
-        "lun": 3,
+        "lun": 6,
         "vhd": {
           "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk7', '.vhd')]"
         },
@@ -257,7 +257,7 @@
       },
       {
         "name": "Datadisk8",
-        "lun": 3,
+        "lun": 7,
         "vhd": {
           "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk8', '.vhd')]"
         },
