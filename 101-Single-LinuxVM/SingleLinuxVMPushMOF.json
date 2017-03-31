@@ -221,8 +221,47 @@
         "createOption": "Empty",
         "caching": "[parameters('diskCaching')]",
         "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk5",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk5', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk6",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk6', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk7",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk7', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+      },
+      {
+        "name": "Datadisk8",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'datadisk8', '.vhd')]"
+        },
+        "createOption": "Empty",
+        "caching": "[parameters('diskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
       }
-
     ]
 
   },
