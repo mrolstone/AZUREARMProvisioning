@@ -176,6 +176,9 @@
     }
   },
   "variables": {
+    "imagePublisher": "RedHat",
+    "imageOffer": "RHEL",
+    "imageSku": "[parameters('OSVersion')]",
     "DSCFileURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.blob.core.windows.net/',parameters('MofContainerName'),'/',parameters('DSCFile'))]",
     "CustomScriptExtensionScriptAgentFileNameURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptAgentFileName'))]",
     "CustomScriptExtensionScriptFileNameToRunURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptFileNameToRun'))]",
@@ -322,9 +325,9 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "Redhat",
-            "offer": "RHEL",
-            "sku": "[parameters('OSVersion')]",
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('imageSku')]",
             "version": "latest"
           },
           "osDisk": {
