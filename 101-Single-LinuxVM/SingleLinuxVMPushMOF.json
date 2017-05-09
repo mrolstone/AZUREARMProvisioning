@@ -348,63 +348,6 @@
           ]
         }
       },
-      "resources": [
-        {
-          "name": "[concat(parameters('VirtualMachineName'), '/DSCForLinux')]",
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "location": "[parameters('Location')]",
-          "tags": {
-            "displayname": "DSCForLinux"
-          },
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]",
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'),'/extensions/CustomScriptExtension')]"
-          ],
-          "properties": {
-            "publisher": "Microsoft.OSTCExtensions",
-            "type": "DSCForLinux",
-            "typeHandlerVersion": "2.0",
-            "settings": {
-              "Mode": "Push",
-              "FileUri": "[variables('DSCFileURL')]"
-            },
-            "protectedSettings": {
-              "StorageAccountName": "[parameters('_DSCagentSourceStorageAccountName')]",
-              "StorageAccountKey": "[parameters('_DSCagentSourceStorageAccountKey')]"
-
-            }
-          }
-        },
-        {
-          "name": "[concat(parameters('VirtualMachineName'), '/CustomScriptExtension')]",
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "location": "[parameters('Location')]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', string(parameters('VirtualMachineName')))]"
-          ],
-          "tags": {
-            "displayName": "CustomScriptExtension"
-          },
-          "properties": {
-            "publisher": "Microsoft.OSTCExtensions",
-            "type": "CustomScriptForLinux",
-            "typeHandlerVersion": "1.4",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "fileUris": [
-                "[concat(variables('CustomScriptExtensionScriptAgentFileNameURL'), parameters('_artifactsLocationSasToken'))]",
-                "[concat(variables('CustomScriptExtensionScriptFileNameToRunURL'), parameters('_artifactsLocationSasToken'))]"
-
-              ],
-              "commandToExecute": "[concat('sh ', parameters('CustomScriptExtensionScriptFileNameToRun'))]"
-            }
-          }
-        }
-
-      ]
-
     }
   ],
   "outputs": {

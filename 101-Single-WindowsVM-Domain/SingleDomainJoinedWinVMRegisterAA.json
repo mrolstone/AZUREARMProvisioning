@@ -303,39 +303,6 @@
       "resources": [
         {
           "apiVersion": "2015-06-15",
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('VirtualMachineName'),'/BaseWindowsConfiguration')]",
-          "location": "[parameters('Location')]",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'))]"
-          ],
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.0",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "wmfVersion": "5.0",
-              "modulesUrl": "[parameters('DSCFile')]",
-              "configurationFunction": "BaseWindowsInstallation.ps1\\BaseWindowsInstallation",
-              "SASToken": "[parameters('_artifactsLocationSasToken')]",
-              "properties": {
-                "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
-                "AutomationAccountStorageCredential": {
-                  "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
-                  "password": "PrivateSettingsRef:AutomationAccountPass"
-                }
-              }
-            },
-            "protectedSettings": {
-              "items": {
-                "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
-              }
-            }
-          }
-        },
-        {
-          "apiVersion": "2015-06-15",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineName'))]"
           ],
