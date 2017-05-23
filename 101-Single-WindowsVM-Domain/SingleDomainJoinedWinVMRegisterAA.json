@@ -266,9 +266,9 @@
         "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountName'))]"
       ],
       "properties": {
+        "licenseType": "Windows_Server",
         "hardwareProfile": {
           "vmSize": "[parameters('VirtualMachineSize')]"
-
         },
           "osProfile": {
             "computerName": "[parameters('VirtualMachineName')]",
