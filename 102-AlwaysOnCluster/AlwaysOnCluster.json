@@ -564,6 +564,7 @@
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
         },
+        "licenseType": "Windows_Server",
         "hardwareProfile": {
           "vmSize": "[variables('ClusterVMSize')]"
         },

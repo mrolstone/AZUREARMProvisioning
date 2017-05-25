@@ -465,6 +465,7 @@
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('AvailabilitysetName'))]"
         },
+        "licenseType": "Windows_Server",
         "hardwareProfile": {
           "vmSize": "[parameters('VirtualMachineSize')]"
         },
@@ -574,6 +575,7 @@
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('AvailabilitysetName'))]"
         },
+        "licenseType": "Windows_Server",
         "hardwareProfile": {
           "vmSize": "[parameters('VirtualMachineSize')]"
         },
