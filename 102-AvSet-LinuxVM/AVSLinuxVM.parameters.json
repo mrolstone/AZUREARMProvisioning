@@ -1,0 +1,90 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualMachineNameFirst": {
+      "value": "SCRBTSTAZE077"
+    },
+    "VMadminUsername": {
+      "value": "allan"
+    },
+    "OSVersion": {
+      "value": "7.3"
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "512"
+    },
+    "VirtualMachineNICNameFirst": {
+      "value": "SCRBTSTAZE077NIC"
+    },
+    "DiskCaching": {
+      "value": "ReadWrite"
+    },
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "SubnetName": {
+      "value": "LAN-Subnet-02"
+    },
+    "VirtualNetworkName": {
+      "value": "OnPremConnectedNetwork"
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D1"
+    },
+    "StorageAccountName": {
+      "value": "satest57614175wwq6"
+    },
+    "VirtualNetworkResourceGroup": {
+      "value": "Operations"
+    },
+    "Location": {
+      "value": "West Europe"
+    },
+    "NumDataDisks": {
+      "value": 0
+    },
+    "VirtualMachineNameSecond": {
+      "value": "SCRBTSTAZE076"
+    },
+    "VirtualMachineNICNameSecond": {
+      "value": "SCRBTSTAZE076NIC"
+    },
+    "AvailabilitysetName": {
+      "value": "avsetalla76"
+    },
+    "LoadBalancerName": {
+      "value": "ilballan76"
+    },
+    "LoadBalancerProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerFrontPort": {
+      "value": 80
+    },
+    "LoadBalancerBackendPort": {
+      "value": 80
+    },
+    "LoadBalancerIdleTimeoutInMinutes": {
+      "value": 15
+    },
+    "LoadBalancerNameRuleName": {
+      "value": "testrules76"
+    },
+    "LoadBalancerProbeProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerProbePort": {
+      "value": 80
+    },
+    "LoadBalancerProbeIntervalInSeconds": {
+      "value": 15
+    },
+    "LoadBalancerNumberofProbes": {
+      "value": 2
+    },
+    "LoadBalancerProbeName": {
+      "value": "lbprobe76"
+    }
+  }
+}
