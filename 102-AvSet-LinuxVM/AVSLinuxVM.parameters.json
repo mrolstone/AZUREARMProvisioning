@@ -2,20 +2,20 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "VirtualMachineNameFirst": {
-      "value": "SCRBTSTAZE077"
+    "VirtualMachineName": {
+      "value": "SCRBTSTAZE059"
     },
     "VMadminUsername": {
       "value": "allan"
     },
     "OSVersion": {
-      "value": "7.3"
+      "value": "6.7"
     },
     "SizeOfDataDisksInGB": {
       "value": "512"
     },
-    "VirtualMachineNICNameFirst": {
-      "value": "SCRBTSTAZE077NIC"
+    "VirtualMachineNICName": {
+      "value": "SCRBTSTAZE059NIC"
     },
     "DiskCaching": {
       "value": "ReadWrite"
@@ -33,7 +33,7 @@
       "value": "Standard_D1"
     },
     "StorageAccountName": {
-      "value": "satest57614175wwq6"
+      "value": "satest59614175wwq6"
     },
     "VirtualNetworkResourceGroup": {
       "value": "Operations"
@@ -44,13 +44,25 @@
     "NumDataDisks": {
       "value": 0
     },
-    "VirtualMachineNameSecond": {
-      "value": "SCRBTSTAZE076"
+    "DSCFile": {
+      "value": "LinuxDSCConf.mof"
     },
-    "VirtualMachineNICNameSecond": {
-      "value": "SCRBTSTAZE076NIC"
+    "CustomScriptExtensionScriptFileNameToRun": {
+      "value": "untar.sh"
     },
-    "AvailabilitysetName": {
+    "CustomScriptExtensionScriptAgentFileName": {
+      "value": "agents.tar"
+    },
+    "CustomScriptExtensionContainer": {
+      "value": "linuxbaseagents"
+    },
+    "MofContainerName": {
+      "value": "linuxdsc"
+    },
+    "ArtifactsStorageAccount": {
+      "value": "stgazewpmgislsd075d38001"
+    },
+        "AvailabilitysetName": {
       "value": "avsetalla76"
     },
     "LoadBalancerName": {
