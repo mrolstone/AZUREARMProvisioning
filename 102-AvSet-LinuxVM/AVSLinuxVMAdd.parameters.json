@@ -64,6 +64,9 @@
     },
     "AvailabilitysetName": {
       "value": "avsetalla76"
+    },
+    "LoadBalancerName": {
+      "value": "ilballan76"
     }
   }
 }
