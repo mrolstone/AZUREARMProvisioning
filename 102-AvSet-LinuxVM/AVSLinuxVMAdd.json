@@ -173,36 +173,6 @@
     },
     "LoadBalancerName": {
       "type": "string"
-    },
-    "LoadBalancerProtocol": {
-      "type": "string"
-    },
-    "LoadBalancerFrontPort": {
-      "type": "int"
-    },
-    "LoadBalancerBackendPort": {
-      "type": "int"
-    },
-    "LoadBalancerIdleTimeoutInMinutes": {
-      "type": "int"
-    },
-    "LoadBalancerNameRuleName": {
-      "type": "string"
-    },
-    "LoadBalancerProbeProtocol": {
-      "type": "string"
-    },
-    "LoadBalancerProbePort": {
-      "type": "int"
-    },
-    "LoadBalancerProbeIntervalInSeconds": {
-      "type": "int"
-    },
-    "LoadBalancerNumberofProbes": {
-      "type": "int"
-    },
-    "LoadBalancerProbeName": {
-      "type": "string"
     }
   },
 
