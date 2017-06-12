@@ -44,6 +44,24 @@
     "NumDataDisks": {
       "value": 0
     },
+        "DSCFile": {
+      "value": "LinuxDSCConf.mof"
+    },
+    "CustomScriptExtensionScriptFileNameToRun": {
+      "value": "untar.sh"
+    },
+    "CustomScriptExtensionScriptAgentFileName": {
+      "value": "agents.tar"
+    },
+    "CustomScriptExtensionContainer": {
+      "value": "linuxbaseagents"
+    },
+    "MofContainerName": {
+      "value": "linuxdsc"
+    },
+    "ArtifactsStorageAccount": {
+      "value": "stgazewpmgislsd075d38001"
+    },
     "AvailabilitysetName": {
       "value": "avsetalla76"
     }

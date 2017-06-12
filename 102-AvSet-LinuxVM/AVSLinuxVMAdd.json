@@ -113,6 +113,60 @@
         "Premium_LRS"
       ]
     },
+    "_DSCagentSourceStorageAccountName": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Storageaccount name where the MOF file is stored"
+      }
+    },
+    "_DSCagentSourceStorageAccountKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Key of storage account where MOF file is stored"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated token to access _artifactsLocation"
+      }
+    },
+    "CustomScriptExtensionScriptFileNameToRun": {
+      "type": "string",
+      "metadata": {
+        "description": "Script file to run as custome script extension"
+      }
+    },
+    "CustomScriptExtensionScriptAgentFileName": {
+      "type": "string",
+      "metadata": {
+        "description": "Script file to download"
+      }
+    },
+    "CustomScriptExtensionContainer": {
+      "type": "string",
+      "metadata": {
+        "description": "Container name of CSE files"
+      }
+    },
+    "DSCFile": {
+      "type": "string",
+      "metadata": {
+        "description": "DSC file name"
+      }
+    },
+    "ArtifactsStorageAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account of artifacts, should be the same as the storage account of which SAS tokens was created"
+      }
+    },
+    "MofContainerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Container name of MOF"
+      }
+    },
     "AvailabilitysetName": {
       "type": "string",
       "minLength": 1
