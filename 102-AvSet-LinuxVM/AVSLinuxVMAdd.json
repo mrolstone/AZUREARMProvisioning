@@ -51,7 +51,7 @@
     },
     "OSVersion": {
       "type": "string",
-      "defaultValue": "6.7",
+      "defaultValue": "7.3",
       "allowedValues": [
         "6.9",
         "7.3"
@@ -113,60 +113,6 @@
         "Premium_LRS"
       ]
     },
-    "_DSCagentSourceStorageAccountName": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Storageaccount name where the MOF file is stored"
-      }
-    },
-    "_DSCagentSourceStorageAccountKey": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Key of storage account where MOF file is stored"
-      }
-    },
-    "_artifactsLocationSasToken": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Auto-generated token to access _artifactsLocation"
-      }
-    },
-    "CustomScriptExtensionScriptFileNameToRun": {
-      "type": "string",
-      "metadata": {
-        "description": "Script file to run as custome script extension"
-      }
-    },
-    "CustomScriptExtensionScriptAgentFileName": {
-      "type": "string",
-      "metadata": {
-        "description": "Script file to download"
-      }
-    },
-    "CustomScriptExtensionContainer": {
-      "type": "string",
-      "metadata": {
-        "description": "Container name of CSE files"
-      }
-    },
-    "DSCFile": {
-      "type": "string",
-      "metadata": {
-        "description": "DSC file name"
-      }
-    },
-    "ArtifactsStorageAccount": {
-      "type": "string",
-      "metadata": {
-        "description": "Storage account of artifacts, should be the same as the storage account of which SAS tokens was created"
-      }
-    },
-    "MofContainerName": {
-      "type": "string",
-      "metadata": {
-        "description": "Container name of MOF"
-      }
-    },
     "AvailabilitysetName": {
       "type": "string",
       "minLength": 1
@@ -180,9 +126,6 @@
     "imagePublisher": "RedHat",
     "imageOffer": "RHEL",
     "imageSku": "[parameters('OSVersion')]",
-    "DSCFileURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.blob.core.windows.net/',parameters('MofContainerName'),'/',parameters('DSCFile'))]",
-    "CustomScriptExtensionScriptAgentFileNameURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptAgentFileName'))]",
-    "CustomScriptExtensionScriptFileNameToRunURL": "[concat('https://',parameters('ArtifactsStorageAccount'), '.file.core.windows.net/',parameters('CustomScriptExtensionContainer'),'/',parameters('CustomScriptExtensionScriptFileNameToRun'))]",
     "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
     "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
     "DiskArray": [
@@ -285,33 +228,6 @@
       }
     },
 
-    {
-      "apiVersion": "2016-03-30",
-      "location": "[parameters('Location')]",
-      "name": "[parameters('VirtualMachineNICName')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
-      ],      
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "subnet": {
-                "id": "[variables('alwaysonvnetSubnetRef')]"
-              },
-              "loadBalancerBackendAddressPools": [
-                {
-                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
-                }
-              ]
-            }
-          }
-        ]
-      },
-      "type": "Microsoft.Network/networkInterfaces"
-    },
 
     {
       "apiVersion": "2015-06-15",
