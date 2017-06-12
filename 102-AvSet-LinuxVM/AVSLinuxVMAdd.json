@@ -167,14 +167,15 @@
         "description": "Container name of MOF"
       }
     },
+      "LoadBalancerName": {
+      "type": "string"
+    },
     "AvailabilitysetName": {
       "type": "string",
       "minLength": 1
-    },
-    "LoadBalancerName": {
-      "type": "string"
     }
   },
+
 
   "variables": {
     "imagePublisher": "RedHat",
