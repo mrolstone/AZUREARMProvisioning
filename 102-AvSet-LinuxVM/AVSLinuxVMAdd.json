@@ -283,7 +283,34 @@
       }
     },
 
-
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICName')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+      ],      
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+    
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
