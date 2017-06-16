@@ -814,7 +814,9 @@
           ]
         }
       }
-    },
+    }
+  ],
+  "resources": [
     {
       "apiVersion": "2015-06-15",
       "dependsOn": [
@@ -888,7 +890,9 @@
           ]
         }
       }
-    },
+    }
+  ],
+  "resources": [
     {
       "apiVersion": "2015-06-15",
       "dependsOn": [
@@ -961,8 +965,9 @@
           ]
         }
       }
-    },
-
+    }
+  ],
+  "resources": [
     {
       "apiVersion": "2015-06-15",
       "dependsOn": [
