@@ -20,6 +20,30 @@
     "VirtualMachineNICNameWitness": {
       "value": "cls2107witt-NIC"
     },
+    "StorageAccountNameFirst": {
+      "value": "cls2102n121672"
+    },
+    "StorageAccountNameSecond": {
+      "value": "cls21014882"
+    },
+    "StorageAccountNameWitness": {
+      "value": "cls21014882"
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "128"
+    },
+    "DiskCaching": {
+      "value": "None"
+    },
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "NumDataDisks": {
+      "value": 4
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D12_v2"
+    },
     "SubnetName": {
       "value": "LAN-Subnet-02"
     },
@@ -43,12 +67,6 @@
     },
     "DomainJoinOptions": {
       "value": 3
-    },
-    "StorageAccountNamePrem": {
-      "value": "cls2102n121672"
-    },
-    "StorageAccountNameStd": {
-      "value": "cls21014882"
     },
     "LoadBalancerName": {
       "value": "cls210"
@@ -74,8 +92,8 @@
     "StorageAccountSourcePath": {
       "value": "\\\\stgazewpmgislsd075d38001.file.core.windows.net\\aonbaseagents"
     },
-      "VMadminUsername": {
-          "value": "allan"
-      }
+    "VMadminUsername": {
+      "value": "allan"
+    }
   }
 }
