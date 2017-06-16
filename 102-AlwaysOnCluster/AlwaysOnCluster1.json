@@ -1,0 +1,969 @@
+{"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VMadminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "_vmAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated from runbook"
+      }
+    },
+    "ClusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "ClusterPrefix for naming cluster resources"
+      }
+    },
+    "ADComputerModificationGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "AD group for cluster"
+      }
+    },
+    "DomainToJoin": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD domain"
+      }
+    },
+    "_domainUsername": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Username of the account on the domain"
+      }
+    },
+    "_domainPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password of the account on the domain"
+      }
+    },
+    "_SQLsvcaccountname": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SQL service account"
+      }
+    },
+    "_SQLsvcaccountnamePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SQL service account password"
+      }
+    },
+    "OuPath": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
+      }
+    },
+    "ServiceAccountOUPath": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies an organizational unit (OU) for sql service account to be created. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
+      }
+    },
+    "DomainJoinOptions": {
+      "type": "int",
+      "defaultValue": 3,
+      "metadata": {
+        "description": "Set of bit flags that define the join options. Default value of 3 is a combination of NETSETUP_JOIN_DOMAIN (0x00000001) & NETSETUP_ACCT_CREATE (0x00000002) i.e. will join the domain and create the account on the domain. For more information see https://msdn.microsoft.com/en-us/library/aa392154(v=vs.85).aspx"
+      }
+    },
+    "VirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "VirtualMachineNameFirst": {
+      "type": "string",
+      "Metadata": {
+        "description": "Virtual Machine Name"
+      }
+    },
+    "VirtualMachineNameSecond": {
+      "type": "string",
+      "Metadata": {
+        "description": "Virtual Machine Name"
+      }
+    },
+    "VirtualMachineNameWitness": {
+      "type": "string",
+      "Metadata": {
+        "description": "Virtual Machine Name"
+      }
+    },
+    "VirtualMachineNICNameFirst": {
+      "type": "string",
+      "Metadata": {
+        "description": "Name of VM NIC"
+      }
+    },
+    "VirtualMachineNICNameSecond": {
+      "type": "string",
+      "Metadata": {
+        "description": "Name of VM NIC"
+      }
+    },
+    "VirtualMachineNICNameWitness": {
+      "type": "string",
+      "Metadata": {
+        "description": "Name of VM NIC"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "allowedValues": [
+        "East Asia",
+        "East US 2",
+        "West Europe"
+      ],
+      "metadata": {
+        "description": "Location of Virtual machine"
+      }
+    },
+    "StorageAccountNamePrem": {
+      "type": "string",
+      "metadata": {
+        "description": "Name  for storageaccount"
+      }
+    },
+    "AvailabilitysetName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "StorageAccountNameStd": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of second storageaccount"
+      }
+    },
+    "SubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Subnet Name"
+      }
+    },
+    "VirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing virtualNetworkName"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated token to access DSC configurations"
+      }
+    },
+    "LoadBalancerName": {
+      "type": "string"
+    },
+    "LoadBalancerIP": {
+      "type": "string"
+    },
+    "LoadBalancerNameRuleName": {
+      "type": "string"
+    },
+    "LoadBalancerProbeName": {
+      "type": "string"
+    },
+    "_DSCagentSourceStorageAccountName": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Storage account name of storage account with agents"
+      }
+    },
+    "_DSCagentSourceStorageAccountKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Storage account key of storage account with agents"
+      }
+    },
+    "StorageAccountSourcePath": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage path of agents"
+      }
+    }
+  },
+  "variables": {
+    "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
+    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
+    "SizeOfDataDisksInGB": "1023",
+    "DiskCachingPrem": "none",
+    "DiskCachingStd": "none",
+    "ClusterVMSize": "Standard_DS3_v2",
+    "ClusterVMWitnessSize": "Standard_DS1_v2",
+    "AlwaysonWitnessDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysonWitness.zip",
+    "AlwaysonFirstDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/PrepareAlwaysOnSqlServer.zip",
+    "AlwaysonSecondaryDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysOnCluster.zip",
+    "sqlAlwaysOnFileSharePath": "[concat(parameters('ClusterName'),'-fsw')]",
+    "numberOfDisks": "4",
+    "workloadType": "GENERAL",
+    "sqlAlwaysOnEPName": "[concat(parameters('ClusterName'),'-agep')]",
+    "sqlAlwaysOnAGName1": "[concat(parameters('ClusterName'),'-ag1')]",
+    "sqlAlwaysOnListener1": "[concat(parameters('ClusterName'),'-agl1')]"
+
+  },
+
+  "resources": [
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameWitness'),'/CreateFileShareWitness')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'),'/extensions/joindomain')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "[variables('AlwaysonWitnessDSCFile')]",
+          "configurationFunction": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "domainName": "[parameters('DomainToJoin')]",
+            "sharePath": "[variables('sqlAlwaysOnFileSharePath')]",
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "adminPassword": "[parameters('_domainPassword')]",
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]"
+          }
+        }
+      }
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameFirst'),'/SetupFirstVM')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'),'/extensions/joindomain')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "[variables('AlwaysonFirstDSCFile')]",
+          "configurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "domainName": "[parameters('DomainToJoin')]",
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')]",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
+            },
+            "SQLServicecreds": {
+              "userName": "[parameters('_SQLsvcaccountname')]",
+              "password": "PrivateSettingsRef:sqlServerServiceAccountPassword"
+            },
+            "VMAdmincreds": {
+              "userName": "[parameters('VMadminUsername')]",
+              "password": "PrivateSettingsRef:VMadminUsernamePassword"
+            }
+          }
+
+        },
+        "protectedSettings": {
+          "items": {
+            "sqlServerServiceAccountPassword": "[parameters('_SQLsvcaccountnamePassword')]",
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]",
+            "adminPassword": "[parameters('_domainPassword')]",
+            "VMadminUsernamePassword": "[parameters('_vmAdminPassword')]"
+          }
+        }
+      }
+    },
+
+      {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VirtualMachineNameSecond'),'/SetupSecondVM')]",
+      "location": "[parameters('Location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'),'/extensions/CreateFileShareWitness')]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'),'/extensions/SetupFirstVM')]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'))]",
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'),'/extensions/joindomain')]"
+        ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.17",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "5.0",
+          "modulesUrl": "[variables('AlwaysonSecondaryDSCFile')]",
+          "configurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
+          "SASToken": "[parameters('_artifactsLocationSasToken')]",
+          "properties": {
+            "domainName": "[parameters('DomainToJoin')]",
+            "StorageAccountSourcePath": "[parameters('StorageAccountSourcePath')]",
+            "ServiceAccountOUPath": "[parameters('ServiceAccountOUPath')]",
+            "clusterName": "[parameters('ClusterName')]",
+            "ADComputerModificationGroup": "[parameters('ADComputerModificationGroup')]",
+            "sharePath": "[concat('\\\\',parameters('VirtualMachineNameWitness'),'\\',variables('sqlAlwaysOnFileSharePath'))]",
+            "nodes": [
+              "[parameters('VirtualMachineNameFirst')]",
+              "[parameters('VirtualMachineNameSecond')]"
+            ],
+            "sqlAlwaysOnEndpointName": "[variables('sqlAlwaysOnEPName')]",
+            "sqlAlwaysOnAvailabilityGroupName": "[variables('sqlAlwaysOnAGName1')]",
+            "sqlAlwaysOnAvailabilityGroupListenerName": "[variables('sqlAlwaysOnListener1')]",
+            "sqlAlwaysOnAvailabilityGroupListenerPort": 1433,
+            "lbName": "[parameters('LoadBalancerName')]",
+            "lbAddress": "[parameters('LoadBalancerIP')]",
+            "PrimaryReplica": "[parameters('VirtualMachineNameSecond')]",
+            "SecondaryReplica": "[parameters('VirtualMachineNameFirst')]",
+            "dnsServerName": "OperationsDC",
+            "AutomationAccountStorageCredential": {
+              "userName": "[parameters('_DSCagentSourceStorageAccountName')]",
+              "password": "PrivateSettingsRef:AutomationAccountPass"
+            },
+            "adminCreds": {
+              "userName": "[parameters('_domainUsername')]",
+              "password": "PrivateSettingsRef:adminPassword"
+            },
+            "sqlServiceCreds": {
+              "userName": "[parameters('_SQLsvcaccountname')]",
+              "password": "PrivateSettingsRef:sqlServerServiceAccountPassword"
+
+            },
+            "VMAdmincreds": {
+              "userName": "[parameters('VMadminUsername')]",
+              "password": "PrivateSettingsRef:VMadminUsernamePassword"
+            }
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "adminPassword": "[parameters('_domainPassword')]",
+            "sqlServerServiceAccountPassword": "[parameters('_SQLsvcaccountnamePassword')]",
+            "AutomationAccountPass": "[parameters('_DSCagentSourceStorageAccountKey')]",
+            "VMadminUsernamePassword": "[parameters('_vmAdminPassword')]"
+          }
+        }
+      }
+    },
+
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[parameters('loadBalancerName')]",
+      "location": "[parameters('Location')]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('LoadBalancerIP')]",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              }
+            },
+            "name": "LoadBalancerFrontend"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "BackendPool1"
+          }
+        ],
+
+        "loadBalancingRules": [
+          {
+            "Name": "[variables('sqlAlwaysOnListener1')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/probes/',parameters('LoadBalancerProbeName'))]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 1433,
+              "backendPort": 1433,
+              "enableFloatingIP": true
+            }
+
+          }
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 59999,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            },
+            "name": "[parameters('LoadBalancerProbeName')]"
+          }
+        ]
+      }
+    },
+    {
+      "name": "[parameters('AvailabilitysetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('AvailabilitysetName')]"
+      },
+      "properties": {}
+    },
+    {
+      "name": "[parameters('StorageAccountNamePrem')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('StorageAccountNamePrem')]"
+      },
+      "properties": {
+        "accountType": "Premium_LRS"
+      }
+    },
+    {
+      "name": "[parameters('StorageAccountNameStd')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('StorageAccountNameStd')]"
+      },
+      "properties": {
+        "accountType": "Standard_LRS"
+      }
+    },
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICNameFirst')]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICNameSecond')]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig2",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualMachineNICNameWitness')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig3",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('alwaysonvnetSubnetRef')]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('VirtualMachineNameFirst')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameFirst'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
+        "licenseType": "Windows_Server",
+        "hardwareProfile": {
+          "vmSize": "[variables('ClusterVMSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('VirtualMachineNameFirst')]",
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftSQLServer",
+            "offer": "SQL2014SP1-WS2012R2",
+            "sku": "Enterprise",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'osdisk', '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "DatadiskPrem1",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem2",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem3",
+              "lun": 2,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem4",
+              "lun": 3,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskprem4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd1",
+              "lun": 4,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd2",
+              "lun": 5,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd3",
+              "lun": 6,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd4",
+              "lun": 7,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameFirst'), 'datadiskstd4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
+
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameFirst'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameFirst'))]"
+          ],
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('VirtualMachineNameFirst'),'/joindomain')]",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "autoUpgradeMinorVersion": true,
+            "protectedsettings": {
+              "Password": "[parameters('_domainPassword')]"
+            },
+            "publisher": "Microsoft.Compute",
+            "settings": {
+              "Name": "[parameters('domainToJoin')]",
+              "OUPath": "[parameters('ouPath')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
+              "Restart": "true",
+              "Options": "[parameters('domainJoinOptions')]"
+            },
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3"
+          }
+        }
+
+      ]
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('VirtualMachineNameSecond')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameFirst'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNamePrem'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('ClusterVMSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('VirtualMachineNameSecond')]",
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftSQLServer",
+            "offer": "SQL2014SP1-WS2012R2",
+            "sku": "Enterprise",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'osdisk', '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "DatadiskPrem1",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskprem1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem2",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskprem2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem3",
+              "lun": 2,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskprem3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskPrem4",
+              "lun": 3,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNamePrem'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskprem4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingPrem')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd1",
+              "lun": 4,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskstd1', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd2",
+              "lun": 5,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskstd2', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd3",
+              "lun": 6,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskstd3', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            },
+            {
+              "name": "DatadiskStd4",
+              "lun": 7,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'datadiskstd4', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameSecond'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameSecond'))]"
+          ],
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('VirtualMachineNameSecond'),'/joindomain')]",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "autoUpgradeMinorVersion": true,
+            "protectedsettings": {
+              "Password": "[parameters('_domainPassword')]"
+            },
+            "publisher": "Microsoft.Compute",
+            "settings": {
+              "Name": "[parameters('domainToJoin')]",
+              "OUPath": "[parameters('ouPath')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
+              "Restart": "true",
+              "Options": "[parameters('domainJoinOptions')]"
+            },
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3"
+          }
+        }
+      ]
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('VirtualMachineNameWitness')]",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameWitness'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameStd'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('ClusterVMWitnessSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('VirtualMachineNameWitness')]",
+          "adminUsername": "[parameters('VMadminUsername')]",
+          "adminPassword": "[parameters('_vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2012-R2-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameWitness'), 'osdisk', '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "Datadiskstd",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameStd'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameWitness'), 'datadiskstd', '.vhd')]"
+              },
+              "createOption": "Empty",
+              "caching": "[variables('DiskCachingStd')]",
+              "diskSizeGB": "[variables('SizeOfDataDisksInGB')]"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameWitness'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('VirtualMachineNameWitness'))]"
+          ],
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('VirtualMachineNameWitness'),'/joindomain')]",
+          "location": "[parameters('Location')]",
+          "properties": {
+            "autoUpgradeMinorVersion": true,
+            "protectedsettings": {
+              "Password": "[parameters('_domainPassword')]"
+            },
+            "publisher": "Microsoft.Compute",
+            "settings": {
+              "Name": "[parameters('domainToJoin')]",
+              "OUPath": "[parameters('ouPath')]",
+              "User": "[concat(parameters('domainToJoin'),'\\',parameters('_domainUsername'))]",
+              "Restart": "true",
+              "Options": "[parameters('domainJoinOptions')]"
+            },
+            "type": "JsonADDomainExtension",
+            "typeHandlerVersion": "1.3"
+          }
+        }
+
+      ]
+    }
+
+
+
+
+
+
+  ],
+  "outputs": {
+
+  }
+
+}
