@@ -663,7 +663,7 @@
         "displayName": "[parameters('StorageAccountNameFirst')]"
       },
       "properties": {
-        "accountType": "[parameters('StorageAccountType')]"
+        "accountType": "Premium_LRS"
       }
     },
     {
@@ -676,7 +676,7 @@
         "displayName": "[parameters('StorageAccountNameSecond')]"
       },
       "properties": {
-        "accountType": "[parameters('StorageAccountType')]"
+        "accountType": "Premium_LRS"
       }
     },
     {
