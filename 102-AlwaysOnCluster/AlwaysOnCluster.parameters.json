@@ -44,6 +44,9 @@
     "VirtualMachineSize": {
       "value": "Standard_D12_v2"
     },
+    "OSVersion": {
+      "value": "2012-R2-Datacenter"
+    },
     "SubnetName": {
       "value": "LAN-Subnet-02"
     },
