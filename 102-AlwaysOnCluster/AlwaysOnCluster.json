@@ -593,8 +593,7 @@
         "frontendIPConfigurations": [
           {
             "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('LoadBalancerIP')]",
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('alwaysonvnetSubnetRef')]"
               }
