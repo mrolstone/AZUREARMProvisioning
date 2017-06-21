@@ -250,7 +250,7 @@
   "variables": {
     "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
     "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
-    "ClusterVMWitnessSize": "Standard_A2_v2",
+    "ClusterVMWitnessSize": "Standard_DS1_v2",
     "AlwaysonWitnessDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysonWitness.zip",
     "AlwaysonFirstDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/PrepareAlwaysOnSqlServer.zip",
     "AlwaysonSecondaryDSCFile": "https://stgazewpmgislsd075d38001.file.core.windows.net/azuredsc/CreateAlwaysOnCluster.zip",
