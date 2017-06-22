@@ -245,8 +245,7 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-            "copy": [
-            {
+            "copy": [{
                 "name": "dataDisks",
                 "count": "[parameters('numDataDisks')]",
               "input": {
