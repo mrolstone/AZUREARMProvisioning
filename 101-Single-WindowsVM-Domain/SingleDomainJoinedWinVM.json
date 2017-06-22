@@ -250,10 +250,10 @@
                 "name": "dataDisks",
                 "count": "[parameters('numDataDisks')]",
               "input": {
-                "name": "[concat('Datadisk', copyIndex(1))",
-                "lun": "[copyIndex()]",
+                "name": "[concat('Datadisk', copyIndex('dataDisks'))",
+                "lun": "[copyIndex('dataDisks')]",
                 "vhd": {
-                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex(), '.vhd')]"
+                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex('dataDisks'), '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
