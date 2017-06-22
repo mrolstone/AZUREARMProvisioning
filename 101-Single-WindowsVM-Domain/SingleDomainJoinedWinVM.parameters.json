@@ -1,0 +1,63 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualMachineName": {
+      "value": "win25"
+    },
+    "VMadminUsername": {
+      "value": "allan"
+    },
+    "OSVersion": {
+      "value": "2012-R2-Datacenter"
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "512"
+    },
+    "VirtualMachineNICName": {
+      "value": "win25-NIC"
+    },
+    "DiskCaching": {
+      "value": "ReadWrite"
+    },
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "SubnetName": {
+      "value": "LAN-Subnet-02"
+    },
+    "VirtualNetworkName": {
+      "value": "OnPremConnectedNetwork"
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D1_v2"
+    },
+    "StorageAccountName": {
+      "value": "sa354724499"
+    },
+    "VirtualNetworkResourceGroup": {
+      "value": "Operations"
+    },
+    "Location": {
+      "value": "West Europe"
+    },
+    "NumDataDisks": {
+      "value": 0
+    },
+    "DSCFile": {
+      "value": "https://stgazewdmgislscfgsvc001.file.core.windows.net/configsvc/dcsfiles/BaseWindowsInstallation.zip"
+    },
+    "StorageAccountSourcePath": {
+      "value": "\\\\stgazewdmgislscfgsvc001.file.core.windows.net\\configsvc\\agents" 
+    },
+    "DomainToJoin": {
+      "value": "corp.allan.com"
+    },
+    "OuPath": {
+      "value": "OU=testOU;DC=corp;DC=allan;DC=com"
+    },
+    "DomainJoinOptions": {
+      "value": 3
+    }
+  }
+}
