@@ -173,7 +173,7 @@
   },
   "variables": {
     "vnetID": "[resourceId(parameters('VirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]",
-    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]",
+    "alwaysonvnetSubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('SubnetName'))]"
    },
   "resources": [
     {
@@ -245,22 +245,24 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "copy": [
-            {         
+            "copy": [
+            {
                 "name": "dataDisks",
                 "count": "[parameters('numDataDisks')]",
-                "input": {
-                  "name": "[concat('Datadisk',parameters('numDataDisks')[copyIndex(1)])]",
-                  "lun": "[parameters('numDataDisks')[copyIndex()]]",
-                  "vhd": {
-                    "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,parameters('numDataDisks')[copyIndex(1)], '.vhd')]"
-                  },
-                  "createOption": "Empty",
-                  "caching": "[parameters('diskCaching')]",
-                  "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
+              "input": {
+                "name": "[concat('Datadisk', copyIndex(1))",
+                "lun": "[copyIndex()]",
+                "vhd": {
+                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex(), '.vhd')]"
+                },
+                "createOption": "Empty",
+                "caching": "[parameters('diskCaching')]",
+                "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
               }
+              
             }
           ]
+
         },
         "networkProfile": {
           "networkInterfaces": [
