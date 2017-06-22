@@ -246,8 +246,7 @@
             "createOption": "FromImage"
           },
           "copy": [
-            {
-              {
+            {         
                 "name": "dataDisks",
                 "count": "[parameters('numDataDisks')]",
                 "input": {
@@ -259,7 +258,6 @@
                   "createOption": "Empty",
                   "caching": "[parameters('diskCaching')]",
                   "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]"
-                }
               }
             }
           ]
