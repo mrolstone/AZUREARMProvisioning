@@ -246,13 +246,13 @@
             "createOption": "FromImage"
           },
             "copy": [{
-                "name": "dataDisks",
+                "name": "disksloop",
                 "count": "[parameters('numDataDisks')]",
               "input": {
-                "name": "[concat('Datadisk', copyIndex('dataDisks'))",
-                "lun": "[copyIndex('dataDisks')]",
+                "name": "[concat('Datadisk', copyIndex('disksloop'))",
+                "lun": "[copyIndex('disksloop')]",
                 "vhd": {
-                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex('dataDisks'), '.vhd')]"
+                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex('disksloop'), '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
