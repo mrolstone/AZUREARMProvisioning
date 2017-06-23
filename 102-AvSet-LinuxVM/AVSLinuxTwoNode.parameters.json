@@ -32,12 +32,14 @@
     "VirtualMachineNICNameSecond": {
       "value": "lin02-NIC"
     },
-
     "StorageAccountType": {
       "value": "Standard_LRS"
     },
-    "StorageAccountName": {
-      "value": "sa354724499"
+    "StorageAccountNameFirst": {
+      "value": "sa111111111"
+    },
+    "StorageAccountNameSecond": {
+      "value": "sa22222222"
     },
     "NumDataDisks": {
       "value": 0
