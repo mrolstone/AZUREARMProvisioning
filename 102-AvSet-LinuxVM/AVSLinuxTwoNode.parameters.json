@@ -1,0 +1,111 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualMachineNameFirst": {
+      "value": "Lin01"
+    },
+    "VirtualMachineNameSecond": {
+      "value": "Lin02"
+    },
+    "VMadminUsername": {
+      "value": "allan"
+    },
+    "OSVersion": {
+      "value": "7.3"
+    },
+    "VirtualMachineSize": {
+      "value": "Standard_D1_v2"
+    },
+    "VirtualNetworkResourceGroup": {
+      "value": "Operations"
+    },
+    "VirtualNetworkName": {
+      "value": "OnPremConnectedNetwork"
+    },
+    "SubnetName": {
+      "value": "LAN-Subnet-02"
+    },
+    "VirtualMachineNICNameFirst": {
+      "value": "lin01-NIC"
+    },
+    "VirtualMachineNICNameSecond": {
+      "value": "lin02-NIC"
+    },
+
+    "StorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "StorageAccountName": {
+      "value": "sa354724499"
+    },
+    "NumDataDisks": {
+      "value": 0
+    },
+    "SizeOfDataDisksInGB": {
+      "value": "512"
+    },
+    "DiskCaching": {
+      "value": "ReadWrite"
+    },
+    "Location": {
+      "value": "West Europe"
+    },
+
+    "AvailabilitysetName": {
+      "value": "avsetalla76"
+    },
+    "LoadBalancerName": {
+      "value": "ilballan76"
+    },
+    "LoadBalancerProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerFrontPort": {
+      "value": 80
+    },
+    "LoadBalancerBackendPort": {
+      "value": 80
+    },
+    "LoadBalancerIdleTimeoutInMinutes": {
+      "value": 15
+    },
+    "LoadBalancerNameRuleName": {
+      "value": "testrules76"
+    },
+    "LoadBalancerProbeProtocol": {
+      "value": "Tcp"
+    },
+    "LoadBalancerProbePort": {
+      "value": 80
+    },
+    "LoadBalancerProbeIntervalInSeconds": {
+      "value": 15
+    },
+    "LoadBalancerNumberofProbes": {
+      "value": 2
+    },
+    "LoadBalancerProbeName": {
+      "value": "lbprobe76"
+    },
+
+    "DSCFile": {
+      "value": "LinuxDSCConf.mof"
+    },
+    "CustomScriptExtensionScriptFileNameToRun": {
+      "value": "untar.sh"
+    },
+    "CustomScriptExtensionScriptAgentFileName": {
+      "value": "agents.tar"
+    },
+    "CustomScriptExtensionContainer": {
+      "value": "linuxbaseagents"
+    },
+    "MofContainerName": {
+      "value": "linuxdsc"
+    },
+    "ArtifactsStorageAccount": {
+      "value": "stgazewpmgislsd075d38001"
+    }
+  }
+}
