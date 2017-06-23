@@ -245,14 +245,14 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-            "copy": [{
-                "name": "disksloop",
+          "copy": [{
+                "name": "dataDisks",
                 "count": "[parameters('numDataDisks')]",
               "input": {
-                "name": "[concat('Datadisk', copyIndex('disksloop'))",
-                "lun": "[copyIndex('disksloop')]",
+                "name": "[concat('Datadisk', copyIndex(1))",
+                "lun": "[copyIndex()]",
                 "vhd": {
-                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex('disksloop'), '.vhd')]"
+                  "uri": "[concat('http://', parameters('StorageAccountName'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineName'), 'Datadisk' ,copyIndex(), '.vhd')]"
                 },
                 "createOption": "Empty",
                 "caching": "[parameters('diskCaching')]",
