@@ -520,58 +520,58 @@
             }
           ]
         }
+      }
       },
-        {
-          "apiVersion": "2015-06-15",
-          "type": "Microsoft.Compute/virtualMachines",
-          "name": "[string(parameters('VirtualMachineNameSecond'))]",
-          "location": "[parameters('Location')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameSecond'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameSecond'))]",
-            "[concat('Microsoft.Compute/availabilitySets/', parameters('AvailabilitysetName'))]"
-          ],
-          "properties": {
-            "availabilitySet": {
-              "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+    {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[string(parameters('VirtualMachineNameSecond'))]",
+        "location": "[parameters('Location')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/networkInterfaces/',parameters('VirtualMachineNICNameSecond'))]",
+          "[resourceId('Microsoft.Storage/storageAccounts/',parameters('StorageAccountNameSecond'))]",
+          "[concat('Microsoft.Compute/availabilitySets/', parameters('AvailabilitysetName'))]"
+        ],
+        "properties": {
+          "availabilitySet": {
+            "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('AvailabilitysetName'))]"
+          },
+          "hardwareProfile": {
+            "vmSize": "[parameters('VirtualMachineSize')]"
+          },
+          "osProfile": {
+            "computerName": "[parameters('VirtualMachineNameSecond')]",
+            "adminUsername": "[parameters('VMadminUsername')]",
+            "adminPassword": "[parameters('_vmAdminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "[variables('imagePublisher')]",
+              "offer": "[variables('imageOffer')]",
+              "sku": "[variables('imageSku')]",
+              "version": "latest"
             },
-            "hardwareProfile": {
-              "vmSize": "[parameters('VirtualMachineSize')]"
-            },
-            "osProfile": {
-              "computerName": "[parameters('VirtualMachineNameSecond')]",
-              "adminUsername": "[parameters('VMadminUsername')]",
-              "adminPassword": "[parameters('_vmAdminPassword')]"
-            },
-            "storageProfile": {
-              "imageReference": {
-                "publisher": "[variables('imagePublisher')]",
-                "offer": "[variables('imageOffer')]",
-                "sku": "[variables('imageSku')]",
-                "version": "latest"
+            "osDisk": {
+              "name": "osdisk",
+              "vhd": {
+                "uri": "[concat('http://', parameters('StorageAccountNameSecond'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'osdisk', '.vhd')]"
               },
-              "osDisk": {
-                "name": "osdisk",
-                "vhd": {
-                  "uri": "[concat('http://', parameters('StorageAccountNameSecond'), '.blob.core.windows.net/', 'vhds/', parameters('VirtualMachineNameSecond'), 'osdisk', '.vhd')]"
-                },
-                "caching": "ReadWrite",
-                "createOption": "FromImage"
-              },
-              "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
+              "caching": "ReadWrite",
+              "createOption": "FromImage"
             },
-            "networkProfile": {
-              "networkInterfaces": [
-                {
-                  "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameSecond'))]"
-                }
-              ]
-            }
+            "datadisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('VirtualMachineNICNameSecond'))]"
+              }
+            ]
           }
         }
-    }
+      }
   ],
-            "outputs": {
+  "outputs": {
 
           }
 
