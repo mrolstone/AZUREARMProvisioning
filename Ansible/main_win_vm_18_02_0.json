@@ -2,7 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmNames": {
+    "vaultSubscriptionID": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "vaultResourceGroup": {
+      "type": "string"
+    },
+    "vmName": {
       "type": "array",
       "metadata": {
         "description": "Name of the VMs"
@@ -38,12 +47,6 @@
         "description": "Username for the Virtual Machine."
       }
     },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Virtual Machine."
-      }
-    },
     "imagePublisher": {
       "type": "string",
       "metadata": {
@@ -69,71 +72,43 @@
       }
     }
   },
-  "variables": {
-    "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]"
-  },
   "resources": [
     {
-      "apiVersion": "2017-10-01",
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('vmNames')[copyIndex()], '-nic1')]",
+      "apiVersion": "2015-01-01",
+      "name": "[concat('nestedTemplate-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
       "copy": {
-        "name": "nicLoop",
-        "count": "[length(parameters('vmNames'))]"
+        "name": "nestedTemplateLoop",
+        "count": "[length(parameters('vmName'))]"
       },
-      "location": "[resourceGroup().location]",
       "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "subnet": {
-                "id": "[variables('subnetRef')]"
-              }
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/nested_win_vm_18_02_0.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+          "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": "[concat(parameters('vmName')[copyIndex()])]"
             }
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "2017-12-01",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('vmNames')[copyIndex()])]",
-      "copy": {
-        "name": "virtualMachineLoop",
-        "count": "[length(parameters('vmNames'))]"
-      },
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('vmNames')[copyIndex()], '-nic1')]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
-        },
-        "osProfile": {
-          "computerName": "[concat(parameters('vmNames')[copyIndex()])]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
-            "version": "[parameters('imageVersion')]",
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmNames')[copyIndex()], '-nic1'))]"
-            }
-          ]
+          },
+          "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+          "imageOffer": { "value": "[parameters('imageOffer')]" },
+          "imageSKU": { "value": "[parameters('imageSKU')]" },
+          "imageVersion": { "value": "[parameters('imageVersion')]" }
         }
       }
     }
-  ]
+  ],
+  "outputs": {}
 }
