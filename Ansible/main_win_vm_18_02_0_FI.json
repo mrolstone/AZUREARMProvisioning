@@ -120,7 +120,7 @@
           "imageVersion": { "value": "[parameters('imageVersion')]" },
           "diskNum": { "value": "[parameters('diskNum')]" },
           //"diskData": { "value": "[if(equals(parameters('diskNum'),1), parameters('diskData'), 0)]" }
-          "diskData": { "vaule": 1}
+          "diskData": { "vaule": 0}
         }
       }
     }
