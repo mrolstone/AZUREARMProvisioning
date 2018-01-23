@@ -118,7 +118,8 @@
           "imageOffer": { "value": "[parameters('imageOffer')]" },
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
-          "diskNum": { "value": "[parameters('diskNum')]" }
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskData": { "value": "[parameters('diskData')]" }
         }
       }
     }
