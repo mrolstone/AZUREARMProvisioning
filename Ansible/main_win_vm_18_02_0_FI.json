@@ -119,8 +119,9 @@
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
           "diskNum": { "value": "[parameters('diskNum')]" },
-          //"diskData": { "value": "[if(equals(parameters('diskNum'),1), parameters('diskData'), 0)]" }
-          "diskData": { "value": 0}
+          "diskData": { "value": "[if(equals(parameters('diskNum'),0), parameters('diskData'), 0)]" },
+          "diskNum": { "value": "[if(equals(parameters('diskNum'),0), parameters('diskNum'), 1)]" }
+          //"diskData": { "value": 0}
         }
       }
     }
