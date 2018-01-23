@@ -1,0 +1,51 @@
+{
+  "description": "", 
+  "spec": [
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "required": true, 
+      "choices": "APMT 02 ARM MN\nAPMT 02 NP ARM MN\nDamco 02 ARM MN\nDamco 02 NP ARM MN\nMaersk Line 02 ARM MN\nMaersk Line 02 NP ARM MN\nShared Services 02 ARM MN\nShared Services 02 NP ARM MN\nITSOE Engineering 01 NP ARM MN", 
+      "variable": "subscription_name", 
+      "question_name": "Subscription_name", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "westeurope\neastasia\neastus2", 
+      "variable": "location", 
+      "question_name": "Location", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "internal\nexternal", 
+      "variable": "network_zone", 
+      "question_name": "Network_Zone", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "question_description": "", 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "required": true, 
+      "choices": "", 
+      "new_question": true, 
+      "variable": "nsg_name", 
+      "question_name": "Nsg_name", 
+      "type": "text"
+    }
+  ], 
+  "name": ""
+}

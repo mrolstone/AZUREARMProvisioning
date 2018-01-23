@@ -1,0 +1,116 @@
+{
+  "description": "", 
+  "spec": [
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "required": true, 
+      "choices": "APMT 02 ARM MN\nAPMT 02 NP ARM MN\nDamco 02 ARM MN\nDamco 02 NP ARM MN\nMaersk Line 02 ARM MN\nMaersk Line 02 NP ARM MN\nShared Services 02 ARM MN\nShared Services 02 NP ARM MN\nITSOE Engineering 01 NP ARM MN", 
+      "variable": "subscription_name", 
+      "question_name": "Subscription_name", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "westeurope\neastasia\neastus2", 
+      "variable": "location", 
+      "question_name": "Location", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "resource_group_name", 
+      "question_name": "Resource_group_name", 
+      "type": "text"
+    }, 
+    {
+      "question_description": "", 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "required": true, 
+      "choices": "", 
+      "variable": "vnet", 
+      "question_name": "Virtual_network_name", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "subnet_name", 
+      "question_name": "Subnet_name", 
+      "type": "text"
+    }, 
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "required": true, 
+      "choices": "Windows-2012-R2-Datacenter\nRedHat-7.4", 
+      "variable": "image_selection", 
+      "question_name": "VM_image", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "Standard_A1_v2\nStandard_A2_v2\nStandard_A4_v2\nStandard_A8_v2\nStandard_A2m_v2\nStandard_A4m_v2\nStandard_A8m_v2\nStandard_D1_v2\nStandard_D2_v2\nStandard_D3_v2\nStandard_D4_v2\nStandard_D5_v2\nStandard_DS1_v2\nStandard_DS2_v2\nStandard_DS3_v2\nStandard_DS4_v2\nStandard_DS5_v2", 
+      "variable": "vm_size", 
+      "question_name": "Vm_size", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "question_description": "", 
+      "min": 0, 
+      "default": "", 
+      "max": 4096, 
+      "required": true, 
+      "choices": "", 
+      "variable": "Vm_names", 
+      "question_name": "Vm_names", 
+      "type": "textarea"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "bigboss", 
+      "max": 1024, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "admin_user", 
+      "question_name": "Admin_username", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 32, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "admin_pass", 
+      "question_name": "Admin_password", 
+      "type": "password"
+    }
+  ], 
+  "name": ""
+}

@@ -1,0 +1,39 @@
+{
+  "description": "", 
+  "spec": [
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "required": true, 
+      "choices": "westeurope\neastasia\neastus2", 
+      "variable": "location", 
+      "question_name": "Location", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "windows\nlinux", 
+      "variable": "vm_type", 
+      "question_name": "VM_TYPE", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 4096, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "vm_ips", 
+      "question_name": "VM_IP's", 
+      "type": "textarea"
+    }
+  ], 
+  "name": ""
+}

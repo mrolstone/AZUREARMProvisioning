@@ -1,0 +1,18 @@
+{
+  "spec": [
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 4096, 
+      "question_description": "", 
+      "choices": "", 
+      "new_question": true, 
+      "variable": "vm_ips", 
+      "question_name": "Vm_ips", 
+      "type": "textarea"
+    }
+  ], 
+  "description": "", 
+  "name": ""
+}
