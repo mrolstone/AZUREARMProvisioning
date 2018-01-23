@@ -107,7 +107,8 @@
     },
     {
       "apiVersion": "2017-12-01",
-      "condition": "[equals(parameters('diskData'),0)]",
+      //"condition": "[equals(parameters('diskData'),0)]",
+      "condition": "[greater(parameters('diskData'),0)]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('vmName'))]",
       "location": "[resourceGroup().location]",
