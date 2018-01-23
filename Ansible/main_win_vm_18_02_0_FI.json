@@ -90,7 +90,7 @@
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "https://s3-eu-west-1.amazonaws.com/marks-s3-eu-bucket/nested_win_vm_18_02_0.json",
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
