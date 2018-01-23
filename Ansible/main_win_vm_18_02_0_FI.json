@@ -119,7 +119,7 @@
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
           "diskNum": { "value": "[parameters('diskNum')]" },
-          "diskData": { "value": "[if(equals(parameters('diskNum'),1), parameters('diskData'), 1)]" }
+          "diskData": { "value": "[if(equals(parameters('diskNum'),1), parameters('diskData'), 0)]" }
         }
       }
     }
