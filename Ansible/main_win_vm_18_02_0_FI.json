@@ -76,6 +76,12 @@
       "metadata": {
         "description": "Number of disks"
       }
+    },
+    "diskData": {
+      "type": "int",
+      "metadata": {
+        "description": "Data Disk Required"
+      }
     }
   },
   "resources": [
