@@ -137,15 +137,16 @@
             //}
             //
           },
+          "condition": "[equals(parameters('diskNum'), '1')]",
           "copy": [
             {
-              "name": "dataDisks",
+              "name": "DataDisks",
               "count": "[parameters('diskNum')]",
               "input": {
                 "caching": "ReadWrite",
                 "diskSizeGB": "1024",
-                "lun": "[copyIndex('dataDisks')]",
-                "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('dataDisks'))]",
+                "lun": "[copyIndex('DataDisks')]",
+                "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "Standard_LRS"
