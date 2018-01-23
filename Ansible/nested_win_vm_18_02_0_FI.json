@@ -100,7 +100,7 @@
       }
     },
     {
-      "condition": "[greater(parameters('diskNum'), 0)]",
+      "condition": "[equals(parameters('diskNum'), 1)]",
       "apiVersion": "2017-12-01",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('vmName'))]",
