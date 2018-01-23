@@ -124,8 +124,7 @@
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
           },
-          "osDisk": {
-            "name": [ "concat(variables('vmName')", "-OSDisk" ],
+          "osDisk": {            
             "caching": "ReadWrite",
             "createOption": "FromImage",
             "managedDisk": {
