@@ -145,7 +145,7 @@
                 "caching": "ReadWrite",
                 "diskSizeGB": "1024",
                 "lun": "[copyIndex('dataDisks')]",
-                "name": "[concat(variables('vmName'), '-datadisk', copyIndex('dataDisks'))]",
+                "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('dataDisks'))]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "Standard_LRS"
