@@ -84,45 +84,85 @@
         }
       }
     },
-    "resources": [
-      {
-        "apiVersion": "2015-01-01",
-        "name": "[concat('nestedTemplate-', copyIndex())]",
-        "type": "Microsoft.Resources/deployments",
-        "copy": {
-          "name": "nestedTemplateLoop",
-          "count": "[length(parameters('vmName'))]"
+  "resources": [
+    {
+      "apiVersion": "2015-01-01",
+      "condition": "[equals(parameters('diskData'),0)]",
+      "name": "[concat('nestedTemplate-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "nestedTemplateLoop",
+        "count": "[length(parameters('vmName'))]"
+      },
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI_OSDisk.json",
+          "contentVersion": "1.0.0.0"
         },
-        "properties": {
-          "mode": "incremental",
-          "templateLink": {
-            "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI_OSDisk.json",
-            "contentVersion": "1.0.0.0"
+        "parameters": {
+          "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+          "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": "[concat(parameters('vmName')[copyIndex()])]"
+            }
           },
-          "parameters": {
-            "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
-            "vmSize": { "value": "[parameters('vmSize')]" },
-            "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
-            "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
-            "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
-            "adminUsername": { "value": "[parameters('adminUsername')]" },
-            "adminPassword": {
-              "reference": {
-                "keyVault": {
-                  "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-                },
-                "secretName": "[concat(parameters('vmName')[copyIndex()])]"
-              }
-            },
-            "imagePublisher": { "value": "[parameters('imagePublisher')]" },
-            "imageOffer": { "value": "[parameters('imageOffer')]" },
-            "imageSKU": { "value": "[parameters('imageSKU')]" },
-            "imageVersion": { "value": "[parameters('imageVersion')]" },
-            "diskNum": { "value": "[parameters('diskNum')]" },
-            "diskData": { "value": "[parameters('diskData')]" }
-          }
+          "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+          "imageOffer": { "value": "[parameters('imageOffer')]" },
+          "imageSKU": { "value": "[parameters('imageSKU')]" },
+          "imageVersion": { "value": "[parameters('imageVersion')]" },
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskData": { "value": "[parameters('diskData')]" }
         }
       }
-    ],
+    },
+    {
+      "apiVersion": "2015-01-01",
+      "condition": "[equals(parameters('diskData'),1)]",
+      "name": "[concat('nestedTemplate-', copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "nestedTemplateLoop",
+        "count": "[length(parameters('vmName'))]"
+      },
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI_OSDisk.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+          "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": "[concat(parameters('vmName')[copyIndex()])]"
+            }
+          },
+          "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+          "imageOffer": { "value": "[parameters('imageOffer')]" },
+          "imageSKU": { "value": "[parameters('imageSKU')]" },
+          "imageVersion": { "value": "[parameters('imageVersion')]" },
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskData": { "value": "[parameters('diskData')]" }
+        }
+      }
+    }
+  ],
     "outputs": {}
   }
