@@ -94,7 +94,7 @@
   },
   "resources": [
       {
-        "apiVersion": "2015-06-15",
+        "apiVersion": "[providers('Microsoft.Compute', 'availabilitySets').apiVersions[0]]",
         "Condition": "[equals(parameters('availabilitySetReq'), 'yes')]",
         "type": "Microsoft.Compute/availabilitySets",
         "name": "[parameters('availabilitySetName')]",
