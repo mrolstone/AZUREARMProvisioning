@@ -133,6 +133,7 @@
              "imageOffer": { "value": "[parameters('imageOffer')]" },
              "imageSKU": { "value": "[parameters('imageSKU')]" },
              "imageVersion": { "value": "[parameters('imageVersion')]" },
+             "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" }
              "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
             }
           }
