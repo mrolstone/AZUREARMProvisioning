@@ -90,53 +90,54 @@
     },
     "resources": [
       {
-
+        "apiVersion": "2015-06-15",
         "Condition": "[equals(parameters('availabilitySetReq'), 'yes')]",
         "type": "Microsoft.Compute/availabilitySets",
         "name": "[parameters('availabilitySetName')]",
-        "apiVersion": "2015-06-15",
         "location": "[resourceGroup().location]",
         "properties": {
           "platformFaultDomainCount": "3",
           "platformUpdateDomainCount": "20"
-        },
-        {
-          "apiVersion": "2015-01-01",
-          "name": "[concat('nestedTemplate-', copyIndex())]",
-          "type": "Microsoft.Resources/deployments",
-          "copy": {
-            "name": "nestedTemplateLoop",
-            "count": "[length(parameters('vmName'))]"
+        }
+      },
+      {
+        "apiVersion": "2015-01-01",
+        "name": "[concat('nestedTemplate-', copyIndex())]",
+        "type": "Microsoft.Resources/deployments",
+        "copy": {
+          "name": "nestedTemplateLoop",
+          "count": "[length(parameters('vmName'))]"
           },
-          "properties": {
-            "mode": "incremental",
-            "templateLink": {
-              "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_mro222.json",
-              "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
-              "vmSize": { "value": "[parameters('vmSize')]" },
-              "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
-              "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
-              "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
-              "adminUsername": { "value": "[parameters('adminUsername')]" },
-              "adminPassword": {
-                "reference": {
-                  "keyVault": {
-                    "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-                  },
-                  "secretName": "[concat(parameters('vmName')[copyIndex()])]"
-                }
+        "properties": {
+          "mode": "incremental",
+          "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_mro222.json",
+          "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+           "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
+           "vmSize": { "value": "[parameters('vmSize')]" },
+           "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+           "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+           "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+           "adminUsername": { "value": "[parameters('adminUsername')]" },
+           "adminPassword": {
+            "reference": {
+             "keyVault": {
+               "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "imagePublisher": { "value": "[parameters('imagePublisher')]" },
-              "imageOffer": { "value": "[parameters('imageOffer')]" },
-              "imageSKU": { "value": "[parameters('imageSKU')]" },
-              "imageVersion": { "value": "[parameters('imageVersion')]" },
-              "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
+              "secretName": "[concat(parameters('vmName')[copyIndex()])]"
+              }
+             },
+             "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+             "imageOffer": { "value": "[parameters('imageOffer')]" },
+             "imageSKU": { "value": "[parameters('imageSKU')]" },
+             "imageVersion": { "value": "[parameters('imageVersion')]" },
+             "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
             }
           }
-        },
-
+        }
+      ],
         "outputs": {}
       }
+   
