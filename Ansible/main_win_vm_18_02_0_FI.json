@@ -117,8 +117,8 @@
             "imagePublisher": { "value": "[parameters('imagePublisher')]" },
             "imageOffer": { "value": "[parameters('imageOffer')]" },
             "imageSKU": { "value": "[parameters('imageSKU')]" },
-            "imageVersion": { "value": "[parameters('imageVersion')]" },
-            "diskNum": { "value": "[parameters('diskNum')]" }
+            "imageVersion": { "value": "[parameters('imageVersion')]" }
+            //"diskNum": { "value": "[parameters('diskNum')]" }
           }
         }
       }
