@@ -145,10 +145,10 @@
           "osDisk": {
             "name": "[concat(parameters('vmName'), '-OSDisk')]",
             "caching": "ReadWrite",
-            "createOption": "FromImage",
-            "managedDisk": {
-              "storageAccountType": "Standard_LRS"
-            }
+            "createOption": "FromImage"
+            //"managedDisk": {
+            //  "storageAccountType": "Standard_LRS"
+            //}
             //
             //"managedDisk": {
             //  "storageAccountType": "[parameters('StorageType')]"
@@ -160,7 +160,7 @@
               "name": "DataDisks",
               "count": "[parameters('diskNum')]",
               "input": {
-                "caching": "[parameters('diskCaching')]",                
+                "caching": "None",                
                 "diskSizeGB": "[parameters('diskSize')]",
                 "lun": "[copyIndex('DataDisks')]",
                 "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
