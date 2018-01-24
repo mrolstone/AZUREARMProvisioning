@@ -68,7 +68,7 @@
         "description": "Image Version"
       }
     },
-    "availabilitySet": {
+    "availabilitySetReq": {
       "type": "string",
       "allowedValues": [
         "yes",
@@ -118,7 +118,7 @@
         "[concat('Microsoft.Network/networkInterfaces/', parameters('vmName'), '-nic1')]"
       ],
       "properties": {
-        "availabilitySet": "[if(greater(length(parameters('availabilitySetName')), 0), parameters('availabilitySetName'), json('null'))]",
+        "availabilitySet": "[if(equals(parameters('availabilitySetReq'), 'yes'), parameters('availabilitySetName'), json('null'))]",
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
