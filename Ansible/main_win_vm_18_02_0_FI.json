@@ -88,12 +88,6 @@
       "metadata": {
         "description": "Disk Size"
       }
-    },
-    "diskCaching": {
-      "type": "string",
-      "metadata": {
-        "description": "Disk Caching"
-      }
     }
   },
   "resources": [
