@@ -131,9 +131,11 @@
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
           "diskNum": { "value": "[parameters('diskNum')]" },
-          "diskSize": { "value": "[parameters('diskSize')]" },
+          //"diskSize": { "value": "[parameters('diskSize')]" },
+          "diskSize": { "value": "1023" },
           "storageType": { "value": "[parameters('storageType')]" },
-          "diskCaching": { "value": "[parameters('diskCaching')]" }
+          "diskCaching": { "value": "None" }
+          //"diskCaching": { "value": "[parameters('diskCaching')]" }
         }
       }
     }
