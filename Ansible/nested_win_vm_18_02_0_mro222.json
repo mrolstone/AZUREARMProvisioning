@@ -119,7 +119,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', parameters('vmName'), '-nic1')]",
-        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName')]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
       ],
       "properties": {
         "availabilitySet": "[if(equals(parameters('availabilitySetReq'), 'yes'), variables('availabilitySetId'), json('null'))]",
