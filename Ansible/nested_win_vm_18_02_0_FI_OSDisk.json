@@ -66,13 +66,7 @@
       "type": "string",
       "metadata": {
         "description": "Image Version"
-      },
-      "diskNumTemp": {
-        "type": "string",
-        "metadata": {
-          "description": "Number of disks"
-        }
-      }
+     }
       },
       "diskNum": {
         "type": "int",
