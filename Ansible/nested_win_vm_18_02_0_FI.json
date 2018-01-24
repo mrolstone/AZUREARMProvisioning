@@ -88,11 +88,9 @@
     },
     "diskCaching": {
       "type": "string",
-      "allowedValues": [
-        "None",
-        "ReadOnly",
-        "ReadWrite"
-      ]
+      "metadata": {
+        "description": "Disk Caching"
+      }
     }
   },
   "variables": {
