@@ -71,23 +71,16 @@
         "description": "Image Version"
       }
     },
-     "diskNum": {
-        "type": "int",
-        "metadata": {
-          "description": "Number of disks"
-        }
-      },
-      "diskData": {
-        "type": "int",
-        "metadata": {
-          "description": "Data Disk Required"
-        }
+    "diskNum": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of disks"
       }
-    },
+    }
+  },
   "resources": [
     {
       "apiVersion": "2015-01-01",
-      "condition": "[equals(parameters('diskData'),1)]",
       "name": "[concat('nestedTemplate-', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "copy": {
@@ -97,7 +90,7 @@
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI_OSDisk.json",
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_02_0_FI.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -119,11 +112,10 @@
           "imageOffer": { "value": "[parameters('imageOffer')]" },
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
-          "diskNum": { "value": "[parameters('diskNum')]" },
-          "diskData": { "value": "[parameters('diskData')]" }
+          "diskNum": { "value": "[parameters('diskNum')]" }
         }
       }
     }
   ],
-    "outputs": {}
-  }
+  "outputs": {}
+}

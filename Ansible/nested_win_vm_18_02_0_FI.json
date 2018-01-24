@@ -73,12 +73,6 @@
       "metadata": {
         "description": "Number of disks"
       }
-    },
-    "diskData": {
-      "type": "int",
-      "metadata": {
-        "description": "Data Disk Required"
-      }
     }
   },
   "variables": {
@@ -107,8 +101,6 @@
     },
     {
       "apiVersion": "2017-12-01",
-      //"condition": "[equals(parameters('diskData'),0)]",
-      "condition": "[equals(parameters('diskData'),1)]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('vmName'))]",
       "location": "[resourceGroup().location]",
