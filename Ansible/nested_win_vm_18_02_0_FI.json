@@ -160,9 +160,8 @@
               "name": "DataDisks",
               "count": "[parameters('diskNum')]",
               "input": {
-                //"caching": ["parameters('diskCaching')"],
-                "caching": "None",
-                "diskSizeGB": [ "parameters('diskSize')" ],
+                "caching": "[parameters('diskCaching')]",                
+                "diskSizeGB": "[parameters('diskSize')]",
                 "lun": "[copyIndex('DataDisks')]",
                 "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
                 "createOption": "Empty",
