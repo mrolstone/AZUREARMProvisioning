@@ -1,19 +1,19 @@
 - job_template: azure/automation/core/name-generator
-  success:
+  success_nodes:
   - job_template: azure/automation/core/create-default-nsg
-    success:
+    success_nodes:
     - job_template: azure/automation/core/create-subnet
-      success:
+      success_nodes:
       - job_template: azure/automation/core/create-resourcegroup
-        success:
+        success_nodes:
         - job_template: azure/automation/core/rm-deployment
-          success:
+          success_nodes:
           - job_template: azure/automation/core/set-static-private-ip
-            success:
+            success_nodes:
             - job_template: azure/automation/core/deploy-ansible-custom-script-extension
-              success:
+              success_nodes:
               - job_template: azure/automation/core/add-vm-to-automation-inventory
-                success:
+                success_nodes:
                 - job_template: azure/automation/core/windows-set-azure-baseline
-                  success:
+                  success_nodes:
                   - job_template: azure/automation/core/move-vm-to-compliance-inventory
