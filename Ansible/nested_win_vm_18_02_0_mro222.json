@@ -68,6 +68,49 @@
         "description": "Image Version"
       }
     },
+    "diskNum": {
+      "type": "int",
+      "maxValue": 16,
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Number of Disks"
+      }
+    },
+    "diskSize": {
+      "type": "string",
+      "defaultValue": "128",
+      "allowedValues": [
+        "128",
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Type"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "defaultValue": "None",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ],
+
+      "metadata": {
+        "description": "Disk Caching"
+      }
+    },
     "availabilitySetReq": {
       "type": "string",
       "allowedValues": [
@@ -88,25 +131,25 @@
   "variables": {
     "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
     "availabilitySetId": {
-      "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"  
+      "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     },
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]"
   },
   "resources": [
-      {
-        "apiVersion": "[providers('Microsoft.Compute', 'availabilitySets').apiVersions[0]]",
-        "Condition": "[equals(parameters('availabilitySetReq'), 'yes')]",
-        "type": "Microsoft.Compute/availabilitySets",
-        "name": "[parameters('availabilitySetName')]",
-        "location": "[resourceGroup().location]",
-        "properties": {
-          "platformFaultDomainCount": "3",
-          "platformUpdateDomainCount": "20"
-        },
-        "sku": {
-          "name": "Aligned"
-        }
+    {
+      "apiVersion": "[providers('Microsoft.Compute', 'availabilitySets').apiVersions[0]]",
+      "Condition": "[equals(parameters('availabilitySetReq'), 'yes')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('availabilitySetName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "platformFaultDomainCount": "3",
+        "platformUpdateDomainCount": "20"
       },
+      "sku": {
+        "name": "Aligned"
+      }
+    },
     {
       "apiVersion": "2017-10-01",
       "type": "Microsoft.Network/networkInterfaces",
@@ -160,7 +203,24 @@
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
           }
-        }
+        },
+        "copy": [
+          {
+            "name": "DataDisks",
+            "count": "[parameters('diskNum')]",
+            "input": {
+              "caching": "[parameters('diskCaching')]",
+              "diskSizeGB": "[parameters('diskSize')]",
+              "lun": "[copyIndex('DataDisks')]",
+              "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
+              "createOption": "Empty",
+              "managedDisk": {
+                "storageAccountType": "[parameters('storageType')]"
+              }
+
+            }
+          }
+        ]
       }
     }
   ]
