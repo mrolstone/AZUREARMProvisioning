@@ -71,8 +71,28 @@
     "diskNum": {
       "type": "int",
       "metadata": {
-        "description": "Number of disks"
+        "description": "Number of Disks"
       }
+    },
+    "diskSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ]
     }
   },
   "variables": {
@@ -142,8 +162,8 @@
               "name": "DataDisks",
               "count": "[parameters('diskNum')]",
               "input": {
-                "caching": "ReadWrite",
-                "diskSizeGB": "1024",
+                "caching": ["parameters('diskCaching')"],
+                "diskSizeGB": ["parameters('diskSize')"],
                 "lun": "[copyIndex('DataDisks')]",
                 "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
                 "createOption": "Empty",

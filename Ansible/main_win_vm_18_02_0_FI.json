@@ -74,8 +74,28 @@
     "diskNum": {
       "type": "int",
       "metadata": {
-        "description": "Number of disks"
+        "description": "Number of Disks"
       }
+    },
+    "diskSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ]
     }
   },
   "resources": [
@@ -112,7 +132,10 @@
           "imageOffer": { "value": "[parameters('imageOffer')]" },
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
-          "diskNum": { "value": "[parameters('diskNum')]" }
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskSize": { "value": "[parameters('diskSize')]" },
+          "storageType": { "value": "[parameters('storageType')]" },
+          "diskCaching": { "value": "[parameters('diskCaching')]" }
         }
       }
     }
