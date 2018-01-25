@@ -143,7 +143,7 @@
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/nested_lin_vm_18_02_0.json",
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_lin_vm_18_02_0.json",
           "contentVersion": "1.0.0.0"
         },
           "parameters": {
