@@ -195,19 +195,18 @@
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
-        "osDisk": {
-          "name": "[concat(parameters('vmName'), '-OSDisk')]",
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        },
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
-          }
-        },
+          },
+          "osDisk": {
+            "name": "[concat(parameters('vmName'), '-OSDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
           "copy": [
             {
               "name": "DataDisks",
@@ -224,6 +223,7 @@
               }
             }
           ]
+        }
       }
     }
   ]
