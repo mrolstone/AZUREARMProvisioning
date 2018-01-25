@@ -135,7 +135,7 @@
   "resources": [
     {
       "apiVersion": "2015-01-01",
-      "name": "[concat('nestedTemplate-', copyIndex())]",
+      "name": "[concat('nestedTemplate-', parameters('vmName')[copyIndex()])]",
       "type": "Microsoft.Resources/deployments",
       "copy": {
         "name": "nestedTemplateLoop",
