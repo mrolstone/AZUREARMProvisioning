@@ -106,7 +106,6 @@
         "ReadOnly",
         "ReadWrite"
       ],
-
       "metadata": {
         "description": "Disk Caching"
       }
@@ -196,6 +195,11 @@
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
+        "osDisk": {
+          "name": "[concat(parameters('vmName'), '-OSDisk')]",
+          "caching": "ReadWrite",
+          "createOption": "FromImage"
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
@@ -203,23 +207,23 @@
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
           }
-        }
-       // "copy": [
-       //   {
-       //     "name": "DataDisks",
-       //     "count": "[parameters('diskNum')]",
-       //     "input": {
-       //       "caching": "[parameters('diskCaching')]",
-       //       "diskSizeGB": "[parameters('diskSize')]",
-       //       "lun": "[copyIndex('DataDisks')]",
-       //       "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
-       //       "createOption": "Empty",
-       //       "managedDisk": {
-       //         "storageAccountType": "[parameters('storageType')]"
-       //       }
-       //     }
-       //   }
-       // ]
+        },
+          "copy": [
+            {
+              "name": "DataDisks",
+              "count": "[parameters('diskNum')]",
+              "input": {
+                "caching": "None",
+                "diskSizeGB": "[parameters('diskSize')]",
+                "lun": "[copyIndex('DataDisks')]",
+                "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
+                "createOption": "Empty",
+                "managedDisk": {
+                  "storageAccountType": "[parameters('storageType')]"
+                }
+              }
+            }
+          ]
       }
     }
   ]
