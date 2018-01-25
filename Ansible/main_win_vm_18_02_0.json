@@ -151,7 +151,7 @@
           "contentVersion": "1.0.0.0"
           },
           "parameters": {
-            "servicenowRequest": { "value": "[parameters('servicenowRequest']" },
+            "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
             "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
             "vmSize": { "value": "[parameters('vmSize')]" },
             "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
