@@ -217,7 +217,6 @@
               "managedDisk": {
                 "storageAccountType": "[parameters('storageType')]"
               }
-
             }
           }
         ]
