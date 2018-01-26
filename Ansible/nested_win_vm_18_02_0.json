@@ -146,8 +146,8 @@
       "name": "[parameters('availabilitySetName')]",
       "location": "[resourceGroup().location]",
       "properties": {
-        "platformFaultDomainCount": "3",
-        "platformUpdateDomainCount": "20"
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "5"
       },
       "sku": {
         "name": "Aligned"
