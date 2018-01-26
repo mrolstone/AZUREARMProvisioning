@@ -2,6 +2,18 @@
   "description": "",
   "spec": [
     {
+      "question_description": "Enter the ServiceNow Demand No",
+      "min": 0,
+      "default": "",
+      "max": 1024,
+      "required": true,
+      "choices": "",
+      "new_question": true,
+      "variable": "servicenow_request",
+      "question_name": "ServiceNow Request",
+      "type": "text"
+    },
+    {
       "required": true,
       "min": null,
       "default": "",
@@ -124,11 +136,11 @@
       "type": "multiplechoice"
     },
     {
-      "required": true,
+      "question_description": "",
       "min": null,
       "default": "RedHat-7.4",
       "max": null,
-      "question_description": "",
+      "required": true,
       "choices": "RedHat-7.4",
       "variable": "image_selection",
       "question_name": "VM_image",
@@ -140,7 +152,7 @@
       "default": "",
       "max": null,
       "question_description": "",
-      "choices": "Standard_A1_v2\nStandard_A2_v2\nStandard_A4_v2\nStandard_A8_v2\nStandard_A2m_v2\nStandard_A4m_v2\nStandard_A8m_v2\nStandard_D1_v2\nStandard_D2_v2\nStandard_D3_v2\nStandard_D4_v2\nStandard_D5_v2\nStandard_DS1_v2\nStandard_DS2_v2\nStandard_DS3_v2\nStandard_DS4_v2\nStandard_DS5_v2",
+      "choices": "Standard_A1_v2\nStandard_A2_v2\nStandard_A4_v2\nStandard_A8_v2\nStandard_A2m_v2\nStandard_A4m_v2\nStandard_A8m_v2\nStandard_D2_v3\nStandard_D4_v3\nStandard_D8_v3\nStandard_D16_v3\nStandard_D32_v3\nStandard_D64_v3\nStandard_E2_v3\nStandard_E4_v3\nStandard_E8_v3\nStandard_E16_v3\nStandard_E32_v3\nStandard_E64_v3\nStandard_D2s_v3\nStandard_D4s_v3\nStandard_D8s_v3\nStandard_D16s_v3\nStandard_D32s_v3\nStandard_D64s_v3\nStandard_E2s_v3\nStandard_E4s_v3\nStandard_E8s_v3\nStandard_E16s_v3\nStandard_E32s_v3\nStandard_E64s_v3",
       "variable": "vm_size",
       "question_name": "Vm_size",
       "type": "multiplechoice"
@@ -149,12 +161,70 @@
       "required": true,
       "min": 1,
       "default": 1,
-      "max": 4,
+      "max": 16,
       "question_description": "",
+      "choices": "",
+      "new_question": true,
+      "variable": "datadisk_num",
+      "question_name": "Number of Data Disks",
+      "type": "integer"
+    },
+    {
+      "required": true,
+      "min": null,
+      "default": "128",
+      "max": null,
+      "question_description": "",
+      "choices": "128\n512\n1023",
+      "new_question": true,
+      "variable": "datadisk_size",
+      "question_name": "Data Disk Size",
+      "type": "multiplechoice"
+    },
+    {
+      "required": true,
+      "min": null,
+      "default": "Standard_LRS",
+      "max": null,
+      "question_description": "",
+      "choices": "Standard_LRS\nPremium_LRS",
+      "new_question": true,
+      "variable": "storage_type",
+      "question_name": "Data Disk Storage Type",
+      "type": "multiplechoice"
+    },
+    {
+      "required": true,
+      "min": 1,
+      "default": 1,
+      "max": 4,
+      "question_description": "1-4 VMs can be deployed with the same settings",
       "choices": "",
       "variable": "vm_num",
       "question_name": "Number of VM's",
       "type": "integer"
+    },
+    {
+      "question_description": "VMs required to be placed into a Availability Set",
+      "min": null,
+      "default": "no",
+      "max": null,
+      "required": true,
+      "choices": "yes\nno",
+      "variable": "availabilityset_req",
+      "question_name": "Availability Set Required",
+      "type": "multiplechoice"
+    },
+    {
+      "question_description": "If an Availability Set is required and this field is left blank a new availability set name will be generated and created. If you want to deploy to an existing availability set, please provide the existing name",
+      "min": 0,
+      "default": "",
+      "max": 1024,
+      "required": false,
+      "choices": "",
+      "variable": "availabilityset",
+      "question_name": "Availability Set Name (If Required)",
+      "type": "text"
     }
   ],
   "name": ""
