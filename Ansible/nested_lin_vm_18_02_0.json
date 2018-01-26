@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "servicenowRequest": {
+      "type": "string"
+    },    
     "vmName": {
       "type": "string",
       "metadata": {
@@ -174,6 +177,9 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('vmName'))]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "SNOW Request": "[parameters('servicenowRequest')]"
+      },
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', parameters('vmName'), '-nic1')]",
         "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
