@@ -83,12 +83,6 @@
     },
     "diskNum": {
       "type": "int",
-      "allowedValues": [
-        4,
-        8,
-        16
-      ],
-      "defaultValue": 4,
       "metadata": {
         "description": "Number of Data Disks"
       }
