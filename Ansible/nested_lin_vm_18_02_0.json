@@ -5,52 +5,13 @@
     "servicenowRequest": {
       "type": "string"
     },
-    "projectId": {
-      "type": "string"
-    },
-    "nameNodeA": {
+    "vmName": {
       "type": "string",
       "metadata": {
-        "description": "Name of the Node A VM"
+        "description": "Name of the VMs"
       }
     },
-    "nameNodeB": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the Node B VM"
-      }
-    },
-    "nameWitness": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the Witness VM"
-      }
-    },
-    "nodeAPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Node A VM"
-      }
-    },
-    "nodeBPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Node B VM"
-      }
-    },
-    "witnessPassword": {
-          "type": "securestring",
-      "metadata": {
-        "description": "Password for the Witness VM"
-      }          
-    },
-    "vmSizeNode": {
-      "type": "string",
-      "metadata": {
-        "description": "Size of the VM"
-      }
-    },
-    "vmSizeWitness": {
+    "vmSize": {
       "type": "string",
       "metadata": {
         "description": "Size of the VM"
@@ -80,6 +41,12 @@
         "description": "Username for the Virtual Machine."
       }
     },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
     "imagePublisher": {
       "type": "string",
       "metadata": {
@@ -106,8 +73,10 @@
     },
     "diskNum": {
       "type": "int",
+      "maxValue": 16,
+      "defaultValue": 1,
       "metadata": {
-        "description": "Number of Data Disks"
+        "description": "Number of Disks"
       }
     },
     "diskSize": {
@@ -144,6 +113,16 @@
         "description": "Disk Caching"
       }
     },
+    "availabilitySetReq": {
+      "type": "string",
+      "allowedValues": [
+        "yes",
+        "no"
+      ],
+      "metadata": {
+        "description": "Availability Set Required"
+      }
+    },
     "availabilitySetName": {
       "type": "string",
       "defaultValue": "None",
@@ -162,12 +141,13 @@
   "resources": [
     {
       "apiVersion": "[providers('Microsoft.Compute', 'availabilitySets').apiVersions[0]]",
+      "Condition": "[equals(parameters('availabilitySetReq'), 'yes')]",
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('availabilitySetName')]",
       "location": "[resourceGroup().location]",
       "properties": {
-        "platformFaultDomainCount": "3",
-        "platformUpdateDomainCount": "20"
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "5"
       },
       "sku": {
         "name": "Aligned"
@@ -176,7 +156,7 @@
     {
       "apiVersion": "2017-10-01",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('nameNodeA'), '-nic1')]",
+      "name": "[concat(parameters('vmName'), '-nic1')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [
@@ -195,32 +175,31 @@
     {
       "apiVersion": "2017-12-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('nameNodeA')]",
+      "name": "[concat(parameters('vmName'))]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "SNOW Request": "[parameters('servicenowRequest')]",
-        "Project ID": "[parameters('projectId')]"
+        "SNOW Request": "[parameters('servicenowRequest')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameNodeA'), '-nic1')]",
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('vmName'), '-nic1')]",
         "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
       ],
       "properties": {
-        "availabilitySet": "[variables('availabilitySetId')]",
+        "availabilitySet": "[if(equals(parameters('availabilitySetReq'), 'yes'), variables('availabilitySetId'), json('null'))]",
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSizeNode')]"
+          "vmSize": "[parameters('vmSize')]"
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameNodeA'), '-nic1'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), '-nic1'))]"
             }
           ]
         },
         "osProfile": {
-          "computerName": "[parameters('nameNodeA')]",
+          "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('nodeAPassword')]"
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -230,7 +209,7 @@
             "version": "[parameters('imageVersion')]"
           },
           "osDisk": {
-            "name": "[concat(parameters('nameNodeA'), '-OSDisk')]",
+            "name": "[concat(parameters('vmName'), '-OSDisk')]",
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
@@ -242,7 +221,7 @@
                 "caching": "None",
                 "diskSizeGB": "[parameters('diskSize')]",
                 "lun": "[copyIndex('DataDisks')]",
-                "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex('DataDisks'))]",
+                "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "[parameters('storageType')]"
@@ -250,152 +229,9 @@
               }
             }
           ]
-        }
-      }
-    },
-    {
-      "apiVersion": "2017-10-01",
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('nameNodeB'), '-nic1')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "subnet": {
-                "id": "[variables('subnetRef')]"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "2017-12-01",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('nameNodeB')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "SNOW Request": "[parameters('servicenowRequest')]",
-        "Project ID": "[parameters('projectId')]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameNodeB'), '-nic1')]",
-        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
-      ],
-      "properties": {
-        "availabilitySet": "[variables('availabilitySetId')]",
-        "hardwareProfile": {
-          "vmSize": "[parameters('vmSizeNode')]"
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameNodeB'), '-nic1'))]"
-            }
-          ]
-        },
-        "osProfile": {
-          "computerName": "[parameters('nameNodeB')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('nodeBPassword')]"
-        }, 
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
-            "version": "[parameters('imageVersion')]"
-          },
-          "osDisk": {
-            "name": "[concat(parameters('nameNodeB'), '-OSDisk')]",
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          },
-          "copy": [
-            {
-              "name": "DataDisks",
-              "count": "[parameters('diskNum')]",
-              "input": {
-                "caching": "None",
-                "diskSizeGB": "[parameters('diskSize')]",
-                "lun": "[copyIndex('DataDisks')]",
-                "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex('DataDisks'))]",
-                "createOption": "Empty",
-                "managedDisk": {
-                  "storageAccountType": "[parameters('storageType')]"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "apiVersion": "2017-10-01",
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('nameWitness'), '-nic1')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "subnet": {
-                "id": "[variables('subnetRef')]"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "2017-12-01",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('nameWitness')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "SNOW Request": "[parameters('servicenowRequest')]",
-        "Project ID": "[parameters('projectId')]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameWitness'), '-nic1')]",
-        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
-      ],
-      "properties": {
-        "availabilitySet": "[variables('availabilitySetId')]",
-        "hardwareProfile": {
-          "vmSize": "[parameters('vmSizeWitness')]"
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameWitness'), '-nic1'))]"
-            }
-          ]
-        },
-        "osProfile": {
-          "computerName": "[parameters('nameWitness')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('witnessPassword')]"
-        },  
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
-            "version": "[parameters('imageVersion')]"
-          },
-          "osDisk": {
-            "name": "[concat(parameters('nameWitness'), '-OSDisk')]",
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          }
         }
       }
     }
   ]
 }
+
