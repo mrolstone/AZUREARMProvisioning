@@ -1,0 +1,204 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "servicenowRequest": {
+      "type": "string"
+    },
+    "projectId": {
+      "type": "string"
+    },
+    "vaultSubscriptionID": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "vaultResourceGroup": {
+      "type": "string"
+    },
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the VMs"
+      }
+    },
+    "vmSizeNode": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "vmSizeWitness": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "existingsubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "metadata": {
+        "description": "Image publisher"
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "metadata": {
+        "description": "Image offer"
+      }
+    },
+    "imageSKU": {
+      "type": "string",
+      "metadata": {
+        "description": "Image SKU"
+      }
+    },
+    "imageVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "Image Version"
+      }
+    },
+    "diskNum": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of Data Disks"
+      }
+    },
+    "diskSize": {
+      "type": "string",
+      "defaultValue": "128",
+      "allowedValues": [
+        "128",
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Type"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "defaultValue": "None",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ],
+      "metadata": {
+        "description": "Disk Caching"
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "None",
+      "metadata": {
+        "description": "Availability Set Name"
+      }
+    }
+  },
+  "variables": {
+    "nameNodeA": "[concat(parameters('clusterName'),'a')]",
+    "nameNodeB": "[concat(parameters('clusterName'),'b')]",
+    "nameWitness": "[concat(parameters('clusterName'),'w')]",
+    "nodeAPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameNodeA')]"
+      }
+    },
+    "nodeBPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameNodeB')]"
+      }
+    },
+    "witnessPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameWitness')]"
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-01-01",
+      "name": "[concat('nestedTemplate-', parameters('clusterName')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_sql_2014_cluster_18_02_0.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
+          "projectId": { "value": "[parameters('projectId')]" },
+          "nameNodeA": { "value": "[variables('nameNodeA')" },
+          "nameNodeB": { "value": "[variables('nameNodeB')" },
+          "nameWitness": { "value": "[variables('nameWitness')" },
+          "nodeAPassword": { "value": "[variables(nodeAPassword)]" },
+          "nodeBPassword": { "value": "[variables(nodeBPassword)]" },
+          "witnessPassword": { "value": "[variables(witnessPassword)]" },
+          "vmSizeNode": { "value": "[parameters('vmSizeNode')]" },
+          "vmSizeWitness": { "value": "[parameters('vmSizeWitness')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+          "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+          "imageOffer": { "value": "[parameters('imageOffer')]" },
+          "imageSKU": { "value": "[parameters('imageSKU')]" },
+          "imageVersion": { "value": "[parameters('imageVersion')]" },
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskSize": { "value": "[parameters('diskSize')]" },
+          "storageType": { "value": "[parameters('storageType')]" },
+          "diskCaching": { "value": "[parameters('diskCaching')]" },
+          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
+

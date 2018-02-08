@@ -1,0 +1,407 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "servicenowRequest": {
+      "type": "string"
+    },
+    "projectId": {
+      "type": "string"
+    },
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the VMs"
+      }
+    },
+    "nameNodeA": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Node A VM"
+      }
+    },
+    "nameNodeB": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Node B VM"
+      }
+    },
+    "nameWitness": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Witness VM"
+      }
+    },
+    "nodeAPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Node A VM"
+        }
+      },
+    "nodeBPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Node B VM"
+        }
+      },
+    "witnessPassword": {
+          "type": "securestring",
+      "metadata": {
+        "description": "Password for the Witness VM"
+        }          
+      },
+    "vmSizeNode": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "vmSizeWitness": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "existingsubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "metadata": {
+        "description": "Image publisher"
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "metadata": {
+        "description": "Image offer"
+      }
+    },
+    "imageSKU": {
+      "type": "string",
+      "metadata": {
+        "description": "Image SKU"
+      }
+    },
+    "imageVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "Image Version"
+      }
+    },
+    "diskNum": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of Data Disks"
+      }
+    },
+    "diskSize": {
+      "type": "string",
+      "defaultValue": "128",
+      "allowedValues": [
+        "128",
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Type"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "defaultValue": "None",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ],
+      "metadata": {
+        "description": "Disk Caching"
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "None",
+      "metadata": {
+        "description": "Availability Set Name"
+      }
+    }
+  },
+  "variables": {
+    "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
+    "availabilitySetId": {
+      "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+    },
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
+  },
+  "resources": [
+    {
+      "apiVersion": "[providers('Microsoft.Compute', 'availabilitySets').apiVersions[0]]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('availabilitySetName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "platformFaultDomainCount": "3",
+        "platformUpdateDomainCount": "20"
+      },
+      "sku": {
+        "name": "Aligned"
+      }
+    },
+    {
+      "apiVersion": "2017-10-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nameNodeA'), '-nic1')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-12-01",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('nameNodeA')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "SNOW Request": "[parameters('servicenowRequest')]",
+        "Project ID": "[parameters('projectId')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameNodeA'), '-nic1')]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": "[variables('availabilitySetId')]",
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSizeNode')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameNodeA'), '-nic1'))]"
+            }
+          ]
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
+            "version": "[parameters('imageVersion')]"
+          }
+        },
+        "osProfile": {
+          "computerName": "[parameters('nameNodeA')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('nodeAPassword')]"
+        },
+        "osDisk": {
+          "name": "[concat(parameters('nameNodeA'), '-OSDisk')]",
+          "caching": "ReadWrite",
+          "createOption": "FromImage"
+        },
+        "copy": [
+          {
+            "name": "DataDisks",
+            "count": "[parameters('diskNum')]",
+            "input": {
+              "caching": "None",
+              "diskSizeGB": "[parameters('diskSize')]",
+              "lun": "[copyIndex('DataDisks')]",
+              "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex('DataDisks'))]",
+              "createOption": "Empty",
+              "managedDisk": {
+                "storageAccountType": "[parameters('storageType')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-10-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nameNodeB'), '-nic1')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-12-01",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('nameNodeB')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "SNOW Request": "[parameters('servicenowRequest')]",
+        "Project ID": "[parameters('projectId')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameNodeB'), '-nic1')]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": "[variables('availabilitySetId')]",
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSizeNode')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameNodeB'), '-nic1'))]"
+            }
+          ]
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
+            "version": "[parameters('imageVersion')]"
+          }
+        },
+        "osProfile": {
+          "computerName": "[parameters('nameNodeB')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('nodeBPassword')]"
+        },
+        "osDisk": {
+          "name": "[concat(parameters('nameNodeB'), '-OSDisk')]",
+          "caching": "ReadWrite",
+          "createOption": "FromImage"
+        },
+        "copy": [
+          {
+            "name": "DataDisks",
+            "count": "[parameters('diskNum')]",
+            "input": {
+              "caching": "None",
+              "diskSizeGB": "[parameters('diskSize')]",
+              "lun": "[copyIndex('DataDisks')]",
+              "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex('DataDisks'))]",
+              "createOption": "Empty",
+              "managedDisk": {
+                "storageAccountType": "[parameters('storageType')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-10-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nameWitness'), '-nic1')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-12-01",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('nameWitness')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "SNOW Request": "[parameters('servicenowRequest')]",
+        "Project ID": "[parameters('projectId')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('nameWitness'), '-nic1')]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
+      ],
+      "properties": {
+        "availabilitySet": "[variables('availabilitySetId')]",
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSizeWitness')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('nameWitness'), '-nic1'))]"
+            }
+          ]
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
+            "version": "[parameters('imageVersion')]"
+          }
+        },
+        "osProfile": {
+          "computerName": "[parameters('nameWitness')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('witnessPassword')]"
+        },
+        "osDisk": {
+          "name": "[concat(parameters('nameWitness'), '-OSDisk')]",
+          "caching": "ReadWrite",
+          "createOption": "FromImage"
+        }
+      }
+    }
+  ]
+}
