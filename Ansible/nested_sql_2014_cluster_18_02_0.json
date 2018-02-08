@@ -8,12 +8,6 @@
     "projectId": {
       "type": "string"
     },
-    "clusterName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the VMs"
-      }
-    },
     "nameNodeA": {
       "type": "string",
       "metadata": {
