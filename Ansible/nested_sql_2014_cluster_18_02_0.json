@@ -30,20 +30,20 @@
       "type": "securestring",
       "metadata": {
         "description": "Password for the Node A VM"
-        }
-      },
+      }
+    },
     "nodeBPassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for the Node B VM"
-        }
-      },
+      }
+    },
     "witnessPassword": {
           "type": "securestring",
       "metadata": {
         "description": "Password for the Witness VM"
-        }          
-      },
+      }          
+    },
     "vmSizeNode": {
       "type": "string",
       "metadata": {
