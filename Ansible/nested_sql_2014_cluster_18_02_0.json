@@ -217,40 +217,40 @@
             }
           ]
         },
+        "osProfile": {
+          "computerName": "[parameters('nameNodeA')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('nodeAPassword')]"
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
-          }
-        },
-        "osProfile": {
-          "computerName": "[parameters('nameNodeA')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('nodeAPassword')]"
-        },
-        "osDisk": {
-          "name": "[concat(parameters('nameNodeA'), '-OSDisk')]",
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        },
-        "copy": [
-          {
-            "name": "DataDisks",
-            "count": "[parameters('diskNum')]",
-            "input": {
-              "caching": "None",
-              "diskSizeGB": "[parameters('diskSize')]",
-              "lun": "[copyIndex('DataDisks')]",
-              "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex('DataDisks'))]",
-              "createOption": "Empty",
-              "managedDisk": {
-                "storageAccountType": "[parameters('storageType')]"
+          },
+          "osDisk": {
+            "name": "[concat(parameters('nameNodeA'), '-OSDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "copy": [
+            {
+              "name": "DataDisks",
+              "count": "[parameters('diskNum')]",
+              "input": {
+                "caching": "None",
+                "diskSizeGB": "[parameters('diskSize')]",
+                "lun": "[copyIndex('DataDisks')]",
+                "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex('DataDisks'))]",
+                "createOption": "Empty",
+                "managedDisk": {
+                  "storageAccountType": "[parameters('storageType')]"
+                }
               }
             }
-          }
-        ]
+          ]
+        }
       }
     },
     {
@@ -297,40 +297,40 @@
             }
           ]
         },
+        "osProfile": {
+          "computerName": "[parameters('nameNodeB')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('nodeBPassword')]"
+        }, 
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
-          }
-        },
-        "osProfile": {
-          "computerName": "[parameters('nameNodeB')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('nodeBPassword')]"
-        },
-        "osDisk": {
-          "name": "[concat(parameters('nameNodeB'), '-OSDisk')]",
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
-        },
-        "copy": [
-          {
-            "name": "DataDisks",
-            "count": "[parameters('diskNum')]",
-            "input": {
-              "caching": "None",
-              "diskSizeGB": "[parameters('diskSize')]",
-              "lun": "[copyIndex('DataDisks')]",
-              "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex('DataDisks'))]",
-              "createOption": "Empty",
-              "managedDisk": {
-                "storageAccountType": "[parameters('storageType')]"
+          },
+          "osDisk": {
+            "name": "[concat(parameters('nameNodeB'), '-OSDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "copy": [
+            {
+              "name": "DataDisks",
+              "count": "[parameters('diskNum')]",
+              "input": {
+                "caching": "None",
+                "diskSizeGB": "[parameters('diskSize')]",
+                "lun": "[copyIndex('DataDisks')]",
+                "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex('DataDisks'))]",
+                "createOption": "Empty",
+                "managedDisk": {
+                  "storageAccountType": "[parameters('storageType')]"
+                }
               }
             }
-          }
-        ]
+          ]
+        }
       }
     },
     {
@@ -377,23 +377,23 @@
             }
           ]
         },
+        "osProfile": {
+          "computerName": "[parameters('nameWitness')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('witnessPassword')]"
+        },  
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('imageSKU')]",
             "version": "[parameters('imageVersion')]"
+          },
+          "osDisk": {
+            "name": "[concat(parameters('nameWitness'), '-OSDisk')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
           }
-        },
-        "osProfile": {
-          "computerName": "[parameters('nameWitness')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('witnessPassword')]"
-        },
-        "osDisk": {
-          "name": "[concat(parameters('nameWitness'), '-OSDisk')]",
-          "caching": "ReadWrite",
-          "createOption": "FromImage"
         }
       }
     }
