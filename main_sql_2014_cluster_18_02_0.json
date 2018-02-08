@@ -135,14 +135,6 @@
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
     "nameWitness": "[concat(parameters('clusterName'),'w')]",
-    "nodeAPassword": {
-      "reference": {
-        "keyVault": {
-          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-        },
-        "secretName": "[concat(parameters('clusterName'),'a')]"
-      }
-    },
     "nodeBPassword": {
       "reference": {
         "keyVault": {
@@ -177,7 +169,14 @@
           "nameNodeA": { "value": "[variables('nameNodeA')" },
           "nameNodeB": { "value": "[variables('nameNodeB')" },
           "nameWitness": { "value": "[variables('nameWitness')" },
-          "nodeAPassword": { "value": "[variables('nodeAPassword')]" },
+          "nodeAPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": "[variables('nameNodeA')]"
+            }
+          },
           "nodeBPassword": { "value": "[variables('nodeBPassword')]" },
           "witnessPassword": { "value": "[variables('witnessPassword')]" },
           "vmSizeNode": { "value": "[parameters('vmSizeNode')]" },
