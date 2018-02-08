@@ -163,7 +163,7 @@
   "resources": [
     {
       "apiVersion": "2015-01-01",
-      "name": "[parameters('clusterName')}",
+      "name": "TestCluster",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
