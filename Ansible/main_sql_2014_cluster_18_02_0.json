@@ -134,31 +134,7 @@
   "variables": {
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
-    "nameWitness": "[concat(parameters('clusterName'),'w')]",
-    "nodeAPassword": {
-      "reference": {
-        "keyVault": {
-          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-        },
-        "secretName": "[variables('nameNodeA')]"
-      }
-    },
-    "nodeBPassword": {
-      "reference": {
-        "keyVault": {
-          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-        },
-        "secretName": "[variables('nameNodeB')]"
-      }
-    },
-    "witnessPassword": {
-      "reference": {
-        "keyVault": {
-          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-        },
-        "secretName": "[variables('nameWitness')]"
-      }
-    }
+    "nameWitness": "[concat(parameters('clusterName'),'w')]"
   },
   "resources": [
     {
@@ -186,6 +162,30 @@
           "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
           "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "nodeAPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": { "value": "[variables('nameNodeA')]" }
+            }
+          },
+          "nodeBPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": { "value": "[variables('nameNodeB')]" }
+            }
+          },
+          "witnessPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": { "value": "[variables('nameWitness')]" }
+            }
+          },
           "imagePublisher": { "value": "[parameters('imagePublisher')]" },
           "imageOffer": { "value": "[parameters('imageOffer')]" },
           "imageSKU": { "value": "[parameters('imageSKU')]" },
