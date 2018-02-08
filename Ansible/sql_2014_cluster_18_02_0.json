@@ -209,8 +209,7 @@
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": "[concat(parameters('clusterName'),'a')]"
-            }
+              "secretName": "[concat(parameters('clusterName'),'a')]
           }
         },
         "storageProfile": {
@@ -294,7 +293,6 @@
               },
               "secretName": "[concat(parameters('clusterName'),'b')]"
             }
-          }
         },
         "storageProfile": {
           "imageReference": {
@@ -377,7 +375,6 @@
               },
               "secretName": "[concat(parameters('clusterName'),'w')]"
             }
-          }
         },
         "storageProfile": {
           "imageReference": {
