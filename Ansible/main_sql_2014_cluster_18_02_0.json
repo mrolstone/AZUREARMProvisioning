@@ -163,7 +163,7 @@
   "resources": [
     {
       "apiVersion": "2015-01-01",
-      "name": "[concat('nestedTemplate-', parameters('clusterName'))]",
+      "name": "[parameters('clusterName')}",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
