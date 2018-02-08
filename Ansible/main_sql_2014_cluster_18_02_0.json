@@ -168,7 +168,7 @@
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_sql_2014_cluster_18_02_0.json",
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_sql_2014_cluster_18_02_0.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
