@@ -164,7 +164,7 @@
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": { "value": "[variables('nameNodeA')]" }
+              "secretName": "[variables('nameNodeA')]"
             }
           },
           "nodeBPassword": {
@@ -172,7 +172,7 @@
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": { "value": "[variables('nameNodeB')]" }
+              "secretName": "[variables('nameNodeB')]"
             }
           },
           "witnessPassword": {
@@ -180,7 +180,7 @@
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": { "value": "[variables('nameWitness')]" }
+              "secretName": "[variables('nameWitness')]"
             }
           },
           "imagePublisher": { "value": "[parameters('imagePublisher')]" },
