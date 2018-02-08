@@ -147,7 +147,31 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
-    "nameWitness": "[concat(parameters('clusterName'),'w')]"
+    "nameWitness": "[concat(parameters('clusterName'),'w')]",
+    "nodeAPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameNodeA')]"
+      }
+    },
+    "nodeBPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameNodeB')]"
+      }
+    },
+    "witnessPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+        },
+        "secretName": "[variables('nameWitness')]"
+      }
+    }
   },
   "resources": [
     {
@@ -218,14 +242,7 @@
         "osProfile": {
           "computerName": "[variables('nameNodeA')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-              },
-              "secretName": "[variables('nameNodeA')]"
-            }
-          }
+          "adminPassword": "[variables('nodeAPassword')]"
         },
         "osDisk": {
           "name": "[concat(parameters('clusterName'), 'a-OSDisk')]",
@@ -304,14 +321,7 @@
         "osProfile": {
           "computerName": "[variables('nameNodeB')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
-              },
-              "secretName": "[variables('nameNodeB')]"
-            }
-          }
+          "adminPassword": "[variables('nodeBPassword')]"
         },
         "osDisk": {
           "name": "[concat(parameters('clusterName'), 'b-OSDisk')]",
@@ -395,7 +405,7 @@
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": "[variables('nameWitness')]"
+              "adminPassword": "[variables('witnessPassword')]"
             }
           }
         },
