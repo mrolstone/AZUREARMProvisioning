@@ -140,7 +140,7 @@
         "keyVault": {
           "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
         },
-        "secretName": "[concat(parameters('clusterName'),'a')]"
+        "secretName": "[variables('nameNodeA')]"
       }
     },
     "nodeBPassword": {
