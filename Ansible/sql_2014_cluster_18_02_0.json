@@ -144,7 +144,10 @@
     "availabilitySetId": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     },
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]"
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
+    "nameNodeA": "[concat(parameters('clusterName'),'a')]",
+    "nameNodeB": "[concat(parameters('clusterName'),'b')]",
+    "nameWitness": "[concat(parameters('clusterName'),'w')]"
   },
   "resources": [
     {
@@ -183,7 +186,7 @@
     {
       "apiVersion": "2017-12-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('clusterName'),'a')]",
+      "name": "[variables('nameNodeA')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "SNOW Request": "[parameters('servicenowRequest')]"
@@ -213,14 +216,14 @@
           }
         },
         "osProfile": {
-          "computerName": "[concat(parameters('clusterName'),'a')]",
+          "computerName": "[variables('nameNodeA')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": {
             "reference": {
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": "[concat(parameters('clusterName'),'a')]"
+              "secretName": "[variables('nameNodeA')]"
             }
           }
         },
@@ -269,7 +272,7 @@
     {
       "apiVersion": "2017-12-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('clusterName'),'b')]",
+      "name": "[variables('nameNodeB')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "SNOW Request": "[parameters('servicenowRequest')]"
@@ -299,14 +302,14 @@
           }
         },
         "osProfile": {
-          "computerName": "[concat(parameters('clusterName'),'b')]",
+          "computerName": "[variables('nameNodeB')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": {
             "reference": {
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": "[concat(parameters('clusterName'),'b')]"
+              "secretName": "[variables('nameNodeB')]"
             }
           }
         },
@@ -355,7 +358,7 @@
     {
       "apiVersion": "2017-12-01",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('clusterName'),'w')]",
+      "name": "[variables('nameWitness')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "SNOW Request": "[parameters('servicenowRequest')]"
@@ -385,14 +388,14 @@
           }
         },
         "osProfile": {
-          "computerName": "[concat(parameters('clusterName'),'w')]",
+          "computerName": "[variables('nameWitness')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": {
             "reference": {
               "keyVault": {
                 "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
               },
-              "secretName": "[concat(parameters('clusterName'),'w')]"
+              "secretName": "[variables('nameWitness')]"
             }
           }
         },
