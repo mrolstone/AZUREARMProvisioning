@@ -140,7 +140,7 @@
         "keyVault": {
           "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
         },
-        "secretName": "[concat(parameters('clusterName'),'a')}"
+        "secretName": "[concat(parameters('clusterName'),'a')]"
       }
     },
     "nodeBPassword": {
@@ -163,7 +163,7 @@
   "resources": [
     {
       "apiVersion": "2015-01-01",
-      "name": "TestCluster",
+      "name": "[concat('nestedTemplate-', parameters('clusterName'))]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
@@ -177,9 +177,9 @@
           "nameNodeA": { "value": "[variables('nameNodeA')" },
           "nameNodeB": { "value": "[variables('nameNodeB')" },
           "nameWitness": { "value": "[variables('nameWitness')" },
-          "nodeAPassword": { "value": "[variables(nodeAPassword)]" },
-          "nodeBPassword": { "value": "[variables(nodeBPassword)]" },
-          "witnessPassword": { "value": "[variables(witnessPassword)]" },
+          "nodeAPassword": { "value": "[variables('nodeAPassword')]" },
+          "nodeBPassword": { "value": "[variables('nodeBPassword')]" },
+          "witnessPassword": { "value": "[variables('witnessPassword')]" },
           "vmSizeNode": { "value": "[parameters('vmSizeNode')]" },
           "vmSizeWitness": { "value": "[parameters('vmSizeWitness')]" },
           "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
