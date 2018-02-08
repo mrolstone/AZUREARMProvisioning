@@ -163,7 +163,7 @@
     "availabilitySetId": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     },
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]"
   },
   "resources": [
     {
