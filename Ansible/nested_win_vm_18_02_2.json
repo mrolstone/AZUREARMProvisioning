@@ -243,10 +243,10 @@
     {
       "type": "extensions",
       "name": "OMSExtension",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2015-03-20",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
