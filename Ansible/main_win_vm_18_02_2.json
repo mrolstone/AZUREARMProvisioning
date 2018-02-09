@@ -133,6 +133,12 @@
     "workspaceName": {
       "type": "string"
     },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
     "availabilitySetName": {
       "type": "string",
       "defaultValue": "None",
@@ -182,6 +188,8 @@
           "storageType": { "value": "[parameters('storageType')]" },
           "diskCaching": { "value": "[parameters('diskCaching')]" },
           "workspaceName": { "value": "[parameters('workspaceName')]" },
+          "workspaceId": { "value": "[parameters('workspaceId')]" },
+          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
         }

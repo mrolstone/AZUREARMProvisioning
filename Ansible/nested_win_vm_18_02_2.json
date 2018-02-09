@@ -129,6 +129,12 @@
     "workspaceName": {
       "type": "string"
     },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
     "availabilitySetName": {
       "type": "string",
       "defaultValue": "None",
@@ -243,7 +249,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('vmName'),'/OMSExtension')]",
-      "apiVersion": "2015-03-20",
+      "apiVersion": "2017-12-01",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
@@ -252,7 +258,13 @@
         "publisher": "Microsoft.EnterpriseCloud.Monitoring",
         "type": "MicrosoftMonitoringAgent",
         "typeHandlerVersion": "1.0",
-        "autoUpgradeMinorVersion": true
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "workspaceId": "[parameters('workspaceId')]"
+        },
+        "protectedSettings": {
+          "workspaceKey": "[parameters('workspaceKey')]"
+        }
       }
     }
   ]
