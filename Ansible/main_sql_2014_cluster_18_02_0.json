@@ -132,7 +132,7 @@
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
     "nameWitness": "[concat(parameters('clusterName'),'w')]",
-    "storageType": "[if(endswith(parameters('vmSize'), 's_v3'), 'Premium_LRS', 'Standard_LRS')]",
+    "storageType": "[if(endswith(parameters('vmSizeNode'), 's_v3'), 'Premium_LRS', 'Standard_LRS')]",
     "sqlDiskSize": {
       "small": {
         "diskNum": 4,
