@@ -102,16 +102,6 @@
         "description": "SQL Disk Pattern"
       }
     },
-    "storageType": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_LRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "Storage Type"
-      }
-    },
     "diskCaching": {
       "type": "string",
       "defaultValue": "None",
@@ -142,6 +132,7 @@
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
     "nameWitness": "[concat(parameters('clusterName'),'w')]",
+    "storageType": "[if(endswith(parameters('vmSize'), 's_v3'), 'Premium_LRS', 'Standard_LRS')]",
     "sqlDiskSize": {
       "small": {
         "diskNum": 4,

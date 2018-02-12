@@ -336,7 +336,7 @@
       "resources": [
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('nameNodeA'),'/OMSExtension')]",
+          "name": "[concat(parameters('nameNodeA'),'/MicrosoftMonitoringAgent')]",
           "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
@@ -445,7 +445,7 @@
       "resources": [
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('nameNodeB'),'/OMSExtension')]",
+          "name": "[concat(parameters('nameNodeB'),'/MicrosoftMonitoringAgent')]",
           "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
@@ -532,7 +532,7 @@
       "resources": [
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('nameWitness'),'/OMSExtension')]",
+          "name": "[concat(parameters('nameWitness'),'/MicrosoftMonitoringAgent')]",
           "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
