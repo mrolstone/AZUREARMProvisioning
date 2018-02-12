@@ -83,22 +83,17 @@
         "description": "Image Version"
       }
     },
-    "diskNum": {
-      "type": "int",
-      "metadata": {
-        "description": "Number of Data Disks"
-      }
-    },
-    "diskSize": {
+    "sqlDiskPattern": {
       "type": "string",
-      "defaultValue": "128",
+      "defaultValue": "small",
       "allowedValues": [
-        "128",
-        "512",
-        "1023"
+        "small",
+        "medium",
+        "large",
+        "xlarge"
       ],
       "metadata": {
-        "description": "Disk Size"
+        "description": "SQL Disk Pattern"
       }
     },
     "storageType": {
@@ -129,12 +124,36 @@
       "metadata": {
         "description": "Availability Set Name"
       }
+    },
+    "loadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Loadbalancer Name"
+      }
     }
   },
   "variables": {
     "nameNodeA": "[concat(parameters('clusterName'),'a')]",
     "nameNodeB": "[concat(parameters('clusterName'),'b')]",
-    "nameWitness": "[concat(parameters('clusterName'),'w')]"
+    "nameWitness": "[concat(parameters('clusterName'),'w')]",
+    "sqlDiskSize": {
+      "small": {
+        "diskNum": 4,
+        "diskSize": "128"
+      },
+      "medium": {
+        "diskNum": 4,
+        "diskSize": "512"
+      },
+      "large": {
+        "diskNum": 4,
+        "diskSize": "1023"
+      },
+      "xlarge": {
+        "diskNum": 8,
+        "diskSize": "1023"
+      }
+    }
   },
   "resources": [
     {
@@ -150,6 +169,7 @@
         "parameters": {
           "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
           "projectId": { "value": "[parameters('projectId')]" },
+          "clusterName": { "value":  "[parameters('clusterName')]" },
           "nameNodeA": { "value": "[variables('nameNodeA')]" },
           "nameNodeB": { "value": "[variables('nameNodeB')]" },
           "nameWitness": { "value": "[variables('nameWitness')]" },
@@ -187,15 +207,17 @@
           "imageOffer": { "value": "[parameters('imageOffer')]" },
           "imageSKU": { "value": "[parameters('imageSKU')]" },
           "imageVersion": { "value": "[parameters('imageVersion')]" },
-          "diskNum": { "value": "[parameters('diskNum')]" },
-          "diskSize": { "value": "[parameters('diskSize')]" },
+          "diskNum": { "value": "[variables('sqlDiskSize')[parameters('sqlDiskPattern')].diskNum]" },
+          "diskSize": { "value": "[variables('sqlDiskSize')[parameters('sqlDiskPattern')].diskSize]" },
           "storageType": { "value": "[parameters('storageType')]" },
           "diskCaching": { "value": "[parameters('diskCaching')]" },
-          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
+          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
+          "loadBalancerName": { "value": "[parameters('loadBalancerName')]" }
         }
       }
     }
   ],
   "outputs": {}
 }
+
 

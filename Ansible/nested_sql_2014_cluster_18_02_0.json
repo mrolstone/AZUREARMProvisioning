@@ -8,6 +8,12 @@
     "projectId": {
       "type": "string"
     },
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Cluster"
+      }
+    },
     "nameNodeA": {
       "type": "string",
       "metadata": {
@@ -39,10 +45,10 @@
       }
     },
     "witnessPassword": {
-          "type": "securestring",
+      "type": "securestring",
       "metadata": {
         "description": "Password for the Witness VM"
-      }          
+      }
     },
     "vmSizeNode": {
       "type": "string",
@@ -150,6 +156,12 @@
       "metadata": {
         "description": "Availability Set Name"
       }
+    },
+    "loadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Loadbalancer Name"
+      }
     }
   },
   "variables": {
@@ -157,7 +169,8 @@
     "availabilitySetId": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     },
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]"
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
+    "sqlAlwaysOnListener1": "[concat(parameters('clusterName'),'x')]"
   },
   "resources": [
     {
@@ -175,9 +188,66 @@
     },
     {
       "apiVersion": "2017-10-01",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[parameters('loadBalancerName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            },
+            "name": "LoadBalancerFrontend"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "AGLBackendPool1"
+          }
+        ],
+
+        "loadBalancingRules": [
+          {
+            "Name": "[variables('sqlAlwaysOnListener1')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/AGLBackendPool1')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/probes/AGLLoadBalancerProbe1')]"
+              },
+              "protocol": "Tcp",
+              "frontendPort": 1433,
+              "backendPort": 1433,
+              "enableFloatingIP": true
+            }
+          }
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 59999,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            },
+            "name": "AGLLoadBalancerProbe1"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-10-01",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('nameNodeA'), '-nic1')]",
       "location": "[resourceGroup().location]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
       "properties": {
         "ipConfigurations": [
           {
@@ -186,7 +256,12 @@
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('subnetRef')]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/AGLBackendPool1')]"
+                }
+              ]
             }
           }
         ]
@@ -251,13 +326,37 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('nameNodeA'),'/OMSExtension')]",
+          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('nameNodeA'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+            "type": "MicrosoftMonitoringAgent",
+            "typeHandlerVersion": "1.0",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "workspaceId": "[parameters('workspaceId')]"
+            },
+            "protectedSettings": {
+              "workspaceKey": "[parameters('workspaceKey')]"
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2017-10-01",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('nameNodeB'), '-nic1')]",
       "location": "[resourceGroup().location]",
+      "dependsOn": [ "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]" ],
       "properties": {
         "ipConfigurations": [
           {
@@ -266,7 +365,12 @@
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[variables('subnetRef')]"
-              }
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/AGLBackendPool1')]"
+                }
+              ]
             }
           }
         ]
@@ -301,7 +405,7 @@
           "computerName": "[parameters('nameNodeB')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('nodeBPassword')]"
-        }, 
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
@@ -331,7 +435,30 @@
             }
           ]
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('nameNodeB'),'/OMSExtension')]",
+          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('nameNodeB'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+            "type": "MicrosoftMonitoringAgent",
+            "typeHandlerVersion": "1.0",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "workspaceId": "[parameters('workspaceId')]"
+            },
+            "protectedSettings": {
+              "workspaceKey": "[parameters('workspaceKey')]"
+            }
+          }
+        }
+      ]
     },
     {
       "apiVersion": "2017-10-01",
@@ -381,7 +508,7 @@
           "computerName": "[parameters('nameWitness')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('witnessPassword')]"
-        },  
+        },
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
@@ -395,7 +522,31 @@
             "createOption": "FromImage"
           }
         }
-      }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('nameWitness'),'/OMSExtension')]",
+          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('nameWitness'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+            "type": "MicrosoftMonitoringAgent",
+            "typeHandlerVersion": "1.0",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "workspaceId": "[parameters('workspaceId')]"
+            },
+            "protectedSettings": {
+              "workspaceKey": "[parameters('workspaceKey')]"
+            }
+          }
+        }
+      ]
     }
   ]
 }
+
