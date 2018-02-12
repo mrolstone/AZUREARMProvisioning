@@ -17,6 +17,12 @@
     "vaultResourceGroup": {
       "type": "string"
     },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
     "clusterName": {
       "type": "string",
       "metadata": {
@@ -169,7 +175,9 @@
         "parameters": {
           "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
           "projectId": { "value": "[parameters('projectId')]" },
-          "clusterName": { "value":  "[parameters('clusterName')]" },
+          "workspaceId": { "value": "[parameters('workspaceId')]" },
+          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
+          "clusterName": { "value": "[parameters('clusterName')]" },
           "nameNodeA": { "value": "[variables('nameNodeA')]" },
           "nameNodeB": { "value": "[variables('nameNodeB')]" },
           "nameWitness": { "value": "[variables('nameWitness')]" },

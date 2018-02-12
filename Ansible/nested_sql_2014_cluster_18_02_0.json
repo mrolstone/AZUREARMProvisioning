@@ -8,6 +8,12 @@
     "projectId": {
       "type": "string"
     },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
     "clusterName": {
       "type": "string",
       "metadata": {
