@@ -331,7 +331,7 @@
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('nameNodeA'),'/OMSExtension')]",
-          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('nameNodeA'))]"
@@ -440,7 +440,7 @@
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('nameNodeB'),'/OMSExtension')]",
-          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('nameNodeB'))]"
@@ -527,7 +527,7 @@
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('nameWitness'),'/OMSExtension')]",
-          "apiVersion": "[providers('Microsoft.Compute/virtualMachines/', 'extensions').apiVersions[0]]",
+          "apiVersion": "2017-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('nameWitness'))]"
