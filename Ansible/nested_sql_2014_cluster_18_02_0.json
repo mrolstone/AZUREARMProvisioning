@@ -291,6 +291,7 @@
         "hardwareProfile": {
           "vmSize": "[parameters('vmSizeNode')]"
         },
+        "licenseType": "Windows_Server",
         "networkProfile": {
           "networkInterfaces": [
             {
@@ -398,7 +399,8 @@
       "properties": {
         "availabilitySet": "[variables('availabilitySetId')]",
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSizeNode')]"
+          "vmSize": "[parameters('vmSizeNode')]",
+          "licenseType": "Windows_Server"
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -501,7 +503,8 @@
       "properties": {
         "availabilitySet": "[variables('availabilitySetId')]",
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSizeWitness')]"
+          "vmSize": "[parameters('vmSizeWitness')]",
+          "licenseType": "Windows_Server"
         },
         "networkProfile": {
           "networkInterfaces": [
