@@ -323,8 +323,8 @@
               "input": {
                 "caching": "None",
                 "diskSizeGB": "[parameters('diskSize')]",
-                "lun": "[copyIndex('DataDisks')]",
-                "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex('DataDisks'))]",
+                "lun": "[copyIndex()]",
+                "name": "[concat(parameters('nameNodeA'), '-datadisk', copyIndex(1))]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "[parameters('storageType')]"
@@ -433,8 +433,8 @@
               "input": {
                 "caching": "None",
                 "diskSizeGB": "[parameters('diskSize')]",
-                "lun": "[copyIndex('DataDisks')]",
-                "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex('DataDisks'))]",
+                "lun": "[copyIndex()]",
+                "name": "[concat(parameters('nameNodeB'), '-datadisk', copyIndex(1))]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "[parameters('storageType')]"
