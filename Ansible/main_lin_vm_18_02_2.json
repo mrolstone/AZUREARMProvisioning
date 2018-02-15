@@ -105,13 +105,9 @@
         "ReadOnly",
         "ReadWrite"
       ],
-
       "metadata": {
         "description": "Disk Caching"
       }
-    },
-    "workspaceName": {
-      "type": "string"
     },
     "workspaceId": {
       "type": "string"
@@ -158,6 +154,8 @@
         "parameters": {
           "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
           "projectId": { "value": "[parameters('projectId')]" },
+          "workspaceId": { "value": "[parameters('workspaceId')]" },
+          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
           "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
           "vmSize": { "value": "[parameters('vmSize')]" },
           "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },

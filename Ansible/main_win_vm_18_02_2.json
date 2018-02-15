@@ -119,9 +119,6 @@
         "description": "Availability Set Required"
       }
     },
-    "workspaceName": {
-      "type": "string"
-    },
     "workspaceId": {
       "type": "string"
     },
@@ -157,6 +154,8 @@
         "parameters": {
           "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
           "projectId": { "value": "[parameters('projectId')]" },
+          "workspaceId": { "value": "[parameters('workspaceId')]" },
+          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
           "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
           "vmSize": { "value": "[parameters('vmSize')]" },
           "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
@@ -179,9 +178,6 @@
           "diskSize": { "value": "[parameters('diskSize')]" },
           "storageType": { "value": "[variables('storageType')]" },
           "diskCaching": { "value": "[parameters('diskCaching')]" },
-          "workspaceName": { "value": "[parameters('workspaceName')]" },
-          "workspaceId": { "value": "[parameters('workspaceId')]" },
-          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
         }

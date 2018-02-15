@@ -8,6 +8,12 @@
     "projectId": {
       "type": "string"
     },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
     "vmName": {
       "type": "string",
       "metadata": {
