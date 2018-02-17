@@ -155,10 +155,10 @@
           "diskSizeGB": "[parameters('diskSize')]",
           "lun": "[copyIndex('DataDisks')]",
           "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
-          "createOption": "Empty",
-          "managedDisk": {
-            "storageAccountType": "[parameters('storageType')]"
-          }
+          "createOption": "Empty"
+//          "managedDisk": {
+//            "storageAccountType": "[parameters('storageType')]"
+//          }
         }
       }
     ]
