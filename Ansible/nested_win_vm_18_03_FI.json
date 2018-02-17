@@ -145,20 +145,15 @@
     "availabilitySetId": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
     },
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",    
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingsubnetName'))]",
     "copy": [
       {
         "name": "DataDisks",
-        "count": "[parameters('diskNum')]",
+        "count": "[if(equals(parameters('diskNum'),0),1, parameters('diskNum'))]",
         "input": {
-          "caching": "None",
-          "diskSizeGB": "[parameters('diskSize')]",
           "lun": "[copyIndex('DataDisks')]",
-          "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
-          "createOption": "Empty"
-//          "managedDisk": {
-//            "storageAccountType": "[parameters('storageType')]"
-//          }
+          "createOption": "Empty",
+          "diskSizeGB": "1023"
         }
       }
     ]
