@@ -149,11 +149,16 @@
     "copy": [
       {
         "name": "DataDisks",
-        "count": "[if(equals(parameters('diskNum'),0),1, parameters('diskNum'))]",
+        "count": "[parameters('diskNum')]",
         "input": {
+          "caching": "None",
+          "diskSizeGB": "[parameters('diskSize')]",
           "lun": "[copyIndex('DataDisks')]",
+          "name": "[concat(parameters('vmName'), '-datadisk', copyIndex('DataDisks'))]",
           "createOption": "Empty",
-          "diskSizeGB": "1023"
+          "managedDisk": {
+            "storageAccountType": "[parameters('storageType')]"
+          }
         }
       }
     ]
