@@ -195,7 +195,7 @@
           "diskCaching": { "value": "[parameters('diskCaching')]" },
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
-          "cseFileUris": { "value": "[concat(parameters('cseFileUris')[copyIndex()])]" },
+          "cseFileUris": { "value": "[parameters('cseFileUris')]" },
           "cseCommands": { "value": "[parameters('cseCommands')]" },
           "storageAccountName": { "value": "[parameters('storageAccountName')]" },
           "storageAccountKey": { "value": "[parameters('storageAccountKey')]" }
