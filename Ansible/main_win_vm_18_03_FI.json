@@ -109,6 +109,9 @@
         "description": "Disk Caching"
       }
     },
+    "cseFileUris": {
+      "type": "array"
+    },
     "cseFileUris1": {
       "type": "string"
     },
@@ -198,9 +201,9 @@
           "diskCaching": { "value": "[parameters('diskCaching')]" },
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
-          "cseFileUris1": { "value": "[parameters('cseFileUris1')]" },
-          "cseFileUris2": { "value": "[parameters('cseFileUris2')]" },
-          "cseFileUris3": { "value": "[parameters('cseFileUris3')]" },
+          "cseFileUris1": { "value": "[parameters('cseFileUris')[0]]" },
+          "cseFileUris2": { "value": "[parameters('cseFileUris')[1]]" },
+          "cseFileUris3": { "value": "[parameters('cseFileUris')[3]]" },
           "cseCommands": { "value": "[parameters('cseCommands')]" },
           "storageAccountName": { "value": "[parameters('storageAccountName')]" },
           "storageAccountKey": { "value": "[parameters('storageAccountKey')]" }
