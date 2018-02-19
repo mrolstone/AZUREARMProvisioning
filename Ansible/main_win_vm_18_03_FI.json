@@ -203,7 +203,7 @@
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
           "cseFileUris1": { "value": "[parameters('cseFileUris')[0]]" },
           "cseFileUris2": { "value": "[parameters('cseFileUris')[1]]" },
-          "cseFileUris3": { "value": "[parameters('cseFileUris')[3]]" },
+          "cseFileUris3": { "value": "[parameters('cseFileUris')[2]]" },
           "cseCommands": { "value": "[parameters('cseCommands')]" },
           "storageAccountName": { "value": "[parameters('storageAccountName')]" },
           "storageAccountKey": { "value": "[parameters('storageAccountKey')]" }
