@@ -196,9 +196,9 @@
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
           "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
           //"cseFileUris": { "value": "[parameters('cseFileUris')]" },
-          "cseCommands": { "value": "[parameters('availabilitySetName')]" },
-          "storageAccountName": { "value": "[parameters('availabilitySetName')]" },
-          "storageAccountKey": { "value": "[parameters('availabilitySetName')]" }
+          "cseCommands": { "value": "[parameters('cseCommands')]" },
+          "storageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "storageAccountKey": { "value": "[parameters('storageAccountKey')]" }
         }
       }
     }

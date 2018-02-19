@@ -300,11 +300,11 @@
             "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/Win8.1AndW2K12R2-KB3191564-x64.msu",
             "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/dev_winrm_client_cert.pem"
           ],
-          "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File ./win_ansible_prep_18_03_01.ps1 -azurelocation westeurope -AnsibleEnvironment dev"
+          "commandToExecute": "[parameters('cseCommands')]"
         },
         "protectedSettings": {
-          "storageAccountName": "stgazewpmgislsd075d38001",
-          "storageAccountKey": "cBz2OAasY1RQ9C7Nj/e+RLZAldQGsReNgj15OiVSlJpMbqM4riQazci6b95P/wLyBiut+3Ol8H3qlyV8HWu3dg=="
+          "storageAccountName": "[parameters('storageAccountName')]",
+          "storageAccountKey": "[parameters('storageAccountKey')]"
         }
       }
     }
