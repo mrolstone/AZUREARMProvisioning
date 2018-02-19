@@ -285,7 +285,8 @@
     },
     {
       "apiVersion": "2017-03-30",
-      "Condition": "[not(equals(parameters('imageSKU'), '2012-R2-Datacenter'))]",
+      //"Condition": "[not(equals(parameters('imageSKU'), '2012-R2-Datacenter'))]",
+      "Condition": "[contains(parameters('imageSKU'), '2012')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('vmName'),'/MaerskCustomExtension')]",
       "location": "[resourceGroup().location]",
