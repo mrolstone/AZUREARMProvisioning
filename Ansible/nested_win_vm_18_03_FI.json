@@ -122,11 +122,20 @@
         "description": "Disk Caching"
       }
     },
-    "cseFileUris": {
-      "type": "array",
-      "metadata": {
-        "description": "CSE File URIs"
-      }
+    //    "cseFileUris": {
+    //      "type": "array",
+    //    "metadata": {
+    //    "description": "CSE File URIs"
+    //  }
+    //  },
+    "cseCommands": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "storageAccountKey": {
+      "type": "string"
     },
     "availabilitySetReq": {
       "type": "string",
