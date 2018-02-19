@@ -185,7 +185,8 @@
           "storageType": { "value": "[variables('storageType')]" },
           "diskCaching": { "value": "[parameters('diskCaching')]" },
           "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
-          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" }
+          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
+          "cseFileUris": { "value": "[parameters('cseFileUris')]" }
         }
       }
     }
