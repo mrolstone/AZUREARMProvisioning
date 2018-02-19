@@ -1,0 +1,207 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "servicenowRequest": {
+      "type": "string"
+    },
+    "projectId": {
+      "type": "string"
+    },
+    "vaultSubscriptionID": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "vaultResourceGroup": {
+      "type": "string"
+    },
+    "vmName": {
+      "type": "array",
+      "metadata": {
+        "description": "Name of the VMs"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Size of the VM"
+      }
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "existingsubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "metadata": {
+        "description": "Image publisher"
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "metadata": {
+        "description": "Image offer"
+      }
+    },
+    "imageSKU": {
+      "type": "string",
+      "metadata": {
+        "description": "Image SKU"
+      }
+    },
+    "imageVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "Image Version"
+      }
+    },
+    "diskNum": {
+      "type": "int",
+      "maxValue": 16,
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Number of Disks"
+      }
+    },
+    "diskSize": {
+      "type": "string",
+      "defaultValue": "128",
+      "allowedValues": [
+        "128",
+        "512",
+        "1023"
+      ],
+      "metadata": {
+        "description": "Disk Size"
+      }
+    },
+    "diskCaching": {
+      "type": "string",
+      "defaultValue": "None",
+      "allowedValues": [
+        "None",
+        "ReadOnly",
+        "ReadWrite"
+      ],
+      "metadata": {
+        "description": "Disk Caching"
+      }
+    },
+    "cseFileUris": {
+      "type": "array",
+      "metadata": {
+        "description": "CSE File URIs"
+      }
+    },
+    "cseCommands": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "storageAccountKey": {
+      "type": "string"
+    },
+    "availabilitySetReq": {
+      "type": "string",
+      "allowedValues": [
+        "yes",
+        "no"
+      ],
+      "metadata": {
+        "description": "Availability Set Required"
+      }
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "workspaceKey": {
+      "type": "string"
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "None",
+      "metadata": {
+        "description": "Availability Set Name"
+      }
+    }
+  },
+  "variables": {
+    "storageType": "[if(endswith(parameters('vmSize'), 's_v3'), 'Premium_LRS', 'Standard_LRS')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-01-01",
+      "name": "[concat('nestedTemplate-', parameters('vmName')[copyIndex()])]",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "nestedTemplateLoop",
+        "count": "[length(parameters('vmName'))]"
+      },
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/MGISCAT/AZUREARMProvisioning/master/Ansible/nested_win_vm_18_03_FI.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "servicenowRequest": { "value": "[parameters('servicenowRequest')]" },
+          "projectId": { "value": "[parameters('projectId')]" },
+          "workspaceId": { "value": "[parameters('workspaceId')]" },
+          "workspaceKey": { "value": "[parameters('workspaceKey')]" },
+          "vmName": { "value": "[concat(parameters('vmName')[copyIndex()])]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },
+          "existingsubnetName": { "value": "[parameters('existingsubnetName')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat('/subscriptions/', parameters('vaultSubscriptionID'), '/resourceGroups/', parameters('vaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('vaultName')) ]"
+              },
+              "secretName": "[concat(parameters('vmName')[copyIndex()])]"
+            }
+          },
+          "imagePublisher": { "value": "[parameters('imagePublisher')]" },
+          "imageOffer": { "value": "[parameters('imageOffer')]" },
+          "imageSKU": { "value": "[parameters('imageSKU')]" },
+          "imageVersion": { "value": "[parameters('imageVersion')]" },
+          "diskNum": { "value": "[parameters('diskNum')]" },
+          "diskSize": { "value": "[parameters('diskSize')]" },
+          "storageType": { "value": "[variables('storageType')]" },
+          "diskCaching": { "value": "[parameters('diskCaching')]" },
+          "availabilitySetReq": { "value": "[parameters('availabilitySetReq')]" },
+          "availabilitySetName": { "value": "[parameters('availabilitySetName')]" },
+          "cseFileUris": { "value": "[parameters('cseFileUris')[copyIndex()]" },
+          "cseCommands": { "value": "[parameters('cseCommands')]" },
+          "storageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "storageAccountKey": { "value": "[parameters('storageAccountKey')]" }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
