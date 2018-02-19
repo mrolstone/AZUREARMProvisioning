@@ -122,11 +122,14 @@
         "description": "Disk Caching"
       }
     },
-    "cseFileUris": {
-      "type": "array",
-      "metadata": {
-        "description": "CSE File URIs"
-      }
+    "cseFileUris1": {
+      "type": "string"
+    },
+    "cseFileUris2": {
+      "type": "string"
+    },
+    "cseFileUris3": {
+      "type": "string"
     },
     "cseCommands": {
       "type": "string"
@@ -296,9 +299,9 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/win_ansible_prep_18_03_01.ps1",
-            "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/Win8.1AndW2K12R2-KB3191564-x64.msu",
-            "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/dev_winrm_client_cert.pem"
+            "[parameters('cseFileUris1')]",
+            "[parameters('cseFileUris2')]",
+            "[parameters('cseFileUris3')]"
           ],
           "commandToExecute": "[parameters('cseCommands')]"
         },
