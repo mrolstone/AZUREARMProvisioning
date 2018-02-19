@@ -121,9 +121,9 @@
     "storageAccountName": {
       "type": "string"
     },
-//    "storageAccountKey": {
-//     "type": "string"
-//    },
+    "storageAccountKey": {
+    "type": "string"
+    },
     "availabilitySetReq": {
       "type": "string",
       "allowedValues": [
