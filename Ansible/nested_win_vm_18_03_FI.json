@@ -267,8 +267,9 @@
     },
     {
       "apiVersion": "2017-03-30",
+      "Condition": "[not(equals(parameters('imageSKU'), 'Windows-2012-R2-Datacenter'))]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "\"[concat(parameters('vmName'),'/MaerskAnsibleExtension')],",
+      "name": "[concat(parameters('vmName'),'/MaerskAnsibleExtension')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
