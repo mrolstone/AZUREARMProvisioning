@@ -281,7 +281,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/win_ansible_prep_18_03_01.ps1,https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/Win8.1AndW2K12R2-KB3191564-x64.msu,https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/dev_winrm_client_cert.pem"
+            "https://stgazewpmgislsd075d38001.blob.core.windows.net/windows/win_ansible_prep_18_03_01.ps1"
           ],
           "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File ./win_ansible_prep_18_03_01.ps1 -azurelocation westeurope -AnsibleEnvironment dev"
         },
