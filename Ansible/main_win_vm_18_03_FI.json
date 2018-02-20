@@ -125,7 +125,7 @@
         "value": ""
     },
     "cseCommands": {
-      "type": "string",      
+      "type": "string"      
     },
     "storageAccountName": {
       "type": "string"
