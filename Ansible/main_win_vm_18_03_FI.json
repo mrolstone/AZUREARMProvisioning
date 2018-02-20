@@ -113,16 +113,19 @@
       "type": "array"
     },
     "cseFileUris1": {
-      "type": "string"
+      "type": "string",
+      "value": ""
     },
     "cseFileUris2": {
-      "type": "string"
+      "type": "string",
+      "value": ""
     },
     "cseFileUris3": {
-      "type": "string"
+      "type": "string",
+        "value": ""
     },
     "cseCommands": {
-      "type": "string"
+      "type": "string",      
     },
     "storageAccountName": {
       "type": "string"
