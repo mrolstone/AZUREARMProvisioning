@@ -114,15 +114,15 @@
     },
     "cseFileUris1": {
       "type": "string",
-      "value": ""
+      "defaultValue": "None"
     },
     "cseFileUris2": {
       "type": "string",
-      "value": ""
+      "defaultValue": "None"
     },
     "cseFileUris3": {
       "type": "string",
-        "value": ""
+      "defaultValue": "None"
     },
     "cseCommands": {
       "type": "string"      
