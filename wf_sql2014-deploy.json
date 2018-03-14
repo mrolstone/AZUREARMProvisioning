@@ -1,0 +1,172 @@
+{
+  "description": "", 
+  "spec": [
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "Enter the ServiceNow Demand No", 
+      "choices": "", 
+      "variable": "servicenow_request", 
+      "question_name": "ServiceNow Request", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 24, 
+      "question_description": "Enter Project ID Authorising Deployment", 
+      "choices": "", 
+      "variable": "project_id", 
+      "question_name": "Project ID", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222\nLGI024\nBGU035\nVPY003\nDWA127", 
+      "variable": "user_id", 
+      "question_name": "Build User ID", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "APMT\nDamco\nMaerskLine\nITSOE", 
+      "variable": "business_unit_name", 
+      "question_name": "Business Unit", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "eastasia\neastus2\nwesteurope", 
+      "variable": "location", 
+      "question_name": "Location", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "production\npre-production\ndevelopment\ntest\nuat\nevaluation\nacceptance", 
+      "variable": "environment_name", 
+      "question_name": "Environment", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "APMT 02 ARM MN\nAPMT 02 NP ARM MN\nDamco 02 ARM MN\nDamco 02 NP ARM MN\nMaersk Line 02 ARM MN\nMaersk Line 02 NP ARM MN\nShared Services 02 ARM MN\nShared Services 02 NP ARM MN\nITSOE Engineering 01 NP ARM MN", 
+      "variable": "subscription_name", 
+      "question_name": "Subscription_name", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "question_description": "5 - 10 Characters", 
+      "min": 5, 
+      "default": "", 
+      "max": 10, 
+      "required": true, 
+      "choices": "", 
+      "variable": "workload", 
+      "question_name": "Workload", 
+      "type": "text"
+    }, 
+    {
+      "required": false, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "If left blank a new resource name will be generated and created. If you want to deploy into an existing resource group, please provide the existing resource group name", 
+      "choices": "", 
+      "variable": "resource_group_name", 
+      "question_name": "Resource_group", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "vnet", 
+      "question_name": "Virtual_network_name", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "", 
+      "choices": "", 
+      "variable": "ip_range", 
+      "question_name": "Subnet address prefix cidr", 
+      "type": "text"
+    }, 
+    {
+      "required": false, 
+      "min": 0, 
+      "default": "", 
+      "max": 1024, 
+      "question_description": "If left blank a new subnet will be generated and created. If you want to deploy into an existing subnet, please provide the existing subnet name", 
+      "choices": "", 
+      "variable": "subnet_name", 
+      "question_name": "Subnet_name", 
+      "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "Standard_D4_v3", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "Standard_D4_v3\nStandard_D8_v3\nStandard_D16_v3\nStandard_D32_v3\nStandard_D64_v3\nStandard_E4_v3\nStandard_E8_v3\nStandard_E16_v3\nStandard_E32_v3\nStandard_E64_v3\nStandard_D4s_v3\nStandard_D8s_v3\nStandard_D16s_v3\nStandard_D32s_v3\nStandard_D64s_v3\nStandard_E4s_v3\nStandard_E8s_v3\nStandard_E16s_v3\nStandard_E32s_v3\nStandard_E64s_v3", 
+      "variable": "vm_size", 
+      "question_name": "Vm_size", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "standard", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "developer\nstandard\nenterprise", 
+      "new_question": true, 
+      "variable": "sql_edition", 
+      "question_name": "SQL Edition", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "small", 
+      "max": null, 
+      "required": true, 
+      "choices": "small\nmedium\nlarge\nxlarge", 
+      "variable": "sql_datadisk_pattern", 
+      "question_name": "SQL Disk Pattern", 
+      "type": "multiplechoice"
+    }
+  ], 
+  "name": ""
+}
