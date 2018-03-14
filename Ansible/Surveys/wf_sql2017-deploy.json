@@ -8,17 +8,16 @@
       "max": 1024, 
       "required": true, 
       "choices": "", 
-      "new_question": true, 
       "variable": "servicenow_request", 
       "question_name": "ServiceNow Request", 
       "type": "text"
     }, 
     {
-      "required": true, 
+      "question_description": "Enter Project ID Authorising Deployment", 
       "min": 0, 
       "default": "", 
       "max": 24, 
-      "question_description": "Enter the Project ID that approved the deployment", 
+      "required": true, 
       "choices": "", 
       "variable": "project_id", 
       "question_name": "Project ID", 
@@ -36,37 +35,48 @@
       "type": "multiplechoice"
     }, 
     {
-      "required": true, 
+      "question_description": "", 
       "min": null, 
       "default": "", 
       "max": null, 
-      "question_description": "", 
+      "required": true, 
       "choices": "APMT\nDamco\nMaerskLine\nITSOE", 
       "variable": "business_unit_name", 
       "question_name": "Business Unit", 
       "type": "multiplechoice"
     }, 
     {
-      "required": true, 
+      "question_description": "", 
       "min": null, 
       "default": "", 
       "max": null, 
-      "question_description": "", 
+      "required": true, 
       "choices": "eastasia\neastus2\nwesteurope", 
       "variable": "location", 
       "question_name": "Location", 
       "type": "multiplechoice"
     }, 
     {
-      "required": true, 
+      "question_description": "", 
       "min": null, 
       "default": "", 
       "max": null, 
-      "question_description": "", 
+      "required": true, 
       "choices": "production\npre-production\ndevelopment\ntest\nuat\nevaluation\nacceptance", 
       "variable": "environment_name", 
       "question_name": "Environment", 
       "type": "multiplechoice"
+    }, 
+    {
+      "required": true, 
+      "min": 5, 
+      "default": "", 
+      "max": 10, 
+      "question_description": "5 - 10 Characters", 
+      "choices": "", 
+      "variable": "workload", 
+      "question_name": "Workload", 
+      "type": "text"
     }, 
     {
       "question_description": "", 
@@ -80,24 +90,13 @@
       "type": "multiplechoice"
     }, 
     {
-      "question_description": "Length 5 - 10 Characters", 
-      "min": 5, 
-      "default": "", 
-      "max": 10, 
-      "required": true, 
-      "choices": "", 
-      "variable": "workload", 
-      "question_name": "Workload", 
-      "type": "text"
-    }, 
-    {
       "question_description": "If left blank a new resource name will be generated and created. If you want to deploy into an existing resource group, please provide the existing resource group name", 
       "min": 0, 
       "default": "", 
       "max": 1024, 
       "required": false, 
       "choices": "", 
-      "variable": "resource_group", 
+      "variable": "resource_group_name", 
       "question_name": "Resource_group", 
       "type": "text"
     }, 
@@ -113,13 +112,12 @@
       "type": "text"
     }, 
     {
-      "required": true, 
+      "question_description": "", 
       "min": 0, 
       "default": "", 
       "max": 1024, 
-      "question_description": "", 
+      "required": true, 
       "choices": "", 
-      "new_question": true, 
       "variable": "ip_range", 
       "question_name": "Subnet address prefix cidr", 
       "type": "text"
@@ -131,31 +129,19 @@
       "max": 1024, 
       "required": false, 
       "choices": "", 
-      "variable": "subnet", 
+      "variable": "subnet_name", 
       "question_name": "Subnet_name", 
       "type": "text"
     }, 
     {
-      "required": true, 
-      "min": null, 
-      "default": "Standard_D4s_v3", 
-      "max": null, 
       "question_description": "", 
-      "choices": "Standard_D4_v3\nStandard_D8_v3\nStandard_D16_v3\nStandard_D32_v3\nStandard_D64_v3\nStandard_E4_v3\nStandard_E8_v3\nStandard_E16_v3\nStandard_E32_v3\nStandard_E64_v3\nStandard_D4s_v3\nStandard_D8s_v3\nStandard_D16s_v3\nStandard_D32s_v3\nStandard_D64s_v3\nStandard_E4s_v3\nStandard_E8s_v3\nStandard_E16s_v3\nStandard_E32s_v3\nStandard_E64s_v3", 
+      "min": null, 
+      "default": "Standard_D4_v3", 
+      "max": null, 
+      "required": true, 
+      "choices": "Standard_A1_v2\nStandard_A2_v2\nStandard_A4_v2\nStandard_A8_v2\nStandard_A2m_v2\nStandard_A4m_v2\nStandard_A8m_v2\nStandard_D2_v3\nStandard_D4_v3\nStandard_D8_v3\nStandard_D16_v3\nStandard_D32_v3\nStandard_D64_v3\nStandard_E2_v3\nStandard_E4_v3\nStandard_E8_v3\nStandard_E16_v3\nStandard_E32_v3\nStandard_E64_v3\nStandard_D2s_v3\nStandard_D4s_v3\nStandard_D8s_v3\nStandard_D16s_v3\nStandard_D32s_v3\nStandard_D64s_v3\nStandard_E2s_v3\nStandard_E4s_v3\nStandard_E8s_v3\nStandard_E16s_v3\nStandard_E32s_v3\nStandard_E64s_v3", 
       "variable": "vm_size", 
       "question_name": "Vm_size", 
-      "type": "multiplechoice"
-    }, 
-    {
-      "required": true, 
-      "min": null, 
-      "default": "enterprise", 
-      "max": null, 
-      "question_description": "", 
-      "choices": "developer\nenterprise", 
-      "new_question": true, 
-      "variable": "sql_edition", 
-      "question_name": "SQL Edition", 
       "type": "multiplechoice"
     }, 
     {
@@ -166,7 +152,19 @@
       "question_description": "", 
       "choices": "small\nmedium\nlarge\nxlarge", 
       "variable": "sql_datadisk_pattern", 
-      "question_name": "SQL Disk Pattern", 
+      "question_name": "SQL Disk Pattern Size", 
+      "type": "multiplechoice"
+    }, 
+    {
+      "question_description": "", 
+      "min": null, 
+      "default": "standard", 
+      "max": null, 
+      "required": true, 
+      "choices": "developer\nstandard\nenterprise", 
+      "new_question": true, 
+      "variable": "sql_edition", 
+      "question_name": "SQL Edition", 
       "type": "multiplechoice"
     }
   ], 

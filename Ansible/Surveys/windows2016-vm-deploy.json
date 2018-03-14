@@ -14,11 +14,11 @@
       "type": "text"
     }, 
     {
-      "required": true, 
+      "question_description": "Enter Project ID Authorising Deployment", 
       "min": 0, 
       "default": "", 
       "max": 24, 
-      "question_description": "Enter Project ID Authorising Deployment", 
+      "required": true, 
       "choices": "", 
       "new_question": true, 
       "variable": "project_id", 
@@ -26,14 +26,14 @@
       "type": "text"
     }, 
     {
-      "question_description": "", 
+      "required": true, 
       "min": null, 
       "default": "", 
       "max": null, 
-      "required": true, 
+      "question_description": "", 
       "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222\nLGI024\nBGU035\nVPY003\nDWA127", 
       "variable": "user_id", 
-      "question_name": "Build user id", 
+      "question_name": "Build User ID", 
       "type": "multiplechoice"
     }, 
     {
@@ -71,18 +71,7 @@
     }, 
     {
       "required": true, 
-      "min": null, 
-      "default": "", 
-      "max": null, 
-      "question_description": "", 
-      "choices": "APMT 02 ARM MN\nAPMT 02 NP ARM MN\nDamco 02 ARM MN\nDamco 02 NP ARM MN\nMaersk Line 02 ARM MN\nMaersk Line 02 NP ARM MN\nShared Services 02 ARM MN\nShared Services 02 NP ARM MN\nITSOE Engineering 01 NP ARM MN", 
-      "variable": "subscription_name", 
-      "question_name": "Subscription_name", 
-      "type": "multiplechoice"
-    }, 
-    {
-      "required": true, 
-      "min": 0, 
+      "min": 5, 
       "default": "", 
       "max": 10, 
       "question_description": "5 - 10 Characters", 
@@ -92,15 +81,26 @@
       "type": "text"
     }, 
     {
-      "required": true, 
+      "question_description": "3 Letter Workload Function", 
       "min": 3, 
       "default": "", 
       "max": 3, 
-      "question_description": "3 Letter Workload Function", 
+      "required": true, 
       "choices": "", 
       "variable": "workload_function", 
       "question_name": "Workload function", 
       "type": "text"
+    }, 
+    {
+      "required": true, 
+      "min": null, 
+      "default": "", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "APMT 02 ARM MN\nAPMT 02 NP ARM MN\nDamco 02 ARM MN\nDamco 02 NP ARM MN\nMaersk Line 02 ARM MN\nMaersk Line 02 NP ARM MN\nShared Services 02 ARM MN\nShared Services 02 NP ARM MN\nITSOE Engineering 01 NP ARM MN", 
+      "variable": "subscription_name", 
+      "question_name": "Subscription_name", 
+      "type": "multiplechoice"
     }, 
     {
       "required": false, 
@@ -159,12 +159,12 @@
       "type": "multiplechoice"
     }, 
     {
-      "question_description": "", 
-      "min": null, 
-      "default": "", 
-      "max": null, 
       "required": true, 
-      "choices": "RedHat-7.4\nOracle-7.4\nOracle-7.4-RedHat-compatible", 
+      "min": null, 
+      "default": "Windows-2016-Server-Core", 
+      "max": null, 
+      "question_description": "", 
+      "choices": "Windows-2016-Datacenter\nWindows-2016-Server-Core", 
       "variable": "image_selection", 
       "question_name": "VM_image", 
       "type": "multiplechoice"
@@ -181,11 +181,11 @@
       "type": "multiplechoice"
     }, 
     {
-      "required": true, 
+      "question_description": "0-16 data disks can be provisioned", 
       "min": 0, 
       "default": 0, 
       "max": 16, 
-      "question_description": "0-16 data disks can be provisioned", 
+      "required": true, 
       "choices": "", 
       "variable": "datadisk_num", 
       "question_name": "Number of Data Disks", 
@@ -204,11 +204,11 @@
       "type": "multiplechoice"
     }, 
     {
-      "question_description": "1-4 VMs can be deployed with the same settings", 
+      "required": true, 
       "min": 1, 
       "default": 1, 
       "max": 4, 
-      "required": true, 
+      "question_description": "1-4 VMs can be deployed with the same settings", 
       "choices": "", 
       "variable": "vm_num", 
       "question_name": "Number of VM's", 
