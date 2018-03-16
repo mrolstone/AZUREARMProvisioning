@@ -31,7 +31,7 @@
       "default": "", 
       "max": null, 
       "required": true, 
-      "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222\nLGI024\nBGU035\nVPY003\nDWA127", 
+      "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222", 
       "variable": "user_id", 
       "question_name": "Build user id", 
       "type": "multiplechoice"
@@ -82,7 +82,7 @@
     }, 
     {
       "required": true, 
-      "min": 0, 
+      "min": 5, 
       "default": "", 
       "max": 10, 
       "question_description": "5 - 10 Characters", 
