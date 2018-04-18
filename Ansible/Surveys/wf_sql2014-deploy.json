@@ -1,5 +1,4 @@
 {
-  "description": "", 
   "spec": [
     {
       "required": true, 
@@ -29,7 +28,7 @@
       "default": "", 
       "max": null, 
       "question_description": "", 
-      "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222\nLGI024\nBGU035\nVPY003\nDWA127", 
+      "choices": "DAH031\nBBE068\nKCH222\nRHC008\nHFA025\nAFI044\nCHU073\nFIS012\nHKU050\nJPA218\nMRO223\nMRO222", 
       "variable": "user_id", 
       "question_name": "Build User ID", 
       "type": "multiplechoice"
@@ -90,13 +89,13 @@
       "type": "text"
     }, 
     {
-      "required": false, 
+      "question_description": "If left blank a new resource name will be generated and created. If you want to deploy into an existing resource group, please provide the existing resource group name", 
       "min": 0, 
       "default": "", 
       "max": 1024, 
-      "question_description": "If left blank a new resource name will be generated and created. If you want to deploy into an existing resource group, please provide the existing resource group name", 
+      "required": false, 
       "choices": "", 
-      "variable": "resource_group_name", 
+      "variable": "resource_group", 
       "question_name": "Resource_group", 
       "type": "text"
     }, 
@@ -123,13 +122,13 @@
       "type": "text"
     }, 
     {
-      "required": false, 
+      "question_description": "If left blank a new subnet will be generated and created. If you want to deploy into an existing subnet, please provide the existing subnet name", 
       "min": 0, 
       "default": "", 
       "max": 1024, 
-      "question_description": "If left blank a new subnet will be generated and created. If you want to deploy into an existing subnet, please provide the existing subnet name", 
+      "required": false, 
       "choices": "", 
-      "variable": "subnet_name", 
+      "variable": "subnet", 
       "question_name": "Subnet_name", 
       "type": "text"
     }, 
@@ -168,5 +167,6 @@
       "type": "multiplechoice"
     }
   ], 
-  "name": ""
+  "name": "", 
+  "description": ""
 }
