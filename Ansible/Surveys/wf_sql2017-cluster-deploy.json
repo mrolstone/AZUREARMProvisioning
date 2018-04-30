@@ -140,7 +140,7 @@
       "default": "", 
       "max": null, 
       "question_description": "", 
-      "choices": "developer\nstandard\nenterprise", 
+      "choices": "developer\nenterprise", 
       "new_question": true, 
       "variable": "sql_edition", 
       "question_name": "SQL Edition", 
