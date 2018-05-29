@@ -1,4 +1,6 @@
 {
+  "description": "", 
+  "name": "", 
   "spec": [
     {
       "required": true, 
@@ -133,17 +135,6 @@
       "type": "text"
     }, 
     {
-      "required": false, 
-      "min": 0, 
-      "default": "", 
-      "max": 1024, 
-      "question_description": "If left blank a new subnet will be generated and created. If you want to deploy into an existing subnet, please provide the existing subnet name", 
-      "choices": "", 
-      "variable": "subnet", 
-      "question_name": "Subnet_name", 
-      "type": "text"
-    }, 
-    {
       "required": true, 
       "min": null, 
       "default": "", 
@@ -209,7 +200,5 @@
       "question_name": "Database Data Disk Pattern", 
       "type": "multiplechoice"
     }
-  ], 
-  "description": "", 
-  "name": ""
+  ]
 }
