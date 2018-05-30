@@ -80,15 +80,15 @@
       "type": "text"
     }, 
     {
-      "required": true, 
-      "min": null, 
-      "default": "", 
-      "max": null, 
       "question_description": "3 Letter Workload Function", 
-      "choices": "WLS", 
+      "min": 3, 
+      "default": "WLS", 
+      "max": 3, 
+      "required": true, 
+      "choices": "", 
       "variable": "workload_function", 
       "question_name": "Workload function App tier", 
-      "type": "multiplechoice"
+      "type": "text"
     }, 
     {
       "required": true, 
