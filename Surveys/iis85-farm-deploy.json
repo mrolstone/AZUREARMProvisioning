@@ -30,7 +30,7 @@
       "default": "", 
       "max": null, 
       "required": true, 
-      "choices": "DAH031\nAFI044\nAMA794\nBBE068\nBGU035\nCHU073\nDWA127\nFIS012\nFSS012\nHFA025\nHKU050\nJPA218\nKCH222\nLGI024\nMRO222\nMRO223\nRHC008\nVPY003"
+      "choices": "DAH031\nAFI044\nAMA794\nBBE068\nBGU035\nCHU073\nDWA127\nFIS012\nFSS012\nHFA025\nHKU050\nJPA218\nKCH222\nLGI024\nMRO222\nMRO223\nRHC008\nVPY003",
       "variable": "user_id", 
       "question_name": "Build User ID", 
       "type": "multiplechoice"
