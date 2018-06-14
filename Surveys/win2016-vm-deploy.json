@@ -4,9 +4,9 @@
   "spec": [
     {
       "question_description": "Enter the ServiceNow Demand No", 
-      "min": 0, 
+      "min": 11, 
       "default": "", 
-      "max": 1024, 
+      "max": 11, 
       "required": true, 
       "choices": "", 
       "variable": "servicenow_request", 
@@ -15,9 +15,9 @@
     }, 
     {
       "question_description": "Enter Project ID Authorising Deployment", 
-      "min": 0, 
+      "min": 7, 
       "default": "", 
-      "max": 24, 
+      "max": 7, 
       "required": true, 
       "choices": "", 
       "variable": "project_id", 
@@ -159,7 +159,7 @@
     {
       "question_description": "", 
       "min": null, 
-      "default": "", 
+      "default": "Windows-2016-Server-Core", 
       "max": null, 
       "required": true, 
       "choices": "Windows-2016-Datacenter\nWindows-2016-Server-Core", 
